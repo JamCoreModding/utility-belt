@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "mixin": [
-    "{{mod_id}}.mixins.json"
+    "utility_belt.mixins.json"
   ],
   "quilt_loader": {
-    "group": "{{ group }}",
-    "id": "{{ mod_id }}",
+    "group": "io.github.jamalam360",
+    "id": "utility_belt",
     "version": "${version}",
     "metadata": {
-      "name": "{{ name }}",
-      "description": "{{ description }}",
+      "name": "Utility Belt",
+      "description": "Free your hotbar",
       "contributors": {
-        "{{ author }}": "Owner"
+        "Jamalam": "Owner"
       },
       "contact": {
-        "sources": "https://github.com/{{github_owner}}/{{github_repo}}"
+        "sources": "https://github.com/JamCoreModding/utility-belt"
       },
-      "icon": "assets/{{ mod_id }}/icon.png"
+      "icon": "assets/utility_belt/icon.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
-      "init": ["{{group}}.{{mod_id}}.quilt.{{main_class}}Quilt"]
+      "init": ["io.github.jamalam360.utility_belt.quilt.UtilityBeltQuilt"]
     },
     "depends": [
       {

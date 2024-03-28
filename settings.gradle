@@ -27,7 +27,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "{{ mod_id }}"
+rootProject.name = "utility_belt"
 include("common")
 include("fabric")
 include("quilt")

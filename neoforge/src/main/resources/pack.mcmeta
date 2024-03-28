@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "{{ name }}",
+        "description": "Utility Belt",
         "pack_format": 15
     }
 }
