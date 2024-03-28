@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mixin": [
+    "{{mod_id}}.mixins.json"
+  ],
+  "quilt_loader": {
+    "group": "{{ group }}",
+    "id": "{{ mod_id }}",
+    "version": "${version}",
+    "metadata": {
+      "name": "{{ name }}",
+      "description": "{{ description }}",
+      "contributors": {
+        "{{ author }}": "Owner"
+      },
+      "contact": {
+        "sources": "https://github.com/{{github_owner}}/{{github_repo}}"
+      },
+      "icon": "assets/{{ mod_id }}/icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": ["{{group}}.{{mod_id}}.quilt.{{main_class}}Quilt"]
+    },
+    "depends": [
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": ">=${minecraft_version}"
+      },
+      {
+        "id": "architectury",
+        "version": ">=${architectury_version}"
+      },
+      {
+        "id": "jamlib",
+        "version": ">=${jamlib_version}"
+      }
+    ]
+  },
+  "minecraft": {
+    "environment": "*"
+  }
+}
