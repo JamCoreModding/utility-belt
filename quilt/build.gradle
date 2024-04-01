@@ -36,6 +36,8 @@ dependencies {
     }
     modRuntimeOnly libs.modmenu
     modImplementation libs.jamlib.quilt
+    modImplementation libs.baubly.fabric
+    include libs.baubly.fabric
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionQuilt")) { transitive false }

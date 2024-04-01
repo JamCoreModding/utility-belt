@@ -31,6 +31,12 @@ dependencies {
     forge libs.forge
     modApi libs.architectury.forge
     modImplementation libs.jamlib.forge
+    modImplementation libs.baubly.forge
+    include libs.baubly.forge
+    compileOnly libs.mixin.extras.common
+    annotationProcessor libs.mixin.extras.common
+    implementation libs.mixin.extras.forge
+    include libs.mixin.extras.forge
 
     // Dependency of JamLib
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3"

@@ -6,4 +6,7 @@ dependencies {
     modImplementation libs.fabric.loader
     modApi libs.architectury.common
     modImplementation libs.jamlib.common
+    modImplementation libs.baubly.common
+    compileOnly libs.mixin.extras.common
+    annotationProcessor libs.mixin.extras.common
 }

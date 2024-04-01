@@ -68,6 +68,16 @@ allprojects {
             name = "Jamalam's Maven"
             url = "https://maven.jamalam.tech/releases"
         }
+
+        maven {
+            name = "Terrarium Earth Maven"
+            url = "https://maven.resourcefulbees.com/repository/maven-public"
+        }
+
+        maven {
+            name = "Cardinal Components Maven"
+            url = "https://maven.ladysnake.org/releases"
+        }
     }
 
     tasks.withType(JavaCompile) {

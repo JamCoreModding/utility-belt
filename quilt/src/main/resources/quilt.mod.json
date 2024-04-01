@@ -24,6 +24,10 @@
     },
     "depends": [
       {
+        "id": "fabricloader",
+        "version": ">=0.15.0"
+      },
+      {
         "id": "quilt_base",
         "version": "*"
       },

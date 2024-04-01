@@ -26,6 +26,8 @@ dependencies {
     modApi libs.architectury.fabric
     modRuntimeOnly libs.modmenu
     modImplementation libs.jamlib.fabric
+    modImplementation libs.baubly.fabric
+    include libs.baubly.fabric
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
