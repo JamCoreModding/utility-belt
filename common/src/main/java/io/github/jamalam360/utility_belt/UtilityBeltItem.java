@@ -1,7 +1,6 @@
 package io.github.jamalam360.utility_belt;
 
 import earth.terrarium.baubly.common.*;
-import io.github.jamalam360.utility_belt.server.ServerStateManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -140,7 +139,7 @@ public class UtilityBeltItem extends Item implements Bauble {
 	}
 
 	public static boolean isValidItem(ItemStack stack) {
-		return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ProjectileWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.isEmpty() || stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
+		return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ProjectileWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.getItem() instanceof BrushItem || stack.isEmpty() || stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
 	}
 
 	public static UtilityBeltInventory getInventoryFromTag(ItemStack stack) {
