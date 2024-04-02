@@ -9,7 +9,7 @@ architectury {
 }
 
 base {
-    archivesName = "utility_belt-neoforge"
+    archivesName = "utility-belt-neoforge"
 }
 
 configurations {

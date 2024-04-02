@@ -25,8 +25,7 @@ public class MinecraftMixin {
 
 	@Inject(
 			method = "pickBlock",
-			at = @At("HEAD"),
-			cancellable = true
+			at = @At("HEAD")
 	)
 	private void utilitybelt$preventPickBlockInBelt(CallbackInfo ci) {
 		if (StateManager.getClientInstance().isInBelt(this.player)) {

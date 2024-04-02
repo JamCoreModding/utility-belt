@@ -9,7 +9,7 @@ architectury {
 }
 
 base {
-    archivesName = "utility_belt-forge"
+    archivesName = "utility-belt-forge"
 }
 
 loom {

@@ -45,14 +45,14 @@ side = "BOTH"
 [[dependencies.utility_belt]]
 modId = "baubly"
 mandatory = true
-versionRange = ""
+versionRange = "*"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.utility_belt]]
 modId = "curios"
 mandatory = true
-versionRange = ""
+versionRange = "*"
 ordering = "AFTER"
 side = "BOTH"
 
