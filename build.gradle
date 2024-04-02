@@ -87,6 +87,10 @@ allprojects {
 
     tasks.create("prepareWorkspace") {}
 
+    base {
+        archivesName = "utility-belt"
+    }
+
     java {
         withSourcesJar()
     }
