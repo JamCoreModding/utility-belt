@@ -33,19 +33,19 @@ public class ServerNetworking {
 
 		ctx.queue(() -> {
 			int beltSlot = slot;
-			ItemStack belt = UtilityBeltItem.getBelt(ctx.getPlayer());
-
-			if (belt == null) {
-				UtilityBelt.LOGGER.warn("Received swap packet from client without a belt equipped");
-				return;
-			}
-
 			StateManager stateManager = StateManager.getServerInstance();
 			stateManager.setInBelt(ctx.getPlayer(), inBelt);
 			stateManager.setSelectedBeltSlot(ctx.getPlayer(), beltSlot);
 			ctx.getPlayer().swing(InteractionHand.MAIN_HAND, true);
 
 			if (swap) {
+				ItemStack belt = UtilityBeltItem.getBelt(ctx.getPlayer());
+
+				if (belt == null) {
+					UtilityBelt.LOGGER.warn("Received swap request packet from client without a belt equipped");
+					return;
+				}
+
 				UtilityBeltInventory inv = stateManager.getInventory(ctx.getPlayer());
 				ItemStack stackInHand = ctx.getPlayer().getInventory().getItem(ctx.getPlayer().getInventory().selected);
 				int hotbarSlot = ctx.getPlayer().getInventory().selected;
