@@ -15,11 +15,9 @@ import org.spongepowered.asm.mixin.injection.At;
 @Environment(EnvType.CLIENT)
 @Mixin(Gui.class)
 public abstract class GuiMixin {
-	@Shadow protected abstract Player getCameraPlayer();
+	@Shadow
+	protected abstract Player getCameraPlayer();
 
-	/**
-	 * @reason Prevent the selected item hotbar highlight from being rendered when in the belt
-	 */
 	@WrapWithCondition(
 			method = "renderHotbar",
 			at = @At(

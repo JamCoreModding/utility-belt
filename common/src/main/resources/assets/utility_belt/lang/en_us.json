@@ -1,0 +1,16 @@
+{
+  "item.utility_belt.utility_belt": "Utility Belt",
+  "container.utility_belt.utility_belt": "Utility Belt",
+  "key.category.utility_belt": "Utility Belt",
+  "key.utility_belt.swap_toggle": "Switch to Belt (Toggle)",
+  "key.utility_belt.swap_hold": "Switch to Belt (Hold)",
+  "key.utility_belt.open_screen": "Open Utility Belt GUI",
+  "config.utility_belt.invertScrolling": "Invert Scrolling in Belt Hotbar",
+  "config.utility_belt.displayUtilityBeltWhenNotSelected": "Show Utility Belt Hotbar When Not Selected",
+  "config.utility_belt.hotbarKeyBehaviour": "Hotbar Key Behaviour While in Belt",
+  "config.utility_belt.hotbarKeyBehaviour.tooltip": "When set to 'Switch Back', pressing the hotbar key while in the belt will switch back to the hotbar. When set to 'Switch Belt Slot', pressing the hotbar key will switch to the corresponding belt slot.",
+  "config.utility_belt.hotbarKeyBehaviour.switch_back_to_hotbar": "Switch Back",
+  "config.utility_belt.hotbarKeyBehaviour.switch_belt_slot": "Switch Belt Slot",
+  "advancements.utility_belt.utility_belt.title": "Utility Belt",
+  "advancements.utility_belt.utility_belt.description": "Craft a utility belt to store your weapons and tools."
+}

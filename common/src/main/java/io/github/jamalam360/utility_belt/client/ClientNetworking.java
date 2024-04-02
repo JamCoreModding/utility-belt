@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 @Environment(EnvType.CLIENT)
 public class ClientNetworking {
 	public static void init() {
-		NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBelt.S2C_UPDATE_BELT_INVENTORY, ClientNetworking::handleUpdateBeltInventory);
+		NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBelt.S2C_UPDATE_INV, ClientNetworking::handleUpdateInventory);
 	}
 
 	public static void sendNewStateToServer(boolean inBelt, int slot, boolean swap) {
@@ -29,19 +29,9 @@ public class ClientNetworking {
 		NetworkManager.sendToServer(UtilityBelt.C2S_OPEN_SCREEN, new FriendlyByteBuf(Unpooled.buffer()));
 	}
 
-	private static void handleUpdateBeltInventory(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
-		CompoundTag inv = buf.readNbt();
-		assert inv != null;
-		ctx.queue(() -> {
-			Player player = ctx.getPlayer();
-			ItemStack belt = UtilityBeltItem.getBelt(player);
-
-			if (belt != null) {
-				CompoundTag tag = belt.getOrCreateTag();
-				tag.put("Inventory", inv.getList("Inventory", CompoundTag.TAG_COMPOUND));
-			} else {
-				UtilityBelt.LOGGER.warn("Received belt inventory update packet without a belt equipped");
-			}
-		});
+	private static void handleUpdateInventory(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
+		CompoundTag tag = buf.readNbt();
+		ItemStack belt = UtilityBeltItem.getBelt(ctx.getPlayer());
+		belt.getTag().put("Inventory", tag.getList("Inventory", CompoundTag.TAG_COMPOUND));
 	}
 }

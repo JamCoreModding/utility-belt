@@ -20,11 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
-	@Shadow public LocalPlayer player;
+	@Shadow
+	public LocalPlayer player;
 
-	/**
-	 * @reason Prevents the player from picking blocks (middle click) while in the belt
-	 */
 	@Inject(
 			method = "pickBlock",
 			at = @At("HEAD"),
@@ -32,12 +30,13 @@ public class MinecraftMixin {
 	)
 	private void utilitybelt$preventPickBlockInBelt(CallbackInfo ci) {
 		if (StateManager.getClientInstance().isInBelt(this.player)) {
-			ci.cancel();
+			StateManager.getClientInstance().setInBelt(this.player, false);
+			ClientNetworking.sendNewStateToServer(false, StateManager.getClientInstance().getSelectedBeltSlot(this.player), false);
 		}
 	}
 
 	/**
-	 * @reason Allows using the 1-9 hotbar keys to select slots in the belt
+	 * @reason Allows using the 1-9 hotbar keys to select slots in the belt or switch back to the hotbar depending on the config
 	 */
 	@ModifyExpressionValue(
 			method = "handleKeybinds",

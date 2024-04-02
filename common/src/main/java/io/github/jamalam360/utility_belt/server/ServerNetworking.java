@@ -1,6 +1,7 @@
 package io.github.jamalam360.utility_belt.server;
 
 import dev.architectury.networking.NetworkManager;
+import dev.architectury.registry.menu.MenuRegistry;
 import io.github.jamalam360.utility_belt.*;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
 import io.netty.buffer.Unpooled;
@@ -16,13 +17,13 @@ public class ServerNetworking {
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBelt.C2S_OPEN_SCREEN, ServerNetworking::handleOpenScreen);
 	}
 
-	public static void sendNewBeltInventoryToClient(ServerPlayer holder) {
+	public static void sendNewInventoryToClient(ServerPlayer player) {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-		UtilityBeltInventory inv = StateManager.getServerInstance().getInventory(holder);
+		UtilityBeltInventory inv = StateManager.getServerInstance().getInventory(player);
 		CompoundTag tag = new CompoundTag();
 		tag.put("Inventory", inv.createTag());
 		buf.writeNbt(tag);
-		NetworkManager.sendToPlayer(holder, UtilityBelt.S2C_UPDATE_BELT_INVENTORY, buf);
+		NetworkManager.sendToPlayer(player, UtilityBelt.S2C_UPDATE_INV, buf);
 	}
 
 	private static void handleUpdateState(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
@@ -31,26 +32,46 @@ public class ServerNetworking {
 		boolean swap = buf.readBoolean();
 
 		ctx.queue(() -> {
+			int beltSlot = slot;
+			ItemStack belt = UtilityBeltItem.getBelt(ctx.getPlayer());
+
+			if (belt == null) {
+				UtilityBelt.LOGGER.warn("Received swap packet from client without a belt equipped");
+				return;
+			}
+
 			StateManager stateManager = StateManager.getServerInstance();
 			stateManager.setInBelt(ctx.getPlayer(), inBelt);
-			stateManager.setSelectedBeltSlot(ctx.getPlayer(), slot);
-			ctx.getPlayer().swing(InteractionHand.MAIN_HAND);
+			stateManager.setSelectedBeltSlot(ctx.getPlayer(), beltSlot);
+			ctx.getPlayer().swing(InteractionHand.MAIN_HAND, true);
 
 			if (swap) {
-				ItemStack belt = UtilityBeltItem.getBelt(ctx.getPlayer());
-
-				if (belt == null) {
-					UtilityBelt.LOGGER.warn("Received swap packet from client without a belt equipped");
-					return;
-				}
-
 				UtilityBeltInventory inv = stateManager.getInventory(ctx.getPlayer());
 				ItemStack stackInHand = ctx.getPlayer().getInventory().getItem(ctx.getPlayer().getInventory().selected);
-				ItemStack stackInBelt = inv.getItem(slot);
+				int hotbarSlot = ctx.getPlayer().getInventory().selected;
+				ItemStack stackInBelt = inv.getItem(beltSlot);
+
+				if (!stackInHand.isEmpty() && !stateManager.isInBelt(ctx.getPlayer())) {
+					for (int i = 0; i < 10; i++) {
+						if (ctx.getPlayer().getInventory().getItem(i).isEmpty()) {
+							hotbarSlot = i;
+							stackInHand = ctx.getPlayer().getInventory().getItem(i);
+							break;
+						}
+					}
+				} else if (!stackInBelt.isEmpty() && stateManager.isInBelt(ctx.getPlayer())) {
+					for (int i = 0; i < inv.getContainerSize(); i++) {
+						if (inv.getItem(i).isEmpty()) {
+							beltSlot = i;
+							stackInBelt = inv.getItem(i);
+							break;
+						}
+					}
+				}
 
 				if (UtilityBeltItem.isValidItem(stackInHand)) {
-					ctx.getPlayer().setItemInHand(ctx.getPlayer().getUsedItemHand(), stackInBelt);
-					inv.setItem(slot, stackInHand);
+					ctx.getPlayer().getInventory().setItem(hotbarSlot, stackInBelt);
+					inv.setItem(beltSlot, stackInHand);
 					((Duck.LivingEntity) ctx.getPlayer()).utilitybelt$detectEquipmentUpdates();
 				}
 			}
@@ -58,6 +79,6 @@ public class ServerNetworking {
 	}
 
 	private static void handleOpenScreen(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
-		ctx.queue(() -> ctx.getPlayer().openMenu(UtilityBeltMenu.Factory.INSTANCE));
+		ctx.queue(() -> MenuRegistry.openMenu((ServerPlayer) ctx.getPlayer(), UtilityBeltMenu.Factory.INSTANCE));
 	}
 }

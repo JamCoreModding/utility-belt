@@ -41,3 +41,17 @@ mandatory = true
 versionRange = "[${jamlib_version},)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.utility_belt]]
+modId = "baubly"
+mandatory = true
+versionRange = ""
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.utility_belt]]
+modId = "curios"
+mandatory = true
+versionRange = ""
+ordering = "AFTER"
+side = "BOTH"

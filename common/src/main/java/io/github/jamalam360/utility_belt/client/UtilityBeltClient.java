@@ -1,10 +1,8 @@
 package io.github.jamalam360.utility_belt.client;
 
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.client.ClientCommandRegistrationEvent;
-import dev.architectury.event.events.client.ClientGuiEvent;
-import dev.architectury.event.events.client.ClientRawInputEvent;
-import dev.architectury.event.events.client.ClientTickEvent;
+import dev.architectury.event.events.client.*;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import earth.terrarium.baubly.client.BaublyClient;
@@ -17,6 +15,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -37,12 +36,15 @@ public class UtilityBeltClient {
 		ClientGuiEvent.RENDER_HUD.register(BeltHotbarRenderer::render);
 		ClientTickEvent.CLIENT_POST.register(UtilityBeltClient::onEndClientTick);
 		ClientRawInputEvent.MOUSE_SCROLLED.register(UtilityBeltClient::onMouseScrolled);
-		BaublyClient.registerBaubleRenderer(UtilityBelt.UTILITY_BELT.get(), new BeltRenderer());
-		MenuRegistry.registerScreenFactory(UtilityBelt.MENU_TYPE, UtilityBeltScreen::new);
+		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register(UtilityBeltClient::onPlayerRespawn);
+		UtilityBelt.UTILITY_BELT.listen(belt -> BaublyClient.registerBaubleRenderer(belt, new BeltRenderer()));
+		UtilityBelt.MENU_TYPE.listen(menu -> MenuRegistry.registerScreenFactory(UtilityBelt.MENU_TYPE.get(), UtilityBeltScreen::new));
 		KeyMappingRegistry.register(SWAP_TOGGLE);
 		KeyMappingRegistry.register(SWAP_HOLD);
 		KeyMappingRegistry.register(OPEN_SCREEN);
 		ClientNetworking.init();
+		StateManager.setClientInstance(new ClientStateManager());
+		StateManager.setServerInstance(new ClientDelegatingServerStateManager()); // Will be fixed later. Currently a hackfix
 
 		ClientCommandRegistrationEvent.EVENT.register((dispatcher, c) -> dispatcher.register(
 				literal("utilitybelt")
@@ -65,11 +67,26 @@ public class UtilityBeltClient {
 										})
 						)
 		));
-	}
 
-	public static void onJoinServer() {
-		//TODO: probably is not needed
-		StateManager.setClientInstance(new ClientStateManager());
+		if (Platform.isDevelopmentEnvironment()) {
+			ClientCommandRegistrationEvent.EVENT.register(((dispatcher, c) ->
+					dispatcher.register(
+							literal("dumpstatec")
+									.executes(ctx -> {
+										StateManager stateManager = StateManager.getClientInstance();
+										System.out.println("In belt: " + stateManager.isInBelt(Minecraft.getInstance().player));
+										System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(Minecraft.getInstance().player));
+										System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag());
+
+										StateManager stateManagerS = StateManager.getServerInstance();
+										System.out.println("In belt (client but server): " + stateManagerS.isInBelt(Minecraft.getInstance().player));
+										System.out.println("Selected slot (client but server): " + stateManagerS.getSelectedBeltSlot(Minecraft.getInstance().player));
+										System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag());
+										return 0;
+									})
+					)
+			));
+		}
 	}
 
 	private static void onEndClientTick(Minecraft client) {
@@ -124,8 +141,41 @@ public class UtilityBeltClient {
 		return EventResult.pass();
 	}
 
+	private static void onPlayerRespawn(LocalPlayer oldPlayer, LocalPlayer newPlayer) {
+		if (oldPlayer == Minecraft.getInstance().player || newPlayer == Minecraft.getInstance().player) {
+			StateManager stateManager = StateManager.getClientInstance();
+			stateManager.setInBelt(Minecraft.getInstance().player, false);
+			stateManager.setSelectedBeltSlot(Minecraft.getInstance().player, 0);
+			ClientNetworking.sendNewStateToServer(false, 0, false);
+		}
+	}
+
+	/**
+	 * @see io.github.jamalam360.utility_belt.mixin.client.ClientPacketListenerMixin
+	 */
+	public static void onClientConnect() {
+		StateManager stateManager = StateManager.getClientInstance();
+		stateManager.setInBelt(Minecraft.getInstance().player, false);
+		stateManager.setSelectedBeltSlot(Minecraft.getInstance().player, 0);
+		ClientNetworking.sendNewStateToServer(false, 0, false);
+	}
+
+	/**
+	 * @see io.github.jamalam360.utility_belt.mixin.client.ClientPacketListenerMixin
+	 */
+	public static void onClientDisconnect() {
+		StateManager stateManager = StateManager.getClientInstance();
+		stateManager.setInBelt(Minecraft.getInstance().player, false);
+		stateManager.setSelectedBeltSlot(Minecraft.getInstance().player, 0);
+	}
+
 	private static void toggleInBelt(Minecraft client) {
 		assert client.player != null;
+
+		if (UtilityBeltItem.getBelt(client.player) == null) {
+			return;
+		}
+
 		StateManager stateManager = StateManager.getClientInstance();
 		stateManager.setInBelt(client.player, !stateManager.isInBelt(client.player));
 		playSwapSound(client);

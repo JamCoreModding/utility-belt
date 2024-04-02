@@ -4,7 +4,6 @@ import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
-import io.github.jamalam360.utility_belt.server.ServerNetworking;
 import io.github.jamalam360.utility_belt.server.ServerStateManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +25,7 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
 	}
 
 	public UtilityBeltMenu(int syncId, Inventory playerInventory, UtilityBeltInventory inventory) {
-		super(UtilityBelt.MENU_TYPE, syncId);
+		super(UtilityBelt.MENU_TYPE.get(), syncId);
 		this.inventory = inventory;
 
 		int m;

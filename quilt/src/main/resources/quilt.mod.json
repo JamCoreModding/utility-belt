@@ -42,6 +42,14 @@
       {
         "id": "jamlib",
         "version": ">=${jamlib_version}"
+      },
+      {
+        "id": "baubly",
+        "version": "*"
+      },
+      {
+        "id": "trinkets",
+        "version": "*"
       }
     ]
   },

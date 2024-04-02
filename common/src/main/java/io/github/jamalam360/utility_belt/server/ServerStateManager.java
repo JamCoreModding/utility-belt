@@ -66,12 +66,12 @@ public class ServerStateManager extends StateManager {
 	}
 
 	private static class PlayerState {
-		private boolean inBelt;
-		private int selectedBeltSlot;
+		boolean inBelt;
+		int selectedBeltSlot;
 		@Nullable
-		private UtilityBeltInventory inventory;
+		UtilityBeltInventory inventory;
 
-		public PlayerState(boolean inBelt, int selectedBeltSlot) {
+		PlayerState(boolean inBelt, int selectedBeltSlot) {
 			this.inBelt = inBelt;
 			this.selectedBeltSlot = selectedBeltSlot;
 			this.inventory = null;

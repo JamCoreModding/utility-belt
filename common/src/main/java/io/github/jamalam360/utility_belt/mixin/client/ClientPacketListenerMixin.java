@@ -12,11 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
-	@Inject(
-			method = "handleLogin",
-			at = @At("RETURN")
-	)
-	private void utilitybelt$onJoinServer(CallbackInfo info) {
-		UtilityBeltClient.onJoinServer();
+	@Inject(method = "handleLogin", at = @At("TAIL"))
+	private void utilitybelt$onClientPacketListenerLogin(CallbackInfo ci) {
+		UtilityBeltClient.onClientConnect();
+	}
+
+	@Inject(method = "close", at = @At("HEAD"))
+	private void utilitybelt$onClientPacketListenerClose(CallbackInfo ci) {
+		UtilityBeltClient.onClientDisconnect();
 	}
 }

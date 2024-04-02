@@ -28,17 +28,6 @@ public class BeltRenderer implements BaubleRenderer {
 			new BeltModel(BeltModel.createLayerDefinition().bakeRoot())
 	);
 
-	@Override
-	public void render(ItemStack stack, SlotInfo slotContext, PoseStack matrixStack, EntityModel<? extends LivingEntity> entityModel, MultiBufferSource renderTypeBuffer, int light, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float netHeadYaw, float headPitch) {
-		HumanoidModel<LivingEntity> model = MODEL.get();
-		LivingEntity entity = slotContext.wearer();
-		model.setupAnim(entity, limbAngle, limbDistance, animationProgress, animationProgress, headPitch);
-		model.prepareMobModel(entity, limbAngle, limbDistance, tickDelta);
-		followBodyRotations(entity, model);
-		VertexConsumer vertexConsumer = renderTypeBuffer.getBuffer(model.renderType(TEXTURE));
-		model.renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
-	}
-
 	// shamelessly copied from https://github.com/emilyploszaj/trinkets/blob/main/src/main/java/dev/emi/trinkets/api/client/TrinketRenderer.java
 	// MIT licensed; thanks Trinkets contributors!
 	private static void followBodyRotations(final LivingEntity entity, final HumanoidModel<LivingEntity> model) {
@@ -55,5 +44,16 @@ public class BeltRenderer implements BaubleRenderer {
 				bipedModel.copyPropertiesTo(model);
 			}
 		}
+	}
+
+	@Override
+	public void render(ItemStack stack, SlotInfo slotContext, PoseStack matrixStack, EntityModel<? extends LivingEntity> entityModel, MultiBufferSource renderTypeBuffer, int light, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float netHeadYaw, float headPitch) {
+		HumanoidModel<LivingEntity> model = MODEL.get();
+		LivingEntity entity = slotContext.wearer();
+		model.setupAnim(entity, limbAngle, limbDistance, animationProgress, animationProgress, headPitch);
+		model.prepareMobModel(entity, limbAngle, limbDistance, tickDelta);
+		followBodyRotations(entity, model);
+		VertexConsumer vertexConsumer = renderTypeBuffer.getBuffer(model.renderType(TEXTURE));
+		model.renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 	}
 }

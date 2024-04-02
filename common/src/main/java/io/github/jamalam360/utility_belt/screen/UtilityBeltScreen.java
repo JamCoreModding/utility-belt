@@ -13,7 +13,7 @@ public class UtilityBeltScreen extends AbstractContainerScreen<UtilityBeltMenu> 
 	private static final ResourceLocation TEXTURE = UtilityBelt.id("textures/gui/utility_belt_gui.png");
 
 	public UtilityBeltScreen(UtilityBeltMenu menu, Inventory inventory, Component title) {
-		super(menu, inventory, title);
+		super(menu, inventory, Component.translatable("container.utility_belt.utility_belt"));
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class UtilityBeltScreen extends AbstractContainerScreen<UtilityBeltMenu> 
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		int x = (width - this.imageWidth) / 2;
 		int y = (height - this.imageHeight) / 2;
-		graphics.blitSprite(TEXTURE, x, y, this.imageWidth, this.imageHeight);
+		graphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
 	}
 
 	@Override

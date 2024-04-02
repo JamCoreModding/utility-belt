@@ -37,7 +37,7 @@ subprojects {
                     'Implementation-Version'  : project.jar.archiveVersion,
                     'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
                     'Built-On-Minecraft'      : minecraft_version,
-                    'JamLib-File-Name'        : "utility_belt-${project.base.archivesName.get()}-${rootProject.version}.jar",
+                    'JamLib-File-Name'        : "utility-belt-${project.base.archivesName.get()}-${rootProject.version}.jar",
             ])
         }
     }
@@ -92,6 +92,7 @@ allprojects {
     }
     
     tasks.publish {
+        dependsOn("clean")
         dependsOn(":githubRelease")
         dependsOn("fabric:publishUnified")
         dependsOn("quilt:publishUnified")

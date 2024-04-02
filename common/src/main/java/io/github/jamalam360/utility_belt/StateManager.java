@@ -11,12 +11,12 @@ public abstract class StateManager {
 		return clientInstance;
 	}
 
-	public static StateManager getServerInstance() {
-		return serverInstance;
-	}
-
 	public static void setClientInstance(StateManager clientInstance) {
 		StateManager.clientInstance = clientInstance;
+	}
+
+	public static StateManager getServerInstance() {
+		return serverInstance;
 	}
 
 	public static void setServerInstance(StateManager serverInstance) {
