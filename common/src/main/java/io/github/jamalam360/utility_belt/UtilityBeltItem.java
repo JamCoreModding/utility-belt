@@ -3,12 +3,12 @@ package io.github.jamalam360.utility_belt;
 import dev.architectury.platform.Platform;
 import earth.terrarium.baubly.common.*;
 import io.github.jamalam360.jamlib.JamLibPlatform;
+import io.github.jamalam360.utility_belt.client.ClientNetworking;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -62,13 +62,15 @@ public class UtilityBeltItem extends Item implements Bauble {
 	}
 
 	public static UtilityBeltInventory getInventoryFromTag(ItemStack stack) {
-		CompoundTag tag = stack.getOrCreateTag();
 		UtilityBeltInventory inv = new UtilityBeltInventory();
 
-		if (!tag.contains("Inventory")) {
-			tag.put("Inventory", inv.createTag());
-		} else {
-			inv.fromTag(tag.getList("Inventory", CompoundTag.TAG_COMPOUND));
+		if (stack != null) {
+			CompoundTag tag = stack.getOrCreateTag();
+			if (!tag.contains("Inventory")) {
+				tag.put("Inventory", inv.createTag());
+			} else {
+				inv.fromTag(tag.getList("Inventory", CompoundTag.TAG_COMPOUND));
+			}
 		}
 
 		return inv;
@@ -78,7 +80,7 @@ public class UtilityBeltItem extends Item implements Bauble {
 	public static ItemStack getBelt(Player player) {
 		if (Platform.isForgeLike() && BaubleUtils.getBaubleContainer(player, DefaultSlotIdentifiers.BELT.curioId()) == null) {
 			return null;
-		} else if ((JamLibPlatform.getPlatform().isFabricLike()) && BaubleUtils.getBaubleContainer(player, DefaultSlotIdentifiers.BELT.trinketIds()[0]) == null) {
+		} else if (JamLibPlatform.getPlatform().isFabricLike() && BaubleUtils.getBaubleContainer(player, DefaultSlotIdentifiers.BELT.trinketIds()[0]) == null) {
 			return null;
 		}
 
@@ -170,6 +172,16 @@ public class UtilityBeltItem extends Item implements Bauble {
 		}
 
 		return slot.identifier().equals(DefaultSlotIdentifiers.BELT.curioId()) || slot.identifier().equals(DefaultSlotIdentifiers.BELT.trinketIds()[0]);
+	}
+
+	@Override
+	public void onUnequip(ItemStack stack, SlotInfo slot) {
+		Player player = (Player) slot.wearer();
+		if (player.level().isClientSide) {
+			StateManager.getClientInstance().setInBelt(player, false);
+			StateManager.getClientInstance().setSelectedBeltSlot(player, 0);
+			ClientNetworking.sendNewStateToServer(false, 0, false);
+		}
 	}
 
 	@Override

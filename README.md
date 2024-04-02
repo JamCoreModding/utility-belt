@@ -1,26 +1,38 @@
-# JamCore Multi-loader Template Mod
+![Utility Belt: Free your hotbar; adds an extra hotbar for storing your tools](https://cdn.jamalam.tech/mod-assets/utility-belt-banner.png)
 
-<p align="center">
-    <img alt="forge" height="25" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/supported/forge_vector.svg">
-    <img alt="fabric" height="25" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/supported/fabric_vector.svg">
-    <img alt="quilt" height="25" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/supported/quilt_vector.svg">
-</p>
+<div align="center">
 
-This repository uses a system I created called
-[easytemplate](https://github.com/Jamalam360/easytemplate) to initialize the
-template automatically. After following the easytemplate prompt, you shouldn't
-have to make any changes before starting programming.
+[Report Issues](https://github.com/JamCoreModding/utility-belt) • [Chat on Discord](https://discord.jamalam.tech) • [CurseForge](https://curseforge.com/minecraft/mc-mods/utility-belt) • [Modrinth](https://modrinth.com/mod/utility-belt)
 
-1. Install [Deno](https://deno.land/)
-2. Click `Use This Template`
-3. Clone the repository.
-4. Run
-   `deno run --allow-read --allow-write --allow-env https://raw.githubusercontent.com/Jamalam360/easytemplate/main/easytemplate.ts`
-   in the repository directory.
-5. Follow the instructions.
-6. See [the docs](https://docs.jamalam.tech) for more information.
+</div>
 
-## License
+<div align="center">
 
-This repository contains the MIT license for ease of use, but you can change it
-to whatever you want.
+![A screenshot of a player wearing a Utility Belt](https://cdn.jamalam.tech/mod-assets/utility-belt-screenshot.png)
+
+</div>
+
+### **WARNING**: Utility Belt is currently in a **BETA STATE**: backup your worlds and tread with caution! Please report any issues at the link above :)
+
+## How to Use
+
+<div align="center">
+
+![The recipe for the Utility Belt](https://cdn.jamalam.tech/mod-assets/utility-belt-recipe.png)
+
+</div>
+
+1. Craft a Utility Belt
+2. Place it in your belt slot
+3. Use `'` to open a GUI to manage the belt's contents.
+4. Use `B` and `N` to switch between your regular hotbar and the belt. Crouch at the same time to swap items between the belt and your hotbar.
+
+## How to Configure
+
+Utility Belt can be configured via an in-game configuration screen which can be accessed in Mod Menu (Fabric/Quilt) or the mods screen (Forge/NeoForge).
+
+## I think I found a bug!
+
+Please report any issues you find on the [GitHub issue tracker](https://github.com/JamCoreModding/utility-belt). Until I reply, try out the `/utilitybelt fixme` command to see if it resolves the issue (but still report the problem if it does!).
+
+[![Rent a server with Bisect Hosting: Use Code jamalam to get 25% off](https://www.bisecthosting.com/partners/custom-banners/e0cc6668-0d29-40ff-9820-4d4f5433198a.webp)](https://bisecthosting.com/jamalam)
