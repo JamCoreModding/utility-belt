@@ -73,6 +73,18 @@ public class ServerNetworking {
 					ctx.getPlayer().getInventory().setItem(hotbarSlot, stackInBelt);
 					inv.setItem(beltSlot, stackInHand);
 					((Duck.LivingEntity) ctx.getPlayer()).utilitybelt$detectEquipmentUpdates();
+
+					if (beltSlot != slot) {
+						stateManager.setSelectedBeltSlot(ctx.getPlayer(), beltSlot);
+						FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
+						buf2.writeInt(beltSlot);
+						NetworkManager.sendToPlayer((ServerPlayer) ctx.getPlayer(), UtilityBelt.S2C_SET_BELT_SLOT, buf2);
+					} else if (hotbarSlot != ctx.getPlayer().getInventory().selected) {
+						ctx.getPlayer().getInventory().selected = hotbarSlot;
+						FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
+						buf2.writeInt(hotbarSlot);
+						NetworkManager.sendToPlayer((ServerPlayer) ctx.getPlayer(), UtilityBelt.S2C_SET_HOTBAR_SLOT, buf2);
+					}
 				}
 			}
 		});

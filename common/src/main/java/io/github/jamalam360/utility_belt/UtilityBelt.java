@@ -35,6 +35,8 @@ public class UtilityBelt {
 	public static final ResourceLocation C2S_UPDATE_STATE = id("update_state");
 	public static final ResourceLocation C2S_OPEN_SCREEN = id("open_screen");
 	public static final ResourceLocation S2C_UPDATE_INV = id("update_inv");
+	public static final ResourceLocation S2C_SET_BELT_SLOT = id("set_belt_slot");
+	public static final ResourceLocation S2C_SET_HOTBAR_SLOT = id("set_hotbar_slot");
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, Registries.ITEM);
 	public static final RegistrySupplier<Item> UTILITY_BELT = ITEMS.register("utility_belt", UtilityBeltItem::new);
 	public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(MOD_ID, Registries.MENU);
