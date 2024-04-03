@@ -58,7 +58,7 @@ public class BeltHotbarRenderer {
 				graphics.pose().translate(-12, -(y + 12), 0);
 			}
 
-			graphics.renderItem(player, stack, 4, y, seed);
+			graphics.renderItem(player, stack, 5, y, seed);
 			if (f > 0.0F) {
 				graphics.pose().popPose();
 			}
