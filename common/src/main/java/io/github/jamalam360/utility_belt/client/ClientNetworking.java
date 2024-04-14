@@ -19,11 +19,17 @@ public class ClientNetworking {
 		NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBelt.S2C_SET_HOTBAR_SLOT, ClientNetworking::handleSetHotbarSlot);
 	}
 
-	public static void sendNewStateToServer(boolean inBelt, int slot, boolean swap) {
+	public static void sendNewStateToServer(boolean inBelt, int slot, boolean swapItems) {
+//		swapItems |= UtilityBelt.CONFIG.get().useSneakSwapping;
+
+		if (swapItems && !UtilityBelt.CONFIG.get().useSneakSwapping) {
+			swapItems = false;
+		}
+
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(inBelt);
 		buf.writeInt(slot);
-		buf.writeBoolean(swap);
+		buf.writeBoolean(swapItems);
 		NetworkManager.sendToServer(UtilityBelt.C2S_UPDATE_STATE, buf);
 	}
 

@@ -3,6 +3,7 @@ package io.github.jamalam360.utility_belt;
 public class Config {
 	public boolean displayUtilityBeltWhenNotSelected = true;
 	public boolean invertScrolling = false;
+	public boolean useSneakSwapping = true;
 	public HotbarKeyBehaviour hotbarKeyBehaviour = HotbarKeyBehaviour.SWITCH_BELT_SLOT;
 	public Position hotbarPosition = Position.MIDDLE_LEFT;
 

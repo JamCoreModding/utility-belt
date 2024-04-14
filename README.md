@@ -12,8 +12,6 @@
 
 </div>
 
-### **WARNING**: Utility Belt is currently in a **BETA STATE**: backup your worlds and tread with caution! Please report any issues at the link above :)
-
 ## How to Use
 
 <div align="center">
