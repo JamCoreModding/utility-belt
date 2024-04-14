@@ -1,2 +1,1 @@
-- Add an option, `useSneakSwapping`, to disable the sneak-to-swap-items behavior (#40).
-- Release as non-beta version.
+- Re-release due to Curseforge being jank?
