@@ -1,1 +1,1 @@
-- Re-release due to Curseforge being jank?
+- Fix item-loss when dropping an item from the belt.

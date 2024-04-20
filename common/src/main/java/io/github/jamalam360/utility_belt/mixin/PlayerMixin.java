@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
 public class PlayerMixin {
+	@SuppressWarnings("ConstantValue")
 	@Inject(
 			method = "setItemSlot",
 			at = @At("HEAD")
