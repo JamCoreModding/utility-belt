@@ -25,7 +25,7 @@ public abstract class StateManager {
 
 	public boolean hasBelt(Player player) {
 		ItemStack belt = UtilityBeltItem.getBelt(player);
-		return belt != null && belt.is(UtilityBelt.UTILITY_BELT.get());
+		return belt != null && belt.is(UtilityBelt.UTILITY_BELT_ITEM.get());
 	}
 
 	public void onStartTick(Player player) {

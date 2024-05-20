@@ -47,6 +47,7 @@ public class UtilityBeltInventory extends SimpleContainer {
 		return false;
 	}
 
+	@Override
 	public UtilityBeltInventory clone() {
 		UtilityBeltInventory inv = new UtilityBeltInventory();
 		for (int i = 0; i < this.getContainerSize(); i++) {

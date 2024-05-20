@@ -18,6 +18,9 @@
     "entrypoints": {
         "main": [
             "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabric"
+        ],
+        "client": [
+            "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabricClient"
         ]
     },
     "mixins": [
@@ -29,7 +32,6 @@
         "minecraft": ">=${minecraft_version}",
         "architectury": ">=${architectury_version}",
         "jamlib": ">=${jamlib_version}",
-        "baubly": "*",
-        "trinkets": "*"
+        "trinkets": ">=${trinkets_version}"
     }
 }

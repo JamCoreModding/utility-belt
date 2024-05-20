@@ -5,7 +5,6 @@ import dev.architectury.event.events.client.*;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
-import earth.terrarium.baubly.client.BaublyClient;
 import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
@@ -37,7 +36,6 @@ public class UtilityBeltClient {
 		ClientTickEvent.CLIENT_POST.register(UtilityBeltClient::onEndClientTick);
 		ClientRawInputEvent.MOUSE_SCROLLED.register(UtilityBeltClient::onMouseScrolled);
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register(UtilityBeltClient::onPlayerRespawn);
-		UtilityBelt.UTILITY_BELT.listen(belt -> BaublyClient.registerBaubleRenderer(belt, new BeltRenderer()));
 		UtilityBelt.MENU_TYPE.listen(menu -> MenuRegistry.registerScreenFactory(UtilityBelt.MENU_TYPE.get(), UtilityBeltScreen::new));
 		KeyMappingRegistry.register(SWAP_TOGGLE);
 		KeyMappingRegistry.register(SWAP_HOLD);

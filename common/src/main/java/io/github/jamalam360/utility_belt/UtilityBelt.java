@@ -38,7 +38,7 @@ public class UtilityBelt {
 	public static final ResourceLocation S2C_SET_BELT_SLOT = id("set_belt_slot");
 	public static final ResourceLocation S2C_SET_HOTBAR_SLOT = id("set_hotbar_slot");
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, Registries.ITEM);
-	public static final RegistrySupplier<Item> UTILITY_BELT = ITEMS.register("utility_belt", UtilityBeltItem::new);
+	public static final RegistrySupplier<Item> UTILITY_BELT_ITEM = ITEMS.register("utility_belt", UtilityBeltItem::new);
 	public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(MOD_ID, Registries.MENU);
 	public static final RegistrySupplier<MenuType<UtilityBeltMenu>> MENU_TYPE = MENUS.register("utility_belt", () -> new MenuType<>(UtilityBeltMenu::new, FeatureFlagSet.of()));
 
@@ -46,7 +46,7 @@ public class UtilityBelt {
 		JamLib.checkForJarRenaming(UtilityBelt.class);
 		ITEMS.register();
 		MENUS.register();
-		UTILITY_BELT.listen((belt) -> CreativeTabRegistry.append(CreativeModeTabs.TOOLS_AND_UTILITIES, UTILITY_BELT.get()));
+		UTILITY_BELT_ITEM.listen((belt) -> CreativeTabRegistry.append(CreativeModeTabs.TOOLS_AND_UTILITIES, belt));
 		ServerNetworking.init();
 		StateManager.setServerInstance(new ServerStateManager());
 		EnvExecutor.runInEnv(Env.CLIENT, () -> UtilityBeltClient::init);
