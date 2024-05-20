@@ -104,8 +104,6 @@ allprojects {
         dependsOn("clean")
         dependsOn(":githubRelease")
         dependsOn("fabric:publishUnified")
-        dependsOn("quilt:publishUnified")
-        dependsOn("forge:publishUnified")
         dependsOn("neoforge:publishUnified")
     }
 }
