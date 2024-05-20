@@ -109,9 +109,16 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
 
 	private void markDirty(Player player) {
 		ItemStack belt = UtilityBeltItem.getBelt(player);
-		belt.getTag().put("Inventory", this.inventory.createTag());
 
-		if (player instanceof ServerPlayer sPlayer) {
+		if (belt == null) {
+			// uh oh
+			// anyways
+			return;
+		}
+
+		UtilityBeltItem.setInventory(belt, this.inventory);
+
+		if (player instanceof ServerPlayer) {
 			((ServerStateManager) StateManager.getServerInstance()).getInventoryFromTag(player);
 		}
 	}

@@ -74,12 +74,12 @@ public class UtilityBeltClient {
 										StateManager stateManager = StateManager.getClientInstance();
 										System.out.println("In belt: " + stateManager.isInBelt(Minecraft.getInstance().player));
 										System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(Minecraft.getInstance().player));
-										System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag());
+										System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
 
 										StateManager stateManagerS = StateManager.getServerInstance();
 										System.out.println("In belt (client but server): " + stateManagerS.isInBelt(Minecraft.getInstance().player));
 										System.out.println("Selected slot (client but server): " + stateManagerS.getSelectedBeltSlot(Minecraft.getInstance().player));
-										System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag());
+										System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
 										return 0;
 									})
 					)

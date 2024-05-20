@@ -1,59 +1,73 @@
 package io.github.jamalam360.utility_belt;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import com.mojang.serialization.Codec;
+import java.util.List;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 
 public class UtilityBeltInventory extends SimpleContainer {
-	public UtilityBeltInventory() {
-		super(4);
-	}
 
-	@Override
-	public void fromTag(ListTag listTag) {
-		this.clearContent();
+    public static final Codec<UtilityBeltInventory> CODEC = Codec
+          .list(ItemStack.CODEC)
+          .xmap(UtilityBeltInventory::new, UtilityBeltInventory::getItems);
 
-		for (int i = 0; i < listTag.size(); ++i) {
-			this.setItem(i, ItemStack.of(listTag.getCompound(i)));
-		}
-	}
+    public static final StreamCodec<RegistryFriendlyByteBuf, UtilityBeltInventory> STREAM_CODEC = StreamCodec
+          .composite(
+                ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list(4)),
+                UtilityBeltInventory::getItems,
+                UtilityBeltInventory::new
+          );
 
-	@Override
-	public ListTag createTag() {
-		ListTag listTag = new ListTag();
 
-		for (int i = 0; i < this.getContainerSize(); ++i) {
-			listTag.add(this.getItem(i).save(new CompoundTag()));
-		}
+    public UtilityBeltInventory() {
+        super(4);
+    }
 
-		return listTag;
-	}
+    private UtilityBeltInventory(List<ItemStack> stacks) {
+        super(4);
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof UtilityBeltInventory other) {
-			if (other.getContainerSize() == this.getContainerSize()) {
-				for (int i = 0; i < this.getContainerSize(); i++) {
-					if (!ItemStack.matches(this.getItem(i), other.getItem(i))) {
-						return false;
-					}
-				}
+        for (int i = 0; i < stacks.size(); i++) {
+            this.setItem(i, stacks.get(i));
+        }
+    }
 
-				return true;
-			}
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof UtilityBeltInventory other) {
+            if (other.getContainerSize() == this.getContainerSize()) {
+                for (int i = 0; i < this.getContainerSize(); i++) {
+                    if (!ItemStack.matches(this.getItem(i), other.getItem(i))) {
+                        return false;
+                    }
+                }
 
-		return false;
-	}
+                return true;
+            }
+        }
 
-	@Override
-	public UtilityBeltInventory clone() {
-		UtilityBeltInventory inv = new UtilityBeltInventory();
-		for (int i = 0; i < this.getContainerSize(); i++) {
-			inv.setItem(i, this.getItem(i).copy());
-		}
+        return false;
+    }
 
-		return inv;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        for (int i = 0; i < this.getContainerSize(); i++) {
+            hash += this.getItem(i).hashCode();
+        }
+
+        return hash;
+    }
+
+    @Override
+    public UtilityBeltInventory clone() {
+        UtilityBeltInventory inv = new UtilityBeltInventory();
+        for (int i = 0; i < this.getContainerSize(); i++) {
+            inv.setItem(i, this.getItem(i).copy());
+        }
+
+        return inv;
+    }
 }

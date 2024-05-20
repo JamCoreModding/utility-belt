@@ -19,7 +19,7 @@ public abstract class GuiMixin {
 	protected abstract Player getCameraPlayer();
 
 	@WrapWithCondition(
-			method = "renderHotbar",
+			method = "renderItemHotbar",
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V",

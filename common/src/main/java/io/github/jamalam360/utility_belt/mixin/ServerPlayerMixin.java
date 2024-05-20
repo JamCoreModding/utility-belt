@@ -28,7 +28,7 @@ public class ServerPlayerMixin {
 			UtilityBeltInventory nbtInv = UtilityBeltItem.getInventoryFromTag(belt);
 
 			if (!inv.equals(nbtInv)) {
-				belt.getOrCreateTag().put("Inventory", inv.createTag());
+				UtilityBeltItem.setInventory(belt, inv);
 				ServerNetworking.sendNewInventoryToClient((ServerPlayer) (Object) this);
 			}
 		}

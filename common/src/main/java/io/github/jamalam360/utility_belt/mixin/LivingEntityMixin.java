@@ -6,6 +6,7 @@ import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,11 +23,11 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
 
     @SuppressWarnings("ConstantValue")
     @Inject(
-          method = "broadcastBreakEvent(Lnet/minecraft/world/InteractionHand;)V",
+          method = "broadcastBreakEvent",
           at = @At("HEAD")
     )
-    private void utilitybelt$broadcastBreakEvent(InteractionHand interactionHand, CallbackInfo ci) {
-        if (interactionHand == InteractionHand.MAIN_HAND && (Object) this instanceof ServerPlayer player) {
+    private void utilitybelt$broadcastBreakEvent(EquipmentSlot slot, CallbackInfo ci) {
+        if (slot == EquipmentSlot.MAINHAND && (Object) this instanceof ServerPlayer player) {
             StateManager stateManager = StateManager.getServerInstance();
             if (stateManager.isInBelt(player)) {
                 ItemStack belt = UtilityBeltItem.getBelt(player);

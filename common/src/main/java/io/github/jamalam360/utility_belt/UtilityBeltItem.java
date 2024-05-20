@@ -3,7 +3,6 @@ package io.github.jamalam360.utility_belt;
 import io.github.jamalam360.utility_belt.client.ClientNetworking;
 import java.util.List;
 import java.util.function.Consumer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -24,7 +23,6 @@ import net.minecraft.world.item.SpyglassItem;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.TridentItem;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class UtilityBeltItem extends Item {
@@ -32,7 +30,7 @@ public class UtilityBeltItem extends Item {
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
 
     public UtilityBeltItem() {
-        super(new Item.Properties().stacksTo(1));
+        super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), new UtilityBeltInventory()));
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -66,26 +64,24 @@ public class UtilityBeltItem extends Item {
         return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ProjectileWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.getItem() instanceof BrushItem || stack.isEmpty() || stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
     }
 
+    // Going to keep this name as is until 1.20.4 support is dropped, to keep the diffs smaller
     public static UtilityBeltInventory getInventoryFromTag(ItemStack stack) {
-        UtilityBeltInventory inv = new UtilityBeltInventory();
-
-        if (stack != null) {
-            CompoundTag tag = stack.getOrCreateTag();
-            if (!tag.contains("Inventory")) {
-                tag.put("Inventory", inv.createTag());
-            } else {
-                inv.fromTag(tag.getList("Inventory", CompoundTag.TAG_COMPOUND));
-            }
+        if (!stack.has(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get())) {
+            stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), new UtilityBeltInventory());
         }
 
-        return inv;
+        return stack.get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get());
+    }
+
+    public static void setInventory(ItemStack stack, UtilityBeltInventory inv) {
+        stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), inv);
     }
 
     @Nullable
     public static ItemStack getBelt(Player player) {
         ItemStack stack = UtilityBeltPlatform.getStackInBeltSlot(player);
 
-		if (stack != null && stack.getItem() == UtilityBelt.UTILITY_BELT_ITEM.get()) {
+        if (stack != null && stack.getItem() == UtilityBelt.UTILITY_BELT_ITEM.get()) {
             return stack;
         } else {
             return null;
@@ -109,7 +105,7 @@ public class UtilityBeltItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
         UtilityBeltInventory inv = getInventoryFromTag(itemStack);
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -134,7 +130,7 @@ public class UtilityBeltItem extends Item {
         }
 
         playInsertSound(player);
-        belt.getOrCreateTag().put("Inventory", inv.createTag());
+        setInventory(belt, inv);
         return true;
     }
 
@@ -151,7 +147,7 @@ public class UtilityBeltItem extends Item {
         }
 
         playInsertSound(player);
-        belt.getOrCreateTag().put("Inventory", inv.createTag());
+        setInventory(belt, inv);
         return true;
     }
 
