@@ -30,6 +30,4 @@ dependencyResolutionManagement {
 rootProject.name = "utility_belt"
 include("common")
 include("fabric")
-include("quilt")
 include("neoforge")
-include("forge")

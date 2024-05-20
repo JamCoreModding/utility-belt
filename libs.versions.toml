@@ -17,10 +17,13 @@ quilt-loader = "0.24.0"
 quilted-fabric-api = "7.4.0+0.90.0-1.20.1"
 
 # https://maven.jamalam.tech/#/releases
-jamlib = "1.0.8+1.20.4"
+jamlib = "1.0.9+1.20.4"
 
-# https://github.com/terrarium-earth/Baubly/blob/1.20.x/gradle.properties
-baubly = "1.1.1"
+# https://modrinth.com/mod/trinkets/versions
+trinkets = "3.8.1"
+
+# https://modrinth.com/mod/curios/versions
+curios = "7.4.1+1.20.4"
 
 # https://github.com/LlamaLad7/MixinExtras/releases
 mixin-extras = "0.3.5"
@@ -50,10 +53,9 @@ jamlib-quilt = { module = "io.github.jamalam360:jamlib-quilt", version.ref = "ja
 jamlib-forge = { module = "io.github.jamalam360:jamlib-forge", version.ref = "jamlib" }
 jamlib-neoforge = { module = "io.github.jamalam360:jamlib-neoforge", version.ref = "jamlib" }
 
-baubly-common = { module = "earth.terrarium.baubly:baubly-common-1.20.4", version.ref = "baubly" }
-baubly-fabric = { module = "earth.terrarium.baubly:baubly-fabric-1.20.4", version.ref = "baubly" }
-baubly-forge = { module = "earth.terrarium.baubly:baubly-forge-1.20.4", version.ref = "baubly" }
-baubly-neoforge = { module = "earth.terrarium.baubly:baubly-neoforge-1.20.4", version.ref = "baubly" }
+trinkets = { module = "dev.emi:trinkets", version.ref = "trinkets" }
+
+curios-neoforge = { module = "top.theillusivec4.curios:curios-neoforge", version.ref = "curios" }
 
 mixin-extras-common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
 # Everything other than Forge already includes mixin extras

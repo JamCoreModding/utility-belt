@@ -43,16 +43,9 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.utility_belt]]
-modId = "baubly"
-mandatory = true
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.utility_belt]]
 modId = "curios"
-mandatory = true
-versionRange = "*"
+type = "required"
+versionRange = "[${curios_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
