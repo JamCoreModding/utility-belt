@@ -46,7 +46,7 @@ public class UtilityBelt {
 		JamLib.checkForJarRenaming(UtilityBelt.class);
 		ITEMS.register();
 		MENUS.register();
-		UTILITY_BELT_ITEM.listen((belt) -> CreativeTabRegistry.append(CreativeModeTabs.TOOLS_AND_UTILITIES, UTILITY_BELT_ITEM.get()));
+		UTILITY_BELT_ITEM.listen((belt) -> CreativeTabRegistry.append(CreativeModeTabs.TOOLS_AND_UTILITIES, belt));
 		ServerNetworking.init();
 		StateManager.setServerInstance(new ServerStateManager());
 		EnvExecutor.runInEnv(Env.CLIENT, () -> UtilityBeltClient::init);
