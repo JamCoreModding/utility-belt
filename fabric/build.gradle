@@ -8,6 +8,10 @@ architectury {
     fabric()
 }
 
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
 base {
     archivesName = "utility-belt-fabric"
 }

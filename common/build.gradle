@@ -2,6 +2,10 @@ architectury {
     common(rootProject.enabled_platforms.split(","))
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/utility_belt.accesswidener")
+}
+
 dependencies {
     modImplementation libs.fabric.loader
     modApi libs.architectury.common

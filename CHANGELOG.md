@@ -1,4 +1,7 @@
-- Remove the Baubly dependency
-  - This also fixes #42
-- Drop Forge and Quilt support (see Discord for reasoning). This was done pre-1.20.6 to reduce the
-  work needed to remove Baubly.
+- Port to 1.20.6
+    - It should be safe to update worlds from 1.20.4 to 1.20.6 **ON FABRIC** as a datafixer has been
+      implemented
+      to migrate from NBT to components, but as always make a backup in case.
+    - If [Curios#411](https://github.com/TheIllusiveC4/Curios/issues/411) is implemented, it will be
+      safe to do so on Neoforge. For now, upgrading Neoforge worlds **WILL CAUSE LOSS OF ITEMS IN
+      THE BELT**.
