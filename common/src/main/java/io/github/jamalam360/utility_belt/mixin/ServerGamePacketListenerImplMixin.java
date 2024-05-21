@@ -25,6 +25,6 @@ public class ServerGamePacketListenerImplMixin {
 			)
 	)
 	private boolean utilitybelt$disallowOffhandWhenInBelt(boolean original) {
-		return original && !StateManager.getServerInstance().isInBelt(this.player);
+		return original || StateManager.getServerInstance().isInBelt(this.player);
 	}
 }
