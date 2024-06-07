@@ -10,6 +10,7 @@ public class UtilityBeltPackets {
     public static final CustomPacketPayload.Type<C2SOpenScreen> C2S_OPEN_SCREEN = new CustomPacketPayload.Type<>(UtilityBelt.id("open_screen"));
     public static final CustomPacketPayload.Type<S2CSetBeltSlot> S2C_SET_BELT_SLOT = new CustomPacketPayload.Type<>(UtilityBelt.id("set_belt_slot"));
     public static final CustomPacketPayload.Type<S2CSetHotbarSlot> S2C_SET_HOTBAR_SLOT = new CustomPacketPayload.Type<>(UtilityBelt.id("set_hotbar_slot"));
+    public static final CustomPacketPayload.Type<S2CUpdateBeltInventory> S2C_UPDATE_BELT_INVENTORY = new CustomPacketPayload.Type<>(UtilityBelt.id("update_belt_inventory"));
 
     public record C2SUpdateState(boolean inBelt, int slot, boolean swapItems) implements CustomPacketPayload {
 
@@ -65,6 +66,16 @@ public class UtilityBeltPackets {
         @Override
         public Type<? extends CustomPacketPayload> type() {
             return S2C_SET_HOTBAR_SLOT;
+        }
+    }
+
+    public record S2CUpdateBeltInventory(UtilityBeltInventory inventory) implements CustomPacketPayload {
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, S2CUpdateBeltInventory> STREAM_CODEC = UtilityBeltInventory.STREAM_CODEC.map(S2CUpdateBeltInventory::new, S2CUpdateBeltInventory::inventory);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return new CustomPacketPayload.Type<>(UtilityBelt.id("update_belt_inventory"));
         }
     }
 }

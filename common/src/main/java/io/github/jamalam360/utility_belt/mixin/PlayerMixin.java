@@ -24,8 +24,9 @@ public class PlayerMixin {
 		if (equipmentSlot == EquipmentSlot.MAINHAND && (Object) this instanceof ServerPlayer player) {
 			StateManager stateManager = StateManager.getServerInstance();
 			if (stateManager.isInBelt(player)) {
-				UtilityBeltInventory inv = stateManager.getInventory(player);
+				UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
 				inv.setItem(stateManager.getSelectedBeltSlot(player), itemStack);
+				stateManager.setInventory(player, inv);
 			}
 		}
 	}

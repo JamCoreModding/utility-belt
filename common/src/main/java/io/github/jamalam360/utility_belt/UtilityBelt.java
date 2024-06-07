@@ -42,7 +42,7 @@ public class UtilityBelt {
     public static final RegistrySupplier<Item> UTILITY_BELT_ITEM = ITEMS.register("utility_belt", UtilityBeltItem::new);
     public static final RegistrySupplier<MenuType<UtilityBeltMenu>> MENU_TYPE = MENUS.register("utility_belt", () -> new MenuType<>(UtilityBeltMenu::new, FeatureFlagSet.of()));
     public static final RegistrySupplier<DataComponentType<UtilityBeltInventory>> UTILITY_BELT_INVENTORY_COMPONENT_TYPE = COMPONENT_TYPES.register("utility_belt_inventory", () ->
-          DataComponentType.<UtilityBeltInventory>builder().persistent(UtilityBeltInventory.CODEC).networkSynchronized(UtilityBeltInventory.STREAM_CODEC).build()
+          DataComponentType.<UtilityBeltInventory>builder().persistent(UtilityBeltInventory.CODEC).cacheEncoding().build()
     );
 
     public static void init() {

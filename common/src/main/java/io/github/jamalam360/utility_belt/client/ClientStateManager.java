@@ -16,32 +16,41 @@ public class ClientStateManager extends StateManager {
 
 	@Override
 	public boolean isInBelt(Player player) {
-		assert player == Minecraft.getInstance().player;
 		return this.isInUtilityBelt;
 	}
 
 	@Override
 	public void setInBelt(Player player, boolean inBelt) {
-		assert player == Minecraft.getInstance().player;
 		this.isInUtilityBelt = inBelt;
 	}
 
 	@Override
 	public int getSelectedBeltSlot(Player player) {
-		assert player == Minecraft.getInstance().player;
 		return this.selectedSlot;
 	}
 
 	@Override
 	public void setSelectedBeltSlot(Player player, int slot) {
-		assert player == Minecraft.getInstance().player;
 		this.selectedSlot = slot;
 	}
 
 	@Override
 	public UtilityBeltInventory getInventory(Player player) {
 		ItemStack belt = UtilityBeltItem.getBelt(player);
-		assert belt != null;
-		return UtilityBeltItem.getInventoryFromTag(belt);
+
+		if (belt == null) {
+			return UtilityBeltInventory.EMPTY;
+		} else {
+			return UtilityBeltItem.getInventoryFromTag(belt);
+		}
+	}
+
+	@Override
+	public void setInventory(Player player, UtilityBeltInventory.Mutable inventory) {
+		ItemStack belt = UtilityBeltItem.getBelt(player);
+
+		if (belt != null) {
+			UtilityBeltItem.setInventory(belt, inventory.toImmutable());
+		}
 	}
 }

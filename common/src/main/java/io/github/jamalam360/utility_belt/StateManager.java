@@ -28,9 +28,6 @@ public abstract class StateManager {
 		return belt != null && belt.is(UtilityBelt.UTILITY_BELT_ITEM.get());
 	}
 
-	public void onStartTick(Player player) {
-	}
-
 	public abstract boolean isInBelt(Player player);
 
 	public abstract void setInBelt(Player player, boolean inBelt);
@@ -40,4 +37,10 @@ public abstract class StateManager {
 	public abstract void setSelectedBeltSlot(Player player, int slot);
 
 	public abstract UtilityBeltInventory getInventory(Player player);
+
+	public UtilityBeltInventory.Mutable getMutableInventory(Player player) {
+		return new UtilityBeltInventory.Mutable(this.getInventory(player));
+	}
+
+	public abstract void setInventory(Player player, UtilityBeltInventory.Mutable inventory);
 }

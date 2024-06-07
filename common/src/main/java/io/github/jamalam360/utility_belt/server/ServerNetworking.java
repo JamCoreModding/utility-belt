@@ -23,13 +23,8 @@ public class ServerNetworking {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_OPEN_SCREEN, C2SOpenScreen.STREAM_CODEC, ServerNetworking::handleOpenScreen);
     }
 
-    public static void sendNewInventoryToClient(ServerPlayer player) {
-//		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-//		UtilityBeltInventory inv = StateManager.getServerInstance().getInventory(player);
-//		CompoundTag tag = new CompoundTag();
-//		tag.put("Inventory", inv.createTag());
-//		buf.writeNbt(tag);
-//		NetworkManager.sendToPlayer(player, UtilityBelt.S2C_UPDATE_INV, buf);
+    public static void sendInventoryToClient(ServerPlayer player, UtilityBeltInventory inventory) {
+        NetworkManager.sendToPlayer(player, new UtilityBeltPackets.S2CUpdateBeltInventory(inventory));
     }
 
     private static void handleUpdateState(C2SUpdateState payload, NetworkManager.PacketContext ctx) {
@@ -52,7 +47,7 @@ public class ServerNetworking {
                     return;
                 }
 
-                UtilityBeltInventory inv = stateManager.getInventory(ctx.getPlayer());
+                UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(ctx.getPlayer());
                 ItemStack stackInHand = ctx.getPlayer().getInventory().getItem(ctx.getPlayer().getInventory().selected);
                 int hotbarSlot = ctx.getPlayer().getInventory().selected;
                 ItemStack stackInBelt = inv.getItem(beltSlot);
@@ -78,6 +73,7 @@ public class ServerNetworking {
                 if (UtilityBeltItem.isValidItem(stackInHand)) {
                     ctx.getPlayer().getInventory().setItem(hotbarSlot, stackInBelt);
                     inv.setItem(beltSlot, stackInHand);
+                    stateManager.setInventory(ctx.getPlayer(), inv);
                     ((Duck.LivingEntity) ctx.getPlayer()).utilitybelt$detectEquipmentUpdates();
 
                     if (beltSlot != slot) {

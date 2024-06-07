@@ -1,73 +1,110 @@
 package io.github.jamalam360.utility_belt;
 
 import com.mojang.serialization.Codec;
+import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 
-public class UtilityBeltInventory extends SimpleContainer {
+public record UtilityBeltInventory(List<ItemStack> items) {
 
+    public static final UtilityBeltInventory EMPTY = new UtilityBeltInventory(NonNullList.withSize(4, ItemStack.EMPTY));
     public static final Codec<UtilityBeltInventory> CODEC = Codec
-          .list(ItemStack.CODEC)
-          .xmap(UtilityBeltInventory::new, UtilityBeltInventory::getItems);
+          .list(ItemStack.OPTIONAL_CODEC)
+          .xmap(UtilityBeltInventory::new, UtilityBeltInventory::items);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, UtilityBeltInventory> STREAM_CODEC = StreamCodec
           .composite(
-                ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list(4)),
-                UtilityBeltInventory::getItems,
+                ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list(4)),
+                UtilityBeltInventory::items,
                 UtilityBeltInventory::new
           );
 
-
-    public UtilityBeltInventory() {
-        super(4);
+    public UtilityBeltInventory {
+        if (items.size() != 4) {
+            throw new IllegalArgumentException("Utility belt inventory must have exactly 4 items");
+        }
     }
 
-    private UtilityBeltInventory(List<ItemStack> stacks) {
-        super(4);
+    public ItemStack getItem(int index) {
+        return items.get(index);
+    }
 
-        for (int i = 0; i < stacks.size(); i++) {
-            this.setItem(i, stacks.get(i));
-        }
+    public int getContainerSize() {
+        return 4;
+    }
+
+    public UtilityBeltInventory clone() {
+        return new UtilityBeltInventory(new ArrayList<>(items));
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof UtilityBeltInventory other) {
-            if (other.getContainerSize() == this.getContainerSize()) {
-                for (int i = 0; i < this.getContainerSize(); i++) {
-                    if (!ItemStack.matches(this.getItem(i), other.getItem(i))) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
+            return ItemStack.listMatches(items, other.items);
         }
 
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public int hashCode() {
-        int hash = 0;
-        for (int i = 0; i < this.getContainerSize(); i++) {
-            hash += this.getItem(i).hashCode();
-        }
-
-        return hash;
+        return ItemStack.hashStackList(items);
     }
 
     @Override
-    public UtilityBeltInventory clone() {
-        UtilityBeltInventory inv = new UtilityBeltInventory();
-        for (int i = 0; i < this.getContainerSize(); i++) {
-            inv.setItem(i, this.getItem(i).copy());
+    public String toString() {
+        return invToString("UtilityBeltInventory[", items);
+    }
+
+    public static class Mutable extends SimpleContainer {
+
+        public Mutable(UtilityBeltInventory inv) {
+            super(4);
+
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                this.setItem(i, inv.getItem(i));
+            }
         }
 
-        return inv;
+        public UtilityBeltInventory toImmutable() {
+            return new UtilityBeltInventory(new ArrayList<>(this.getItems()));
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof UtilityBeltInventory other) {
+                return ItemStack.listMatches(this.getItems(), other.items);
+            }
+
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return invToString("UtilityBeltInventory$Mutable[", this.getItems());
+        }
+    }
+
+    private static String invToString(String prefix, List<ItemStack> items) {
+        StringBuilder string = new StringBuilder(prefix);
+
+        for (int i = 0; i < items.size(); i++) {
+            string.append(items.get(i));
+            string.append(" {");
+            string.append(items.get(i).getComponents().get(DataComponents.DAMAGE));
+            string.append("}");
+            if (i < items.size() - 1) {
+                string.append(", ");
+            }
+        }
+
+        return string.toString();
     }
 }

@@ -1,5 +1,6 @@
 package io.github.jamalam360.utility_belt;
 
+import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.client.ClientNetworking;
 import java.util.List;
 import java.util.function.Consumer;
@@ -7,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -30,11 +32,11 @@ public class UtilityBeltItem extends Item {
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
 
     public UtilityBeltItem() {
-        super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), new UtilityBeltInventory()));
+        super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.EMPTY));
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean handleStack(ItemStack stack, UtilityBeltInventory inv, Consumer<ItemStack> slotAccess) {
+    private static boolean handleStack(ItemStack stack, UtilityBeltInventory.Mutable inv, Consumer<ItemStack> slotAccess) {
         if (stack.isEmpty()) {
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 if (!inv.getItem(i).isEmpty()) {
@@ -67,12 +69,13 @@ public class UtilityBeltItem extends Item {
     // Going to keep this name as is until 1.20.4 support is dropped, to keep the diffs smaller
     public static UtilityBeltInventory getInventoryFromTag(ItemStack stack) {
         if (!stack.has(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get())) {
-            stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), new UtilityBeltInventory());
+            stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.EMPTY);
         }
 
         return stack.get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get());
     }
 
+    // This should only be called by the state managers, or when the belt is NOT equipped
     public static void setInventory(ItemStack stack, UtilityBeltInventory inv) {
         stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), inv);
     }
@@ -90,12 +93,12 @@ public class UtilityBeltItem extends Item {
 
     @Override
     public boolean isBarVisible(ItemStack itemStack) {
-        return getInventoryFromTag(itemStack).hasAnyMatching(s -> !s.isEmpty());
+        return getInventoryFromTag(itemStack).items().stream().anyMatch(s -> !s.isEmpty());
     }
 
     @Override
     public int getBarWidth(ItemStack itemStack) {
-        long size = getInventoryFromTag(itemStack).getItems().stream().filter((s) -> !s.isEmpty()).count();
+        long size = getInventoryFromTag(itemStack).items().stream().filter((s) -> !s.isEmpty()).count();
         return size == 4L ? 13 : (int) (size * 3);
     }
 
@@ -123,14 +126,13 @@ public class UtilityBeltItem extends Item {
         }
 
         ItemStack slotStack = slot.getItem();
-        UtilityBeltInventory inv = getInventoryFromTag(belt);
+        UtilityBeltInventory.Mutable inv = new Mutable(getInventoryFromTag(belt));
 
         if (!handleStack(slotStack, inv, slot::set)) {
             return false;
         }
 
-        playInsertSound(player);
-        setInventory(belt, inv);
+        setInventory(belt, inv.toImmutable());
         return true;
     }
 
@@ -140,15 +142,21 @@ public class UtilityBeltItem extends Item {
             return false;
         }
 
-        UtilityBeltInventory inv = getInventoryFromTag(belt);
+        UtilityBeltInventory.Mutable inv = new Mutable(getInventoryFromTag(belt));
 
         if (!handleStack(otherStack, inv, slotAccess::set)) {
             return false;
         }
 
         playInsertSound(player);
-        setInventory(belt, inv);
+        setInventory(belt, inv.toImmutable());
         return true;
+    }
+
+    public void onEquip(LivingEntity wearer, ItemStack belt) {
+        if (wearer instanceof Player player && !player.level().isClientSide) {
+            StateManager.getServerInstance().setInventory(player, new Mutable(getInventoryFromTag(belt)));
+        }
     }
 
     public void onUnequip(LivingEntity wearer) {
