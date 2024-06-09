@@ -11,10 +11,13 @@ import net.minecraft.world.item.ItemStack;
 public class UtilityBeltTrinket implements Trinket {
 
     @Override
-    public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        // FIXME: for some reason, Trinkets is calling this even when the item is not being unequipped
-        // To test, go into survival and break a block/attack an entity using an item in the belt
+    public void onEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        ((UtilityBeltItem) stack.getItem()).onEquip(entity, stack);
+    }
 
+    @Override
+    public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        // Trinkets is calling this even when the item is not being unequipped
         if (UtilityBeltPlatform.getStackInBeltSlot(entity) == null) {
             ((UtilityBeltItem) stack.getItem()).onUnequip(entity);
         }

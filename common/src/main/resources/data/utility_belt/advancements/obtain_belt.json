@@ -2,7 +2,7 @@
   "parent": "minecraft:story/smelt_iron",
   "display": {
     "icon": {
-      "item": "utility_belt:utility_belt"
+      "id": "utility_belt:utility_belt"
     },
     "title": {
       "translate": "advancements.utility_belt.utility_belt.title"

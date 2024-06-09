@@ -8,8 +8,7 @@
     "LivingEntityMixin",
     "PlayerMixin",
     "ServerGamePacketListenerImplMixin",
-    "ServerPlayerMixin",
-    "datafixer.ItemStackComponentizationFixMixin"
+    "ServerPlayerMixin"
   ],
   "client": [
     "client.ClientPacketListenerMixin",

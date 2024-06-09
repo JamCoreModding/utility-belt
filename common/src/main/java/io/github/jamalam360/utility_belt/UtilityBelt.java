@@ -40,16 +40,16 @@ public class UtilityBelt {
     private static final DeferredRegister<DataComponentType<?>> COMPONENT_TYPES = DeferredRegister.create(MOD_ID, Registries.DATA_COMPONENT_TYPE);
 
     public static final RegistrySupplier<Item> UTILITY_BELT_ITEM = ITEMS.register("utility_belt", UtilityBeltItem::new);
-    public static final RegistrySupplier<MenuType<UtilityBeltMenu>> MENU_TYPE = MENUS.register("utility_belt", () -> new MenuType<>(UtilityBeltMenu::new, FeatureFlagSet.of()));
     public static final RegistrySupplier<DataComponentType<UtilityBeltInventory>> UTILITY_BELT_INVENTORY_COMPONENT_TYPE = COMPONENT_TYPES.register("utility_belt_inventory", () ->
           DataComponentType.<UtilityBeltInventory>builder().persistent(UtilityBeltInventory.CODEC).cacheEncoding().build()
     );
+    public static final RegistrySupplier<MenuType<UtilityBeltMenu>> MENU_TYPE = MENUS.register("utility_belt", () -> new MenuType<>(UtilityBeltMenu::new, FeatureFlagSet.of()));
 
     public static void init() {
         JamLib.checkForJarRenaming(UtilityBelt.class);
+        COMPONENT_TYPES.register(); // needs to be before items
         ITEMS.register();
         MENUS.register();
-        COMPONENT_TYPES.register();
         UTILITY_BELT_ITEM.listen((belt) -> CreativeTabRegistry.append(CreativeModeTabs.TOOLS_AND_UTILITIES, belt));
         ServerNetworking.init();
         StateManager.setServerInstance(new ServerStateManager());

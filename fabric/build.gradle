@@ -8,10 +8,6 @@ architectury {
     fabric()
 }
 
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-}
-
 base {
     archivesName = "utility-belt-fabric"
 }
@@ -37,7 +33,6 @@ dependencies {
 }
 
 if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
-// Uncomment these lines and fill in the IDs when ready to publish :)
     unifiedPublishing {
         project {
             displayName = "V${project.version} (Fabric ${project.minecraft_version})"

@@ -13,7 +13,7 @@ fabric-api = "0.99.0+1.20.6"
 jamlib = "1.0.9+1.20.6"
 
 # https://modrinth.com/mod/trinkets/versions
-trinkets = "3.8.1"
+trinkets = "3.9.0"
 
 # https://modrinth.com/mod/curios/versions
 curios = "8.0.0-beta.2+1.20.6"

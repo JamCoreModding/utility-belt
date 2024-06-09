@@ -26,7 +26,6 @@
     "mixins": [
         "utility_belt.mixins.json"
     ],
-    "accessWidener": "utility_belt.accesswidener",
     "depends": {
         "fabricloader": ">=0.15.0",
         "fabric": ">=${fabric_api_version}",

@@ -18,6 +18,8 @@ public class ServerPlayerMixin {
 
     @Unique
     private int utilitybelt$lastSyncedInventoryHash = 0;
+    @Unique
+    private boolean utilitybelt$hasBeltLastTick = false;
 
     @SuppressWarnings("UnreachableCode")
     @Inject(
@@ -29,6 +31,11 @@ public class ServerPlayerMixin {
         ItemStack belt = UtilityBeltItem.getBelt((Player) (Object) this);
 
         if (belt != null) {
+            if (!this.utilitybelt$hasBeltLastTick) {
+                this.utilitybelt$hasBeltLastTick = true;
+                return;
+            }
+
             UtilityBeltInventory inv = stateManager.getInventory((Player) (Object) this);
 
             if (this.utilitybelt$lastSyncedInventoryHash != inv.hashCode()) {
@@ -36,6 +43,8 @@ public class ServerPlayerMixin {
                 ServerNetworking.sendInventoryToClient((ServerPlayer) (Object) this, inv);
                 UtilityBeltItem.setInventory(belt, inv);
             }
+        } else {
+            this.utilitybelt$hasBeltLastTick = false;
         }
     }
 }
