@@ -8,10 +8,6 @@ architectury {
     neoForge()
 }
 
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-}
-
 base {
     archivesName = "utility-belt-neoforge"
 }
@@ -112,7 +108,6 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    atAccessWideners.add "utility_belt.accesswidener"
 }
 
 sourcesJar {
