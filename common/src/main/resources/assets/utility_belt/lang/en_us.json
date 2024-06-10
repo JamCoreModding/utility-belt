@@ -1,5 +1,6 @@
 {
   "item.utility_belt.utility_belt": "Utility Belt",
+  "tag.item.utility_belt.allowed_in_utility_belt": "Allowed in Utility Belt",
   "container.utility_belt.utility_belt": "Utility Belt",
   "key.category.utility_belt": "Utility Belt",
   "key.utility_belt.swap_toggle": "Switch to Belt (Toggle)",

@@ -74,12 +74,12 @@ public class UtilityBeltClient {
 										StateManager stateManager = StateManager.getClientInstance();
 										System.out.println("In belt: " + stateManager.isInBelt(Minecraft.getInstance().player));
 										System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(Minecraft.getInstance().player));
-										System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag());
+										System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag().getCompound("Inventory"));
 
 										StateManager stateManagerS = StateManager.getServerInstance();
 										System.out.println("In belt (client but server): " + stateManagerS.isInBelt(Minecraft.getInstance().player));
 										System.out.println("Selected slot (client but server): " + stateManagerS.getSelectedBeltSlot(Minecraft.getInstance().player));
-										System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag());
+										System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).getTag().getCompound("Inventory"));
 										return 0;
 									})
 					)
@@ -112,7 +112,11 @@ public class UtilityBeltClient {
 		if (scrollY != 0 && stateManager.isInBelt(client.player)) {
 			int slot = stateManager.getSelectedBeltSlot(client.player);
 			ItemStack belt = UtilityBeltItem.getBelt(client.player);
-			assert belt != null;
+
+			if (belt == null) {
+				return EventResult.pass();
+			}
+
 			int beltSize = stateManager.getInventory(client.player).getContainerSize();
 
 			if (UtilityBelt.CONFIG.get().invertScrolling) {
@@ -168,9 +172,7 @@ public class UtilityBeltClient {
 	}
 
 	private static void toggleInBelt(Minecraft client) {
-		assert client.player != null;
-
-		if (UtilityBeltItem.getBelt(client.player) == null) {
+		if (client.player == null || UtilityBeltItem.getBelt(client.player) == null) {
 			return;
 		}
 
@@ -181,7 +183,6 @@ public class UtilityBeltClient {
 	}
 
 	private static void playSwapSound(Minecraft client) {
-		assert client.level != null;
 		client.getSoundManager().play(SimpleSoundInstance.forUI(
 				SoundEvents.ARMOR_EQUIP_LEATHER, client.level.random.nextFloat() + 0.50f));
 	}

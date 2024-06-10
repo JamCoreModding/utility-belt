@@ -3,10 +3,9 @@ package io.github.jamalam360.utility_belt.screen;
 import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
-import io.github.jamalam360.utility_belt.server.ServerStateManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,117 +17,121 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class UtilityBeltMenu extends AbstractContainerMenu {
-	private final UtilityBeltInventory inventory;
 
-	public UtilityBeltMenu(int syncId, Inventory playerInventory) {
-		this(syncId, playerInventory, new UtilityBeltInventory());
-	}
+    private final UtilityBeltInventory.Mutable inventory;
 
-	public UtilityBeltMenu(int syncId, Inventory playerInventory, UtilityBeltInventory inventory) {
-		super(UtilityBelt.MENU_TYPE.get(), syncId);
-		this.inventory = inventory;
+    public UtilityBeltMenu(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new Mutable(UtilityBeltInventory.EMPTY));
+    }
 
-		int m;
-		int l;
+    public UtilityBeltMenu(int syncId, Inventory playerInventory, UtilityBeltInventory.Mutable inventory) {
+        super(UtilityBelt.MENU_TYPE.get(), syncId);
+        this.inventory = inventory;
 
-		for (l = 0; l < this.inventory.getContainerSize(); ++l) {
-			this.addSlot(new Slot(inventory, l, 53 + l * 18, 17) {
-				@Override
-				public boolean mayPlace(ItemStack stack) {
-					return UtilityBeltItem.isValidItem(stack);
-				}
-			});
-		}
+        int m;
+        int l;
 
-		for (m = 0; m < 3; ++m) {
-			for (l = 0; l < 9; ++l) {
-				this.addSlot(new Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 48 + m * 18));
-			}
-		}
+        for (l = 0; l < this.inventory.getContainerSize(); ++l) {
+            this.addSlot(new Slot(inventory, l, 53 + l * 18, 17) {
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return UtilityBeltItem.isValidItem(stack);
+                }
+            });
+        }
 
-		for (m = 0; m < 9; ++m) {
-			this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 106));
-		}
-	}
+        for (m = 0; m < 3; ++m) {
+            for (l = 0; l < 9; ++l) {
+                this.addSlot(new Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 48 + m * 18));
+            }
+        }
 
-	@Override
-	public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
-		if (slot.getContainerSlot() < this.inventory.getContainerSize()) {
-			return UtilityBeltItem.isValidItem(stack);
-		}
+        for (m = 0; m < 9; ++m) {
+            this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 106));
+        }
+    }
 
-		return super.canTakeItemForPickAll(stack, slot);
-	}
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
+        if (slot.getContainerSlot() < this.inventory.getContainerSize()) {
+            return UtilityBeltItem.isValidItem(stack);
+        }
 
-	@Override
-	public @NotNull ItemStack quickMoveStack(Player player, int index) {
-		ItemStack newStack = ItemStack.EMPTY;
-		Slot slot = this.slots.get(index);
+        return super.canTakeItemForPickAll(stack, slot);
+    }
 
-		if (slot.hasItem()) {
-			ItemStack originalStack = slot.getItem();
-			newStack = originalStack.copy();
-			if (index < this.inventory.getContainerSize()) {
-				if (!this.moveItemStackTo(originalStack, this.inventory.getContainerSize(), this.slots.size(), true)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (!this.moveItemStackTo(originalStack, 0, this.inventory.getContainerSize(), false)) {
-				return ItemStack.EMPTY;
-			}
+    @Override
+    public @NotNull ItemStack quickMoveStack(Player player, int index) {
+        ItemStack newStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
 
-			if (originalStack.isEmpty()) {
-				slot.set(ItemStack.EMPTY);
-			} else {
-				slot.setChanged();
-			}
-		}
+        if (slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
+            newStack = originalStack.copy();
+            if (index < this.inventory.getContainerSize()) {
+                if (!this.moveItemStackTo(originalStack, this.inventory.getContainerSize(), this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(originalStack, 0, this.inventory.getContainerSize(), false)) {
+                return ItemStack.EMPTY;
+            }
 
-		this.markDirty(player);
-		return newStack;
-	}
+            if (originalStack.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
 
-	@Override
-	public void clicked(int slotIndex, int button, ClickType clickType, Player player) {
-		super.clicked(slotIndex, button, clickType, player);
+        this.markDirty(player);
+        return newStack;
+    }
 
-		if (slotIndex < this.inventory.getContainerSize()) {
-			this.markDirty(player);
-		}
-	}
+    @Override
+    public void clicked(int slotIndex, int button, ClickType clickType, Player player) {
+        super.clicked(slotIndex, button, clickType, player);
 
-	@Override
-	public boolean stillValid(Player player) {
-		return UtilityBeltItem.getBelt(player) != null;
-	}
+        if (slotIndex < this.inventory.getContainerSize()) {
+            this.markDirty(player);
+        }
+    }
 
-	@Override
-	public void removed(Player player) {
-		this.markDirty(player);
-		super.removed(player);
-	}
+    @Override
+    public boolean stillValid(Player player) {
+        return UtilityBeltItem.getBelt(player) != null;
+    }
 
-	private void markDirty(Player player) {
-		ItemStack belt = UtilityBeltItem.getBelt(player);
-		belt.getTag().put("Inventory", this.inventory.createTag());
+    @Override
+    public void removed(Player player) {
+        this.markDirty(player);
+        super.removed(player);
+    }
 
-		if (player instanceof ServerPlayer sPlayer) {
-			((ServerStateManager) StateManager.getServerInstance()).getInventoryFromTag(player);
-		}
-	}
+    private void markDirty(Player player) {
+        ItemStack belt = UtilityBeltItem.getBelt(player);
 
-	public static class Factory implements MenuProvider {
+        if (belt == null) {
+            // uh oh
+            // anyways
+            return;
+        }
 
-		public static final Factory INSTANCE = new Factory();
+        StateManager.getServerInstance().setInventory(player, this.inventory);
+    }
 
-		@Override
-		public @NotNull Component getDisplayName() {
-			return Component.translatable("container.utility_belt.utility_belt");
-		}
+    public static class Factory implements MenuProvider {
 
-		@Nullable
-		@Override
-		public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-			return new UtilityBeltMenu(i, inventory, UtilityBeltItem.getInventoryFromTag(UtilityBeltItem.getBelt(player)));
-		}
-	}
+        public static final Factory INSTANCE = new Factory();
+
+        @Override
+        public @NotNull Component getDisplayName() {
+            return Component.translatable("container.utility_belt.utility_belt");
+        }
+
+        @Nullable
+        @Override
+        public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+            return new UtilityBeltMenu(i, inventory, new Mutable(UtilityBeltItem.getInventoryFromTag(UtilityBeltItem.getBelt(player))));
+        }
+    }
 }

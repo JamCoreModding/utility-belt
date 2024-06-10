@@ -1,7 +1,6 @@
 package io.github.jamalam360.utility_belt.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.jamalam360.utility_belt.Config;
 import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
@@ -16,64 +15,65 @@ import net.minecraft.world.item.ItemStack;
 
 @Environment(EnvType.CLIENT)
 public class BeltHotbarRenderer {
-	private static final ResourceLocation UTILITY_BELT_WIDGET_TEXTURE = UtilityBelt
-			.id("textures/gui/utility_belt_widget.png");
-	private static final ResourceLocation HOTBAR_SELECTION_SPRITE = new ResourceLocation("hud/hotbar_selection");
 
-	public static void render(GuiGraphics graphics, float tickDelta) {
-		Player player = Minecraft.getInstance().player;
-		StateManager stateManager = StateManager.getClientInstance();
+    private static final ResourceLocation UTILITY_BELT_WIDGET_TEXTURE = UtilityBelt
+          .id("textures/gui/utility_belt_widget.png");
+    private static final ResourceLocation HOTBAR_SELECTION_SPRITE = new ResourceLocation("hud/hotbar_selection");
 
-		if (player != null && stateManager.hasBelt(player) && (stateManager.isInBelt(player)
-				|| UtilityBelt.CONFIG.get().displayUtilityBeltWhenNotSelected)) {
-			int scaledHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-			int x = switch (UtilityBelt.CONFIG.get().hotbarPosition) {
-				case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> 2;
-				case TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT -> Minecraft.getInstance().getWindow().getGuiScaledWidth() - 24;
-			};
-			int y = switch (UtilityBelt.CONFIG.get().hotbarPosition) {
-				case TOP_LEFT, TOP_RIGHT -> 2;
-				case MIDDLE_LEFT, MIDDLE_RIGHT -> scaledHeight / 2 - 44;
-				case BOTTOM_LEFT, BOTTOM_RIGHT -> scaledHeight - 84;
-			};
+    public static void render(GuiGraphics graphics, float tickDelta) {
+        Player player = Minecraft.getInstance().player;
+        StateManager stateManager = StateManager.getClientInstance();
 
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        if (player != null && stateManager.hasBelt(player) && (stateManager.isInBelt(player)
+                                                               || UtilityBelt.CONFIG.get().displayUtilityBeltWhenNotSelected)) {
+            int scaledHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+            int x = switch (UtilityBelt.CONFIG.get().hotbarPosition) {
+                case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> 2;
+                case TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT -> Minecraft.getInstance().getWindow().getGuiScaledWidth() - 24;
+            };
+            int y = switch (UtilityBelt.CONFIG.get().hotbarPosition) {
+                case TOP_LEFT, TOP_RIGHT -> 2;
+                case MIDDLE_LEFT, MIDDLE_RIGHT -> scaledHeight / 2 - 44;
+                case BOTTOM_LEFT, BOTTOM_RIGHT -> scaledHeight - 84;
+            };
 
-			graphics.blit(UTILITY_BELT_WIDGET_TEXTURE, x, y, 0, 0, 22, 88);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
-			if (stateManager.isInBelt(player)) {
-				graphics.blitSprite(HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 0, 24, 23);
-			}
+            graphics.blit(UTILITY_BELT_WIDGET_TEXTURE, x, y, 0, 0, 22, 88);
 
-			UtilityBeltInventory inv = stateManager.getInventory(player);
-			RenderSystem.enableBlend();
-			RenderSystem.defaultBlendFunc();
-			int m = 1;
+            if (stateManager.isInBelt(player)) {
+                graphics.blitSprite(HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 0, 24, 23);
+            }
 
-			for (int n = 0; n < inv.getContainerSize(); ++n) {
-				renderHotbarItem(graphics, x, y + n * 20 + 3, tickDelta, player, inv.getItem(n), m++);
-			}
-		}
-	}
+            UtilityBeltInventory inv = stateManager.getInventory(player);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            int m = 1;
 
-	private static void renderHotbarItem(GuiGraphics graphics, int x, int y, float tickDelta, Player player, ItemStack stack, int seed) {
-		if (!stack.isEmpty()) {
-			float f = (float) stack.getPopTime() - tickDelta;
-			if (f > 0.0F) {
-				float g = 1.0F + f / 5.0F;
-				graphics.pose().pushPose();
-				graphics.pose().translate(12, y + 12, 0);
-				graphics.pose().scale(1.0F / g, (g + 1.0F) / 2.0F, 1);
-				graphics.pose().translate(-12, -(y + 12), 0);
-			}
+            for (int n = 0; n < inv.getContainerSize(); ++n) {
+                renderHotbarItem(graphics, x, y + n * 20 + 3, tickDelta, player, inv.getItem(n), m++);
+            }
+        }
+    }
 
-			graphics.renderItem(player, stack, x + 3, y, seed);
-			if (f > 0.0F) {
-				graphics.pose().popPose();
-			}
+    private static void renderHotbarItem(GuiGraphics graphics, int x, int y, float tickDelta, Player player, ItemStack stack, int seed) {
+        if (!stack.isEmpty()) {
+            float f = (float) stack.getPopTime() - tickDelta;
+            if (f > 0.0F) {
+                float g = 1.0F + f / 5.0F;
+                graphics.pose().pushPose();
+                graphics.pose().translate(12, y + 12, 0);
+                graphics.pose().scale(1.0F / g, (g + 1.0F) / 2.0F, 1);
+                graphics.pose().translate(-12, -(y + 12), 0);
+            }
 
-			graphics.renderItemDecorations(Minecraft.getInstance().font, stack, x + 3, y);
-		}
-	}
+            graphics.renderItem(player, stack, x + 3, y, seed);
+            if (f > 0.0F) {
+                graphics.pose().popPose();
+            }
+
+            graphics.renderItemDecorations(Minecraft.getInstance().font, stack, x + 3, y);
+        }
+    }
 }

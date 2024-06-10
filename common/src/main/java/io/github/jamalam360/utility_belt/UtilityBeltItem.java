@@ -1,9 +1,11 @@
 package io.github.jamalam360.utility_belt;
 
+import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.client.ClientNetworking;
 import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -36,7 +38,7 @@ public class UtilityBeltItem extends Item {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean handleStack(ItemStack stack, UtilityBeltInventory inv, Consumer<ItemStack> slotAccess) {
+    private static boolean handleStack(ItemStack stack, UtilityBeltInventory.Mutable inv, Consumer<ItemStack> slotAccess) {
         if (stack.isEmpty()) {
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 if (!inv.getItem(i).isEmpty()) {
@@ -66,26 +68,28 @@ public class UtilityBeltItem extends Item {
         return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ProjectileWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.getItem() instanceof BrushItem || stack.isEmpty() || stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
     }
 
+    // Going to keep this name as is until 1.20.4 support is dropped, to keep the diffs smaller
     public static UtilityBeltInventory getInventoryFromTag(ItemStack stack) {
-        UtilityBeltInventory inv = new UtilityBeltInventory();
+        CompoundTag tag = stack.getOrCreateTag();
 
-        if (stack != null) {
-            CompoundTag tag = stack.getOrCreateTag();
-            if (!tag.contains("Inventory")) {
-                tag.put("Inventory", inv.createTag());
-            } else {
-                inv.fromTag(tag.getList("Inventory", CompoundTag.TAG_COMPOUND));
-            }
+        if (!tag.contains("Inventory")) {
+            setInventory(stack, UtilityBeltInventory.EMPTY);
+            return getInventoryFromTag(stack);
         }
 
-        return inv;
+        return UtilityBeltInventory.fromTag(tag.getList("Inventory", Tag.TAG_COMPOUND));
+    }
+
+    // This should only be called by the state managers, or when the belt is NOT equipped
+    public static void setInventory(ItemStack stack, UtilityBeltInventory inv) {
+        stack.getOrCreateTag().put("Inventory", inv.toTag());
     }
 
     @Nullable
     public static ItemStack getBelt(Player player) {
         ItemStack stack = UtilityBeltPlatform.getStackInBeltSlot(player);
 
-		if (stack != null && stack.getItem() == UtilityBelt.UTILITY_BELT_ITEM.get()) {
+        if (stack != null && stack.getItem() == UtilityBelt.UTILITY_BELT_ITEM.get()) {
             return stack;
         } else {
             return null;
@@ -94,12 +98,12 @@ public class UtilityBeltItem extends Item {
 
     @Override
     public boolean isBarVisible(ItemStack itemStack) {
-        return getInventoryFromTag(itemStack).hasAnyMatching(s -> !s.isEmpty());
+        return getInventoryFromTag(itemStack).items().stream().anyMatch(s -> !s.isEmpty());
     }
 
     @Override
     public int getBarWidth(ItemStack itemStack) {
-        long size = getInventoryFromTag(itemStack).getItems().stream().filter((s) -> !s.isEmpty()).count();
+        long size = getInventoryFromTag(itemStack).items().stream().filter((s) -> !s.isEmpty()).count();
         return size == 4L ? 13 : (int) (size * 3);
     }
 
@@ -127,14 +131,14 @@ public class UtilityBeltItem extends Item {
         }
 
         ItemStack slotStack = slot.getItem();
-        UtilityBeltInventory inv = getInventoryFromTag(belt);
+        UtilityBeltInventory.Mutable inv = new Mutable(getInventoryFromTag(belt));
 
         if (!handleStack(slotStack, inv, slot::set)) {
             return false;
         }
 
         playInsertSound(player);
-        belt.getOrCreateTag().put("Inventory", inv.createTag());
+        setInventory(belt, inv.toImmutable());
         return true;
     }
 
@@ -144,15 +148,21 @@ public class UtilityBeltItem extends Item {
             return false;
         }
 
-        UtilityBeltInventory inv = getInventoryFromTag(belt);
+        UtilityBeltInventory.Mutable inv = new Mutable(getInventoryFromTag(belt));
 
         if (!handleStack(otherStack, inv, slotAccess::set)) {
             return false;
         }
 
         playInsertSound(player);
-        belt.getOrCreateTag().put("Inventory", inv.createTag());
+        setInventory(belt, inv.toImmutable());
         return true;
+    }
+
+    public void onEquip(LivingEntity wearer, ItemStack belt) {
+        if (wearer instanceof Player player && !player.level().isClientSide) {
+            StateManager.getServerInstance().setInventory(player, new Mutable(getInventoryFromTag(belt)));
+        }
     }
 
     public void onUnequip(LivingEntity wearer) {

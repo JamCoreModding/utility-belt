@@ -55,7 +55,11 @@ public class MinecraftMixin {
 					return true;
 				case SWITCH_BELT_SLOT:
 					ItemStack belt = UtilityBeltItem.getBelt(this.player);
-					assert belt != null;
+
+					if (belt == null) {
+						return false;
+					}
+
 					int beltSize = stateManager.getInventory(this.player).getContainerSize();
 
 					if (i >= 0 && i < beltSize) {

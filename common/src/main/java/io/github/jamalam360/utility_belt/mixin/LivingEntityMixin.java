@@ -30,9 +30,14 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
             StateManager stateManager = StateManager.getServerInstance();
             if (stateManager.isInBelt(player)) {
                 ItemStack belt = UtilityBeltItem.getBelt(player);
-                assert belt != null;
-                UtilityBeltInventory inv = stateManager.getInventory(player);
+
+                if (belt == null) {
+                    return;
+                }
+
+                UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
                 inv.setItem(stateManager.getSelectedBeltSlot(player), ItemStack.EMPTY);
+                stateManager.setInventory(player, inv);
             }
         }
     }

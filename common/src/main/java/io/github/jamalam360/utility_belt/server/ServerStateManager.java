@@ -20,19 +20,6 @@ public class ServerStateManager extends StateManager {
 	}
 
 	@Override
-	public void onStartTick(Player player) {
-		if (this.hasBelt(player)) {
-			getState(player).inventory = UtilityBeltItem.getInventoryFromTag(UtilityBeltItem.getBelt(player));
-		} else {
-			getState(player).inventory = null;
-		}
-	}
-
-	public void getInventoryFromTag(Player player) {
-		getState(player).inventory = UtilityBeltItem.getInventoryFromTag(UtilityBeltItem.getBelt(player));
-	}
-
-	@Override
 	public boolean isInBelt(Player player) {
 		return getState(player).inBelt;
 	}
@@ -58,11 +45,20 @@ public class ServerStateManager extends StateManager {
 
 		if (state.inventory == null) {
 			ItemStack belt = UtilityBeltItem.getBelt(player);
-			assert belt != null;
+
+			if (belt == null) {
+				return UtilityBeltInventory.EMPTY;
+			}
+
 			state.inventory = UtilityBeltItem.getInventoryFromTag(belt);
 		}
 
 		return state.inventory;
+	}
+
+	@Override
+	public void setInventory(Player player, UtilityBeltInventory.Mutable inventory) {
+		getState(player).inventory = inventory.toImmutable();
 	}
 
 	private static class PlayerState {

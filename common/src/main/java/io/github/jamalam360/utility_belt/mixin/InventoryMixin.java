@@ -34,7 +34,11 @@ public abstract class InventoryMixin {
         StateManager stateManager = StateManager.getServerInstance();
         if (stateManager.isInBelt(this.player)) {
             ItemStack belt = UtilityBeltItem.getBelt(this.player);
-            assert belt != null;
+
+            if (belt == null) {
+                return;
+            }
+
             UtilityBeltInventory inv = stateManager.getInventory(this.player);
             cir.setReturnValue(inv.getItem(stateManager.getSelectedBeltSlot(this.player)));
         }
@@ -52,7 +56,11 @@ public abstract class InventoryMixin {
         StateManager stateManager = StateManager.getServerInstance();
         if (stateManager.isInBelt(this.player)) {
             ItemStack belt = UtilityBeltItem.getBelt(this.player);
-            assert belt != null;
+
+            if (belt == null) {
+                return;
+            }
+
             UtilityBeltInventory inv = stateManager.getInventory(this.player);
             cir.setReturnValue(inv.getItem(stateManager.getSelectedBeltSlot(this.player)).getDestroySpeed(blockState));
         }
@@ -63,10 +71,14 @@ public abstract class InventoryMixin {
           at = @At("RETURN")
     )
     private void utilitybelt$tick(CallbackInfo ci) {
-        ItemStack belt = UtilityBeltItem.getBelt(this.player);
         StateManager stateManager = StateManager.getServerInstance();
         if (stateManager.isInBelt(this.player)) {
-            assert belt != null;
+            ItemStack belt = UtilityBeltItem.getBelt(this.player);
+
+            if (belt == null) {
+                return;
+            }
+
             UtilityBeltInventory inv = stateManager.getInventory(this.player);
             int selectedSlot = stateManager.getSelectedBeltSlot(this.player);
 
@@ -83,7 +95,7 @@ public abstract class InventoryMixin {
     private void utilitybelt$patchRemoveOneForHeldItems(ItemStack stack, CallbackInfo ci) {
         ItemStack belt = UtilityBeltItem.getBelt(this.player);
         if (belt != null) {
-            UtilityBeltInventory inv = StateManager.getServerInstance().getInventory(this.player);
+            UtilityBeltInventory.Mutable inv = StateManager.getServerInstance().getMutableInventory(this.player);
             int found = -1;
 
             for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -95,6 +107,7 @@ public abstract class InventoryMixin {
 
             if (found != -1) {
                 inv.setItem(found, ItemStack.EMPTY);
+                StateManager.getServerInstance().setInventory(this.player, inv);
                 ci.cancel();
             }
         }
@@ -117,16 +130,19 @@ public abstract class InventoryMixin {
         StateManager stateManager = StateManager.getServerInstance();
         if (stateManager.isInBelt(this.player)) {
             int slot = stateManager.getSelectedBeltSlot(this.player);
-            UtilityBeltInventory inv = stateManager.getInventory(this.player);
+            UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(this.player);
             ItemStack selected = inv.getItem(slot);
 
             if (this.player.isLocalPlayer()) {
+                //TODO: is this needed?
                 // Because of how the inventory is synced, we fake the return value on the clientside (not actually removing it)
                 ItemStack fakeReturn = selected.copy();
                 fakeReturn.setCount(entireStack ? selected.getCount() : 1);
                 cir.setReturnValue(selected.isEmpty() ? ItemStack.EMPTY : fakeReturn);
             } else {
-                cir.setReturnValue(selected.isEmpty() ? ItemStack.EMPTY : inv.removeItem(slot, entireStack ? selected.getCount() : 1));
+                ItemStack item = selected.isEmpty() ? ItemStack.EMPTY : inv.removeItem(slot, entireStack ? selected.getCount() : 1);
+                stateManager.setInventory(this.player, inv);
+                cir.setReturnValue(item);
             }
         }
     }
@@ -135,8 +151,9 @@ public abstract class InventoryMixin {
     private void utilitybelt$clearUtilityBelt(CallbackInfo ci) {
         ItemStack belt = UtilityBeltItem.getBelt(this.player);
         if (belt != null) {
-            UtilityBeltInventory inv = StateManager.getServerInstance().getInventory(this.player);
+            UtilityBeltInventory.Mutable inv = StateManager.getServerInstance().getMutableInventory(this.player);
             inv.clearContent();
+            StateManager.getServerInstance().setInventory(this.player, inv);
         }
     }
 
@@ -172,7 +189,7 @@ public abstract class InventoryMixin {
     private void utilitybelt$dropAllFromUtilityBelt(CallbackInfo ci) {
         ItemStack belt = UtilityBeltItem.getBelt(this.player);
         if (belt != null) {
-            UtilityBeltInventory inv = StateManager.getServerInstance().getInventory(this.player);
+            UtilityBeltInventory.Mutable inv = StateManager.getServerInstance().getMutableInventory(this.player);
 
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 ItemStack itemStack = inv.getItem(i);
@@ -181,6 +198,8 @@ public abstract class InventoryMixin {
                     inv.setItem(i, ItemStack.EMPTY);
                 }
             }
+
+            StateManager.getServerInstance().setInventory(this.player, inv);
         }
     }
 

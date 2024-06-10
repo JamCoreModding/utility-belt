@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
     id "me.shedaniel.unified-publishing"
 }
 
@@ -22,8 +22,8 @@ configurations {
 
 dependencies {
     modImplementation libs.fabric.loader
-    modApi libs.fabric.api
-    modApi libs.architectury.fabric
+    modImplementation libs.fabric.api
+    modImplementation libs.architectury.fabric
     modRuntimeOnly libs.modmenu
     modImplementation libs.jamlib.fabric
     modImplementation libs.trinkets
@@ -33,7 +33,6 @@ dependencies {
 }
 
 if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
-// Uncomment these lines and fill in the IDs when ready to publish :)
     unifiedPublishing {
         project {
             displayName = "V${project.version} (Fabric ${project.minecraft_version})"
