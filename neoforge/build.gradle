@@ -30,9 +30,7 @@ repositories {
 dependencies {
     neoForge libs.neoforge
     modImplementation libs.architectury.neoforge
-    modImplementation(libs.jamlib.neoforge) {
-        exclude group: "dev.architectury" // Exclude the Architectury dependency, it's currently modApi for some reason
-    }
+    modImplementation libs.jamlib.neoforge)
     modImplementation libs.curios.neoforge
 
     // Dependency of JamLib

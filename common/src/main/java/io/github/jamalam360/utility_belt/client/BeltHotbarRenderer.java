@@ -18,7 +18,7 @@ public class BeltHotbarRenderer {
 
     private static final ResourceLocation UTILITY_BELT_WIDGET_TEXTURE = UtilityBelt
           .id("textures/gui/utility_belt_widget.png");
-    private static final ResourceLocation HOTBAR_SELECTION_SPRITE = new ResourceLocation("hud/hotbar_selection");
+    private static final ResourceLocation HOTBAR_SELECTION_SPRITE = ResourceLocation.withDefaultNamespace("hud/hotbar_selection");
 
     public static void render(GuiGraphics graphics, float tickDelta) {
         Player player = Minecraft.getInstance().player;
