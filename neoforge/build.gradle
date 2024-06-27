@@ -82,7 +82,7 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
 }
 
 processResources {
-    filesMatching("mods.toml") {
+    filesMatching("neoforge.mods.toml") {
         expand "minecraft_version": project.minecraft_version,
             "architectury_version": libs.versions.architectury.get(),
             "jamlib_version": libs.versions.jamlib.get(),
