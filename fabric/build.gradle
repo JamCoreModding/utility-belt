@@ -24,9 +24,9 @@ dependencies {
     modImplementation libs.fabric.loader
     modImplementation libs.fabric.api
     modImplementation libs.architectury.fabric
-    modRuntimeOnly libs.modmenu
     modImplementation libs.jamlib.fabric
-    modImplementation libs.trinkets
+    modRuntimeOnly libs.modmenu
+    modRuntimeOnly libs.accessories.fabric
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
@@ -85,7 +85,7 @@ processResources {
             "fabric_api_version": libs.versions.fabric.api.get(),
             "architectury_version": libs.versions.architectury.get(),
             "jamlib_version": libs.versions.jamlib.get(),
-            "trinkets_version": libs.versions.trinkets.get()
+            "accessories_version": libs.versions.accessories.get()
     }
 
     inputs.property "version", project.version
@@ -93,7 +93,7 @@ processResources {
     inputs.property "fabric_api_version", libs.versions.fabric.api.get()
     inputs.property "architectury_version", libs.versions.architectury.get()
     inputs.property "jamlib_version", libs.versions.jamlib.get()
-    inputs.property "trinkets_version", libs.versions.trinkets.get()
+    inputs.property "accessories_version", libs.versions.accessories.get()
 }
 
 shadowJar {

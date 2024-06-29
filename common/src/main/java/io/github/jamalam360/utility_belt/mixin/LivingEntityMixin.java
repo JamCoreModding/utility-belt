@@ -21,27 +21,27 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
     @Shadow
     protected abstract void detectEquipmentUpdates();
 
-    @SuppressWarnings("ConstantValue")
-    @Inject(
-          method = "broadcastBreakEvent",
-          at = @At("HEAD")
-    )
-    private void utilitybelt$broadcastBreakEvent(EquipmentSlot slot, CallbackInfo ci) {
-        if (slot == EquipmentSlot.MAINHAND && (Object) this instanceof ServerPlayer player) {
-            StateManager stateManager = StateManager.getServerInstance();
-            if (stateManager.isInBelt(player)) {
-                ItemStack belt = UtilityBeltItem.getBelt(player);
-
-                if (belt == null) {
-                    return;
-                }
-
-                UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
-                inv.setItem(stateManager.getSelectedBeltSlot(player), ItemStack.EMPTY);
-                stateManager.setInventory(player, inv);
-            }
-        }
-    }
+//    @SuppressWarnings("ConstantValue")
+//    @Inject(
+//          method = "broadcastBreakEvent",
+//          at = @At("HEAD")
+//    )
+//    private void utilitybelt$broadcastBreakEvent(EquipmentSlot slot, CallbackInfo ci) {
+//        if (slot == EquipmentSlot.MAINHAND && (Object) this instanceof ServerPlayer player) {
+//            StateManager stateManager = StateManager.getServerInstance();
+//            if (stateManager.isInBelt(player)) {
+//                ItemStack belt = UtilityBeltItem.getBelt(player);
+//
+//                if (belt == null) {
+//                    return;
+//                }
+//
+//                UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
+//                inv.setItem(stateManager.getSelectedBeltSlot(player), ItemStack.EMPTY);
+//                stateManager.setInventory(player, inv);
+//            }
+//        }
+//    }
 
     @Override
     public void utilitybelt$detectEquipmentUpdates() {

@@ -73,15 +73,15 @@ allprojects {
             name = "TerraformersMC Maven"
             url = "https://maven.terraformersmc.com"
         }
-
+        
         maven {
-            name = "Cardinal Components Maven"
-            url = "https://maven.ladysnake.org/releases"
+            name = "Su5ed Maven"
+            url = "https://maven.su5ed.dev/releases"
         }
 
         maven {
-            name = "TheIllusiveC4's Maven"
-            url = "https://maven.theillusivec4.top"
+            name = "Wisp Forests Maven"
+            url = "https://maven.wispforest.io/releases"
         }
     }
 

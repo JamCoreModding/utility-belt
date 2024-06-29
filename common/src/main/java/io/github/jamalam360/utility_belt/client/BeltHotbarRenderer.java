@@ -6,6 +6,7 @@ import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -20,7 +21,7 @@ public class BeltHotbarRenderer {
           .id("textures/gui/utility_belt_widget.png");
     private static final ResourceLocation HOTBAR_SELECTION_SPRITE = ResourceLocation.withDefaultNamespace("hud/hotbar_selection");
 
-    public static void render(GuiGraphics graphics, float tickDelta) {
+    public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Player player = Minecraft.getInstance().player;
         StateManager stateManager = StateManager.getClientInstance();
 
@@ -52,7 +53,7 @@ public class BeltHotbarRenderer {
             int m = 1;
 
             for (int n = 0; n < inv.getContainerSize(); ++n) {
-                renderHotbarItem(graphics, x, y + n * 20 + 3, tickDelta, player, inv.getItem(n), m++);
+                renderHotbarItem(graphics, x, y + n * 20 + 3, deltaTracker.getGameTimeDeltaTicks(), player, inv.getItem(n), m++);
             }
         }
     }

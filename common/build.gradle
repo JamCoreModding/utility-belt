@@ -6,6 +6,9 @@ dependencies {
     modImplementation libs.fabric.loader
     modImplementation libs.architectury.common
     modImplementation libs.jamlib.common
+    modImplementation(libs.accessories.common) {
+        exclude group: "mezz.jei"
+    }
     compileOnly libs.mixin.extras.common
     annotationProcessor libs.mixin.extras.common
 }

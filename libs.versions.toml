@@ -11,12 +11,9 @@ fabric-api = "0.100.1+1.20.6"
 
 # https://maven.jamalam.tech/#/releases
 jamlib = "1.0.9+1.21"
-
-# https://modrinth.com/mod/trinkets/versions
-trinkets = "3.9.0"
-
-# https://modrinth.com/mod/curios/versions
-curios = "8.0.0-beta.2+1.20.6"
+ 
+# https://modrinth.com/mod/accessories/versions
+accessories = "1.0.0-beta.5+1.21"
 
 # https://github.com/LlamaLad7/MixinExtras/releases
 mixin-extras = "0.3.6"
@@ -38,9 +35,9 @@ jamlib-common = { module = "io.github.jamalam360:jamlib", version.ref = "jamlib"
 jamlib-fabric = { module = "io.github.jamalam360:jamlib-fabric", version.ref = "jamlib" }
 jamlib-neoforge = { module = "io.github.jamalam360:jamlib-neoforge", version.ref = "jamlib" }
 
-trinkets = { module = "dev.emi:trinkets", version.ref = "trinkets" }
-
-curios-neoforge = { module = "top.theillusivec4.curios:curios-neoforge", version.ref = "curios" }
+accessories-common = { module = "io.wispforest:accessories-common", version.ref = "accessories" }
+accessories-fabric = { module = "io.wispforest:accessories-fabric", version.ref = "accessories" }
+accessories-neoforge = { module = "io.wispforest:accessories-neoforge", version.ref = "accessories" }
 
 mixin-extras-common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
 

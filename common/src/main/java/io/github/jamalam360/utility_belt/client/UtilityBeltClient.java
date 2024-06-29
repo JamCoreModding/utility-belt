@@ -9,6 +9,7 @@ import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltScreen;
+import io.wispforest.accessories.api.client.AccessoriesRendererRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -33,6 +34,7 @@ public class UtilityBeltClient {
 
 	public static void init() {
 		ClientGuiEvent.RENDER_HUD.register(BeltHotbarRenderer::render);
+		UtilityBelt.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.registerRenderer(belt, BeltRenderer::new));
 		ClientTickEvent.CLIENT_POST.register(UtilityBeltClient::onEndClientTick);
 		ClientRawInputEvent.MOUSE_SCROLLED.register(UtilityBeltClient::onMouseScrolled);
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register(UtilityBeltClient::onPlayerRespawn);

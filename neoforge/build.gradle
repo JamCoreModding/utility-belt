@@ -30,8 +30,8 @@ repositories {
 dependencies {
     neoForge libs.neoforge
     modImplementation libs.architectury.neoforge
-    modImplementation libs.jamlib.neoforge)
-    modImplementation libs.curios.neoforge
+    modImplementation libs.jamlib.neoforge  
+    modRuntimeOnly libs.accessories.neoforge
 
     // Dependency of JamLib
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3"
@@ -86,13 +86,13 @@ processResources {
         expand "minecraft_version": project.minecraft_version,
             "architectury_version": libs.versions.architectury.get(),
             "jamlib_version": libs.versions.jamlib.get(),
-            "curios_version": libs.versions.curios.get()
+            "accessories_version": libs.versions.curios.get()
     }
 
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "architectury_version", libs.versions.architectury.get()
     inputs.property "jamlib_version", libs.versions.jamlib.get()
-    inputs.property "curios_version", libs.versions.curios.get()
+    inputs.property "accessories_version", libs.versions.accessories.get()
 }
 
 shadowJar {
