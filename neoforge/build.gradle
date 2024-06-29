@@ -63,8 +63,8 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
                 }
 
                 depends {
-                    curseforge = "curios"
-                    modrinth = "curios"
+                    curseforge = "accessories"
+                    modrinth = "accessories"
                 }
             }
 
