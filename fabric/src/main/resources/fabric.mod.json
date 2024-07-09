@@ -18,6 +18,9 @@
     "entrypoints": {
         "main": [
             "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabric"
+        ],
+        "server": [
+            "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabric"
         ]
     },
     "mixins": [

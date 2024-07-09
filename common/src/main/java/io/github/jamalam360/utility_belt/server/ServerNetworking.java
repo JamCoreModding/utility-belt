@@ -11,6 +11,7 @@ import io.github.jamalam360.utility_belt.UtilityBeltPackets;
 import io.github.jamalam360.utility_belt.UtilityBeltPackets.C2SOpenScreen;
 import io.github.jamalam360.utility_belt.UtilityBeltPackets.C2SUpdateState;
 import io.github.jamalam360.utility_belt.UtilityBeltPackets.S2CSetBeltSlot;
+import io.github.jamalam360.utility_belt.client.ClientNetworking;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -21,6 +22,12 @@ public class ServerNetworking {
     public static void init() {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_UPDATE_STATE, C2SUpdateState.STREAM_CODEC, ServerNetworking::handleUpdateState);
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_OPEN_SCREEN, C2SOpenScreen.STREAM_CODEC, ServerNetworking::handleOpenScreen);
+    }
+
+    public static void initDedicatedServer() {
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_BELT_SLOT, S2CSetBeltSlot.STREAM_CODEC);
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, UtilityBeltPackets.S2CSetHotbarSlot.STREAM_CODEC);
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, UtilityBeltPackets.S2CUpdateBeltInventory.STREAM_CODEC);
     }
 
     public static void sendInventoryToClient(ServerPlayer player, UtilityBeltInventory inventory) {
