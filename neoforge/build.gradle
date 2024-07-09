@@ -25,6 +25,11 @@ repositories {
         name = "NeoForge"
         url = "https://maven.neoforged.net"
     }
+
+    maven {
+        name = "Wisp Forests Maven"
+        url = "https://maven.wispforest.io/releases"
+    }
 }
 
 dependencies {
@@ -35,6 +40,10 @@ dependencies {
 
     // Dependency of JamLib
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3"
+
+    forgeRuntimeLibrary("io.wispforest:endec:0.1.4")
+    forgeRuntimeLibrary("io.wispforest.endec:gson:0.1.3")
+    forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.2")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }

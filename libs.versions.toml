@@ -3,7 +3,7 @@
 architectury = "13.0.1"
 
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "21.0.4-beta"
+neoforge = "21.0.10-beta"
 
 # https://fabricmc.net/develop
 fabric-loader = "0.15.11"
@@ -13,7 +13,7 @@ fabric-api = "0.100.1+1.20.6"
 jamlib = "1.0.9+1.21"
  
 # https://modrinth.com/mod/accessories/versions
-accessories = "1.0.0-beta.5+1.21"
+accessories = "1.0.0-beta.14+1.21"
 
 # https://github.com/LlamaLad7/MixinExtras/releases
 mixin-extras = "0.3.6"
