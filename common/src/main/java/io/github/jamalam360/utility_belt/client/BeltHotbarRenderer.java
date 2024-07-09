@@ -23,9 +23,12 @@ public class BeltHotbarRenderer {
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Player player = Minecraft.getInstance().player;
-        StateManager stateManager = StateManager.getClientInstance();
 
-        if (player != null && stateManager.hasBelt(player) && (stateManager.isInBelt(player)
+        if(player == null) return;
+
+        StateManager stateManager = StateManager.getStateManager(player);
+
+        if (stateManager.hasBelt(player) && (stateManager.isInBelt(player)
                                                                || UtilityBelt.CONFIG.get().displayUtilityBeltWhenNotSelected)) {
             int scaledHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
             int x = switch (UtilityBelt.CONFIG.get().hotbarPosition) {

@@ -118,7 +118,7 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
             return;
         }
 
-        StateManager.getServerInstance().setInventory(player, this.inventory);
+        StateManager.getStateManager(player).setInventory(player, this.inventory);
     }
 
     public static class Factory implements MenuProvider {

@@ -27,7 +27,7 @@ public class ServerPlayerMixin {
           at = @At("HEAD")
     )
     private void utilitybelt$startPlayerTick(CallbackInfo ci) {
-        StateManager stateManager = StateManager.getServerInstance();
+        StateManager stateManager = StateManager.getStateManager((Player) (Object) this);
         ItemStack belt = UtilityBeltItem.getBelt((Player) (Object) this);
 
         if (belt != null) {

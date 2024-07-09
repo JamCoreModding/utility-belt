@@ -33,34 +33,36 @@ public class ServerNetworking {
         boolean swap = payload.swapItems();
 
         ctx.queue(() -> {
+            var player = ctx.getPlayer();
+
             int beltSlot = slot;
-            StateManager stateManager = StateManager.getServerInstance();
-            stateManager.setInBelt(ctx.getPlayer(), inBelt);
-            stateManager.setSelectedBeltSlot(ctx.getPlayer(), beltSlot);
-            ctx.getPlayer().swing(InteractionHand.MAIN_HAND, true);
+            StateManager stateManager = StateManager.getStateManager(player);
+            stateManager.setInBelt(player, inBelt);
+            stateManager.setSelectedBeltSlot(player, beltSlot);
+            player.swing(InteractionHand.MAIN_HAND, true);
 
             if (swap) {
-                ItemStack belt = UtilityBeltItem.getBelt(ctx.getPlayer());
+                ItemStack belt = UtilityBeltItem.getBelt(player);
 
                 if (belt == null) {
                     UtilityBelt.LOGGER.warn("Received swap request packet from client without a belt equipped");
                     return;
                 }
 
-                UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(ctx.getPlayer());
-                ItemStack stackInHand = ctx.getPlayer().getInventory().getItem(ctx.getPlayer().getInventory().selected);
-                int hotbarSlot = ctx.getPlayer().getInventory().selected;
+                UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
+                ItemStack stackInHand = player.getInventory().getItem(player.getInventory().selected);
+                int hotbarSlot = player.getInventory().selected;
                 ItemStack stackInBelt = inv.getItem(beltSlot);
 
-                if (!stackInHand.isEmpty() && !stateManager.isInBelt(ctx.getPlayer())) {
+                if (!stackInHand.isEmpty() && !stateManager.isInBelt(player)) {
                     for (int i = 0; i < 10; i++) {
-                        if (ctx.getPlayer().getInventory().getItem(i).isEmpty()) {
+                        if (player.getInventory().getItem(i).isEmpty()) {
                             hotbarSlot = i;
-                            stackInHand = ctx.getPlayer().getInventory().getItem(i);
+                            stackInHand = player.getInventory().getItem(i);
                             break;
                         }
                     }
-                } else if (!stackInBelt.isEmpty() && stateManager.isInBelt(ctx.getPlayer())) {
+                } else if (!stackInBelt.isEmpty() && stateManager.isInBelt(player)) {
                     for (int i = 0; i < inv.getContainerSize(); i++) {
                         if (inv.getItem(i).isEmpty()) {
                             beltSlot = i;
@@ -71,17 +73,17 @@ public class ServerNetworking {
                 }
 
                 if (UtilityBeltItem.isValidItem(stackInHand)) {
-                    ctx.getPlayer().getInventory().setItem(hotbarSlot, stackInBelt);
+                    player.getInventory().setItem(hotbarSlot, stackInBelt);
                     inv.setItem(beltSlot, stackInHand);
-                    stateManager.setInventory(ctx.getPlayer(), inv);
-                    ((Duck.LivingEntity) ctx.getPlayer()).utilitybelt$detectEquipmentUpdates();
+                    stateManager.setInventory(player, inv);
+                    ((Duck.LivingEntity) player).utilitybelt$detectEquipmentUpdates();
 
                     if (beltSlot != slot) {
-                        stateManager.setSelectedBeltSlot(ctx.getPlayer(), beltSlot);
-                        NetworkManager.sendToPlayer((ServerPlayer) ctx.getPlayer(), new S2CSetBeltSlot(beltSlot));
-                    } else if (hotbarSlot != ctx.getPlayer().getInventory().selected) {
-                        ctx.getPlayer().getInventory().selected = hotbarSlot;
-                        NetworkManager.sendToPlayer((ServerPlayer) ctx.getPlayer(), new S2CSetBeltSlot(hotbarSlot));
+                        stateManager.setSelectedBeltSlot(player, beltSlot);
+                        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetBeltSlot(beltSlot));
+                    } else if (hotbarSlot != player.getInventory().selected) {
+                        player.getInventory().selected = hotbarSlot;
+                        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetBeltSlot(hotbarSlot));
                     }
                 }
             }
