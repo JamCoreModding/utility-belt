@@ -28,9 +28,10 @@ public class MinecraftMixin {
 			at = @At("HEAD")
 	)
 	private void utilitybelt$preventPickBlockInBelt(CallbackInfo ci) {
-		if (StateManager.getStateManager(true).isInBelt(this.player)) {
-			StateManager.getStateManager(true).setInBelt(this.player, false);
-			ClientNetworking.sendNewStateToServer(false, StateManager.getStateManager(true).getSelectedBeltSlot(this.player), false);
+		StateManager stateManager = StateManager.getStateManager(true);
+		if (stateManager.isInBelt(this.player)) {
+			stateManager.setInBelt(this.player, false);
+			ClientNetworking.sendNewStateToServer(false, stateManager.getSelectedBeltSlot(this.player), false);
 		}
 	}
 

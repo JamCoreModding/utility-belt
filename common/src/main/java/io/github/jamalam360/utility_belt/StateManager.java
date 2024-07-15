@@ -20,26 +20,14 @@ public abstract class StateManager {
 	public static StateManager getStateManager(boolean isClientSide) {
 		return isClientSide ? clientInstance : serverInstance;
 	}
-
-	@Deprecated
-	public static StateManager getClientInstance() {
-		return clientInstance;
-	}
-
+	
 	public static void setClientInstance(StateManager clientInstance) {
 		StateManager.clientInstance = clientInstance;
 	}
-
-	@Deprecated
-	public static StateManager getServerInstance() {
-		return serverInstance;
-	}
-
+	
 	public static void setServerInstance(StateManager serverInstance) {
 		StateManager.serverInstance = serverInstance;
 	}
-
-	//--
 
 	public boolean hasBelt(Player player) {
 		ItemStack belt = UtilityBeltItem.getBelt(player);
@@ -61,8 +49,4 @@ public abstract class StateManager {
 	}
 
 	public abstract void setInventory(Player player, UtilityBeltInventory.Mutable inventory);
-
-	public boolean isEmptyManager() {
-		return this == EmptyStateManager.INSTANCE;
-	}
 }

@@ -2,6 +2,8 @@ package io.github.jamalam360.utility_belt.server;
 
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.menu.MenuRegistry;
+import dev.architectury.utils.Env;
+import dev.architectury.utils.EnvExecutor;
 import io.github.jamalam360.utility_belt.Duck;
 import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
@@ -21,6 +23,13 @@ public class ServerNetworking {
     public static void init() {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_UPDATE_STATE, C2SUpdateState.STREAM_CODEC, ServerNetworking::handleUpdateState);
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_OPEN_SCREEN, C2SOpenScreen.STREAM_CODEC, ServerNetworking::handleOpenScreen);
+        EnvExecutor.runInEnv(Env.SERVER, () -> ServerNetworking::registerServerPayloadTypes);
+    }
+    
+    private static void registerServerPayloadTypes() {
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_BELT_SLOT, UtilityBeltPackets.S2CSetBeltSlot.STREAM_CODEC);
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, UtilityBeltPackets.S2CSetHotbarSlot.STREAM_CODEC);
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, UtilityBeltPackets.S2CUpdateBeltInventory.STREAM_CODEC);
     }
 
     public static void sendInventoryToClient(ServerPlayer player, UtilityBeltInventory inventory) {

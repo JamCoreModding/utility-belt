@@ -2,8 +2,6 @@ package io.github.jamalam360.utility_belt.mixin;
 
 import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
-import io.github.jamalam360.utility_belt.server.ServerNetworking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;

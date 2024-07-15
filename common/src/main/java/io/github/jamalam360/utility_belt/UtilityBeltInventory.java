@@ -39,10 +39,6 @@ public record UtilityBeltInventory(List<ItemStack> items) {
         return 4;
     }
 
-    public UtilityBeltInventory clone() {
-        return new UtilityBeltInventory(new ArrayList<>(items));
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof UtilityBeltInventory other) {

@@ -6,12 +6,10 @@ import io.github.jamalam360.utility_belt.client.ClientNetworking;
 import java.util.List;
 import java.util.function.Consumer;
 
-import io.wispforest.accessories.Accessories;
 import io.wispforest.accessories.api.AccessoryItem;
 import io.wispforest.accessories.api.DropRule;
 import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
-import io.wispforest.accessories.api.slot.SlotType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
