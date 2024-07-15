@@ -39,6 +39,7 @@ public record UtilityBeltInventory(List<ItemStack> items) {
         return 4;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof UtilityBeltInventory other) {
@@ -73,6 +74,7 @@ public record UtilityBeltInventory(List<ItemStack> items) {
             return new UtilityBeltInventory(new ArrayList<>(this.getItems()));
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof UtilityBeltInventory other) {

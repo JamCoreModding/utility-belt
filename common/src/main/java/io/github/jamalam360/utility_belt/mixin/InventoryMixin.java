@@ -24,7 +24,7 @@ public abstract class InventoryMixin {
     @Shadow
     @Final
     public Player player;
-
+    
     @Inject(
           method = "getSelected",
           at = @At("HEAD"),
@@ -220,6 +220,41 @@ public abstract class InventoryMixin {
                     cir.setReturnValue(false);
                 }
             }
+        }
+    }
+    
+    @Inject(
+            method = "add(ILnet/minecraft/world/item/ItemStack;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void utilitybelt$tryPlaceStackInBelt(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+        if (slot == -1 && UtilityBeltItem.isValidItem(stack)) {
+            StateManager stateManager = StateManager.getStateManager(this.player);
+            
+            if (!stateManager.isInBelt(this.player)) {
+                return;
+            }
+            
+            UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(this.player);
+            
+            int selected = stateManager.getSelectedBeltSlot(this.player);
+            int beltSlot = -1;
+            
+            if (inv.getItem(selected).isEmpty()) {
+                beltSlot = selected;
+            } else {
+                for (int i = 0; i < inv.getContainerSize(); i++) {
+                    if (inv.getItem(i).isEmpty()) {
+                        beltSlot = i;
+                        break;
+                    }
+                }
+            }
+
+            inv.setItem(beltSlot, stack.copyAndClear());
+            stateManager.setInventory(this.player, inv);
+            cir.setReturnValue(true);
         }
     }
 }
