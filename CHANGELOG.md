@@ -1,11 +1,4 @@
-This release brings about a significant internal rework with should make Utility Belt significantly
-less buggy. I have conducted a long play testing session before this release to try to verify
-everything works as intended.
+- Fix hotbar rendering even when F1 is pressed.
+- Compress icon.
 
-## Closed Issues
-
-- #47: fishing rod flickering
-- #46: dupe bug
-- #45: dupe bug
-
-Alongside the issues that were reported, many others have been fixed.
+> This release is missing a lot of changes from 2.4.0+1.21 as they were only applicable to the 1.21 branch. Please continue to report any issues with 1.20.4 and 1.20.6.

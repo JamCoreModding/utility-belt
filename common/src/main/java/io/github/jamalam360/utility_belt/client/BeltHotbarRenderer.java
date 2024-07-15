@@ -21,6 +21,10 @@ public class BeltHotbarRenderer {
     private static final ResourceLocation HOTBAR_SELECTION_SPRITE = new ResourceLocation("hud/hotbar_selection");
 
     public static void render(GuiGraphics graphics, float tickDelta) {
+        if (Minecraft.getInstance().options.hideGui) {
+            return;
+        }
+        
         Player player = Minecraft.getInstance().player;
         StateManager stateManager = StateManager.getClientInstance();
 
