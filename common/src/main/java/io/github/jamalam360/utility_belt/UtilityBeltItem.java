@@ -164,8 +164,11 @@ public class UtilityBeltItem extends AccessoryItem {
 	@Override
 	public void onUnequip(ItemStack stack, SlotReference reference) {
 		if (reference.entity() instanceof Player player && player.level().isClientSide) {
-			StateManager.getClientInstance().setInBelt(player, false);
-			StateManager.getClientInstance().setSelectedBeltSlot(player, 0);
+			var manager = StateManager.getStateManager(player);
+
+			manager.setInBelt(player, false);
+			manager.setSelectedBeltSlot(player, 0);
+
 			ClientNetworking.sendNewStateToServer(false, 0, false);
 		}
 	}
@@ -173,7 +176,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	@Override
 	public void onEquip(ItemStack stack, SlotReference reference) {
 		if (reference.entity() instanceof Player player && !player.level().isClientSide) {
-			StateManager.getServerInstance().setInventory(player, new Mutable(getInventoryFromTag(stack)));
+			StateManager.getStateManager(player).setInventory(player, new Mutable(getInventoryFromTag(stack)));
 		}
 	}
 

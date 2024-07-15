@@ -20,6 +20,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
@@ -44,7 +45,6 @@ public class UtilityBeltClient {
 		KeyMappingRegistry.register(OPEN_SCREEN);
 		ClientNetworking.init();
 		StateManager.setClientInstance(new ClientStateManager());
-		StateManager.setServerInstance(new ClientDelegatingServerStateManager()); // Will be fixed later. Currently a hackfix
 
 		ClientCommandRegistrationEvent.EVENT.register((dispatcher, c) -> dispatcher.register(
 				literal("utilitybelt")
@@ -58,9 +58,11 @@ public class UtilityBeltClient {
 						.then(
 								literal("fixme")
 										.executes(ctx -> {
-											StateManager stateManager = StateManager.getClientInstance();
-											stateManager.setInBelt(Minecraft.getInstance().player, false);
-											stateManager.setSelectedBeltSlot(Minecraft.getInstance().player, 0);
+											Player player = Minecraft.getInstance().player;
+
+											StateManager stateManager = StateManager.getStateManager(player);
+											stateManager.setInBelt(player, false);
+											stateManager.setSelectedBeltSlot(player, 0);
 											ClientNetworking.sendNewStateToServer(false, 0, false);
 											ctx.getSource().arch$sendSuccess(() -> Component.literal("Reset state"), false);
 											return 0;
@@ -73,15 +75,18 @@ public class UtilityBeltClient {
 					dispatcher.register(
 							literal("dumpstatec")
 									.executes(ctx -> {
-										StateManager stateManager = StateManager.getClientInstance();
-										System.out.println("In belt: " + stateManager.isInBelt(Minecraft.getInstance().player));
-										System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(Minecraft.getInstance().player));
-										System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
+										var player = Minecraft.getInstance().player;
 
-										StateManager stateManagerS = StateManager.getServerInstance();
-										System.out.println("In belt (client but server): " + stateManagerS.isInBelt(Minecraft.getInstance().player));
-										System.out.println("Selected slot (client but server): " + stateManagerS.getSelectedBeltSlot(Minecraft.getInstance().player));
-										System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(Minecraft.getInstance().player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
+										StateManager stateManager = StateManager.getStateManager(player);
+
+										System.out.println("In belt: " + stateManager.isInBelt(player));
+										System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(player));
+										System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
+
+										StateManager stateManagerS = StateManager.getStateManager(false);
+										System.out.println("In belt (client but server): " + stateManagerS.isInBelt(player));
+										System.out.println("Selected slot (client but server): " + stateManagerS.getSelectedBeltSlot(player));
+										System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
 										return 0;
 									})
 					)
@@ -109,17 +114,18 @@ public class UtilityBeltClient {
 	}
 
 	private static EventResult onMouseScrolled(Minecraft client, double scrollX, double scrollY) {
-		StateManager stateManager = StateManager.getClientInstance();
+		Player player = client.player;
+		StateManager stateManager = StateManager.getStateManager(true);
 
-		if (scrollY != 0 && stateManager.isInBelt(client.player)) {
-			int slot = stateManager.getSelectedBeltSlot(client.player);
-			ItemStack belt = UtilityBeltItem.getBelt(client.player);
+		if (scrollY != 0 && stateManager.isInBelt(player)) {
+			int slot = stateManager.getSelectedBeltSlot(player);
+			ItemStack belt = UtilityBeltItem.getBelt(player);
 
 			if (belt == null) {
 				return EventResult.pass();
 			}
 
-			int beltSize = stateManager.getInventory(client.player).getContainerSize();
+			int beltSize = stateManager.getInventory(player).getContainerSize();
 
 			if (UtilityBelt.CONFIG.get().invertScrolling) {
 				scrollY = -scrollY;
@@ -137,8 +143,8 @@ public class UtilityBeltClient {
 				}
 			}
 
-			stateManager.setSelectedBeltSlot(client.player, slot);
-			ClientNetworking.sendNewStateToServer(stateManager.isInBelt(client.player), stateManager.getSelectedBeltSlot(client.player), false);
+			stateManager.setSelectedBeltSlot(player, slot);
+			ClientNetworking.sendNewStateToServer(stateManager.isInBelt(player), stateManager.getSelectedBeltSlot(player), false);
 			return EventResult.interruptTrue();
 		}
 
@@ -147,7 +153,7 @@ public class UtilityBeltClient {
 
 	private static void onPlayerRespawn(LocalPlayer oldPlayer, LocalPlayer newPlayer) {
 		if (oldPlayer == Minecraft.getInstance().player || newPlayer == Minecraft.getInstance().player) {
-			StateManager stateManager = StateManager.getClientInstance();
+			StateManager stateManager = StateManager.getStateManager(true);
 			stateManager.setInBelt(Minecraft.getInstance().player, false);
 			stateManager.setSelectedBeltSlot(Minecraft.getInstance().player, 0);
 			ClientNetworking.sendNewStateToServer(false, 0, false);
@@ -158,7 +164,7 @@ public class UtilityBeltClient {
 	 * @see io.github.jamalam360.utility_belt.mixin.client.ClientPacketListenerMixin
 	 */
 	public static void onClientConnect() {
-		StateManager stateManager = StateManager.getClientInstance();
+		StateManager stateManager = StateManager.getStateManager(true);
 		stateManager.setInBelt(Minecraft.getInstance().player, false);
 		stateManager.setSelectedBeltSlot(Minecraft.getInstance().player, 0);
 		ClientNetworking.sendNewStateToServer(false, 0, false);
@@ -168,7 +174,7 @@ public class UtilityBeltClient {
 	 * @see io.github.jamalam360.utility_belt.mixin.client.ClientPacketListenerMixin
 	 */
 	public static void onClientDisconnect() {
-		StateManager stateManager = StateManager.getClientInstance();
+		StateManager stateManager = StateManager.getStateManager(true);
 		stateManager.setInBelt(Minecraft.getInstance().player, false);
 		stateManager.setSelectedBeltSlot(Minecraft.getInstance().player, 0);
 	}
@@ -178,7 +184,7 @@ public class UtilityBeltClient {
 			return;
 		}
 
-		StateManager stateManager = StateManager.getClientInstance();
+		StateManager stateManager = StateManager.getStateManager(true);
 		stateManager.setInBelt(client.player, !stateManager.isInBelt(client.player));
 		playSwapSound(client);
 		ClientNetworking.sendNewStateToServer(stateManager.isInBelt(client.player), stateManager.getSelectedBeltSlot(client.player), client.player.isCrouching());

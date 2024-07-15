@@ -58,7 +58,7 @@ public class UtilityBelt {
         if (Platform.isDevelopmentEnvironment()) {
             CommandRegistrationEvent.EVENT.register(((dispatcher, registry, selection) -> dispatcher.register(Commands.literal("dumpstate").executes(ctx -> {
                 CommandSourceStack source = ctx.getSource();
-                StateManager stateManager = StateManager.getServerInstance();
+                StateManager stateManager = StateManager.getStateManager(false);
                 System.out.println("In belt: " + stateManager.isInBelt(source.getPlayerOrException()));
                 System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(source.getPlayerOrException()));
                 System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(source.getPlayerOrException()).get(UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));

@@ -22,7 +22,7 @@ public class PlayerMixin {
 	)
 	private void utilitybelt$setItemInHand(EquipmentSlot equipmentSlot, ItemStack itemStack, CallbackInfo ci) {
 		if (equipmentSlot == EquipmentSlot.MAINHAND && (Object) this instanceof ServerPlayer player) {
-			StateManager stateManager = StateManager.getServerInstance();
+			StateManager stateManager = StateManager.getStateManager(player);
 			if (stateManager.isInBelt(player)) {
 				UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
 				inv.setItem(stateManager.getSelectedBeltSlot(player), itemStack);

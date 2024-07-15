@@ -27,6 +27,6 @@ public abstract class GuiMixin {
 			)
 	)
 	private boolean utilitybelt$disableHotbarHighlight(GuiGraphics instance, ResourceLocation arg, int i, int j, int k, int l) {
-		return !StateManager.getClientInstance().isInBelt(this.getCameraPlayer());
+		return !StateManager.getStateManager(true).isInBelt(this.getCameraPlayer());
 	}
 }

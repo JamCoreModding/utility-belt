@@ -28,9 +28,9 @@ public class MinecraftMixin {
 			at = @At("HEAD")
 	)
 	private void utilitybelt$preventPickBlockInBelt(CallbackInfo ci) {
-		if (StateManager.getClientInstance().isInBelt(this.player)) {
-			StateManager.getClientInstance().setInBelt(this.player, false);
-			ClientNetworking.sendNewStateToServer(false, StateManager.getClientInstance().getSelectedBeltSlot(this.player), false);
+		if (StateManager.getStateManager(true).isInBelt(this.player)) {
+			StateManager.getStateManager(true).setInBelt(this.player, false);
+			ClientNetworking.sendNewStateToServer(false, StateManager.getStateManager(true).getSelectedBeltSlot(this.player), false);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class MinecraftMixin {
 			)
 	)
 	private boolean utilitybelt$useHotbarKeysInBelt(boolean pressed, @Local int i) {
-		StateManager stateManager = StateManager.getClientInstance();
+		StateManager stateManager = StateManager.getStateManager(true);
 		if (stateManager.isInBelt(this.player) && pressed) {
 			switch (UtilityBelt.CONFIG.get().hotbarKeyBehaviour) {
 				case SWITCH_BACK_TO_HOTBAR:

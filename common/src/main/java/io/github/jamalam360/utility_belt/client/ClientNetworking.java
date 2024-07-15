@@ -12,6 +12,7 @@ import io.github.jamalam360.utility_belt.UtilityBeltPackets.S2CSetHotbarSlot;
 import io.github.jamalam360.utility_belt.UtilityBeltPackets.S2CUpdateBeltInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.world.entity.player.Player;
 
 @Environment(EnvType.CLIENT)
 public class ClientNetworking {
@@ -36,7 +37,9 @@ public class ClientNetworking {
     }
 
     private static void handleSetBeltSlot(S2CSetBeltSlot payload, NetworkManager.PacketContext ctx) {
-        StateManager.getClientInstance().setSelectedBeltSlot(ctx.getPlayer(), payload.slot());
+        Player player = ctx.getPlayer();
+
+        StateManager.getStateManager(player).setSelectedBeltSlot(player, payload.slot());
     }
 
     private static void handleSetHotbarSlot(S2CSetHotbarSlot payload, NetworkManager.PacketContext ctx) {
@@ -44,6 +47,8 @@ public class ClientNetworking {
     }
 
     private static void handleUpdateBeltInventory(S2CUpdateBeltInventory payload, NetworkManager.PacketContext ctx) {
-        StateManager.getClientInstance().setInventory(ctx.getPlayer(), new Mutable(payload.inventory()));
+        Player player = ctx.getPlayer();
+
+        StateManager.getStateManager(player).setInventory(player, new Mutable(payload.inventory()));
     }
 }
