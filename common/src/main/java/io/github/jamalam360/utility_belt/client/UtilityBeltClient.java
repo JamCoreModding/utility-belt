@@ -5,6 +5,7 @@ import dev.architectury.event.events.client.*;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
+import io.github.jamalam360.jamlib.config.ConfigManager;
 import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
@@ -28,6 +29,7 @@ import static dev.architectury.event.events.client.ClientCommandRegistrationEven
 
 @Environment(EnvType.CLIENT)
 public class UtilityBeltClient {
+	public static final ConfigManager<Config> CONFIG = new ConfigManager<>(UtilityBelt.MOD_ID, Config.class);
 	private static final KeyMapping SWAP_TOGGLE = new KeyMapping("key.utility_belt.swap_toggle", GLFW.GLFW_KEY_B, "key.category.utility_belt");
 	private static final KeyMapping SWAP_HOLD = new KeyMapping("key.utility_belt.swap_hold", GLFW.GLFW_KEY_N, "key.category.utility_belt");
 	private static final KeyMapping OPEN_SCREEN = new KeyMapping("key.utility_belt.open_screen", GLFW.GLFW_KEY_APOSTROPHE, "key.category.utility_belt");
@@ -127,7 +129,7 @@ public class UtilityBeltClient {
 
 			int beltSize = stateManager.getInventory(player).getContainerSize();
 
-			if (UtilityBelt.CONFIG.get().invertScrolling) {
+			if (CONFIG.get().invertScrolling) {
 				scrollY = -scrollY;
 			}
 

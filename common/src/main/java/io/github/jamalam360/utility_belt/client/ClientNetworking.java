@@ -2,7 +2,6 @@ package io.github.jamalam360.utility_belt.client;
 
 import dev.architectury.networking.NetworkManager;
 import io.github.jamalam360.utility_belt.StateManager;
-import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.UtilityBeltPackets;
 import io.github.jamalam360.utility_belt.UtilityBeltPackets.C2SOpenScreen;
@@ -24,7 +23,7 @@ public class ClientNetworking {
     }
 
     public static void sendNewStateToServer(boolean inBelt, int slot, boolean swapItems) {
-        if (swapItems && !UtilityBelt.CONFIG.get().useSneakSwapping) {
+        if (swapItems && !UtilityBeltClient.CONFIG.get().useSneakSwapping) {
             swapItems = false;
         }
 
@@ -37,18 +36,20 @@ public class ClientNetworking {
     }
 
     private static void handleSetBeltSlot(S2CSetBeltSlot payload, NetworkManager.PacketContext ctx) {
-        Player player = ctx.getPlayer();
-
-        StateManager.getStateManager(player).setSelectedBeltSlot(player, payload.slot());
+        ctx.queue(() -> {
+            Player player = ctx.getPlayer();
+            StateManager.getStateManager(player).setSelectedBeltSlot(player, payload.slot());
+        });
     }
 
     private static void handleSetHotbarSlot(S2CSetHotbarSlot payload, NetworkManager.PacketContext ctx) {
-        ctx.getPlayer().getInventory().selected = payload.slot();
+        ctx.queue(() -> ctx.getPlayer().getInventory().selected = payload.slot());
     }
 
     private static void handleUpdateBeltInventory(S2CUpdateBeltInventory payload, NetworkManager.PacketContext ctx) {
-        Player player = ctx.getPlayer();
-
-        StateManager.getStateManager(player).setInventory(player, new Mutable(payload.inventory()));
+        ctx.queue(() -> {
+            Player player = ctx.getPlayer();
+            StateManager.getStateManager(player).setInventory(player, new Mutable(payload.inventory()));
+        });
     }
 }

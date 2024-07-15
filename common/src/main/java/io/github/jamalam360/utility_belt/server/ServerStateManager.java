@@ -50,7 +50,7 @@ public class ServerStateManager extends StateManager {
 				return UtilityBeltInventory.EMPTY;
 			}
 
-			state.inventory = UtilityBeltItem.getInventoryFromTag(belt);
+			state.inventory = UtilityBeltItem.getInventory(belt);
 		}
 
 		return state.inventory;

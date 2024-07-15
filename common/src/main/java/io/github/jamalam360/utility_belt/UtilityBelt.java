@@ -9,7 +9,6 @@ import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
-import io.github.jamalam360.jamlib.config.ConfigManager;
 import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
 import io.github.jamalam360.utility_belt.server.ServerNetworking;
@@ -32,7 +31,6 @@ public class UtilityBelt {
     public static final String MOD_ID = "utility_belt";
     public static final String MOD_NAME = "Utility Belt";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
-    public static final ConfigManager<Config> CONFIG = new ConfigManager<>(MOD_ID, Config.class);
     public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.create(Registries.ITEM, id("allowed_in_utility_belt"));
 
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, Registries.ITEM);

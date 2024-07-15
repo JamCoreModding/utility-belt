@@ -71,8 +71,7 @@ public class UtilityBeltItem extends AccessoryItem {
 		return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ProjectileWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.getItem() instanceof BrushItem || stack.isEmpty() || stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
 	}
 
-	// Going to keep this name as is until 1.20.4 support is dropped, to keep the diffs smaller
-	public static UtilityBeltInventory getInventoryFromTag(ItemStack stack) {
+	public static UtilityBeltInventory getInventory(ItemStack stack) {
 		if (!stack.has(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get())) {
 			stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.EMPTY);
 		}
@@ -98,12 +97,12 @@ public class UtilityBeltItem extends AccessoryItem {
 
 	@Override
 	public boolean isBarVisible(ItemStack itemStack) {
-		return getInventoryFromTag(itemStack).items().stream().anyMatch(s -> !s.isEmpty());
+		return getInventory(itemStack).items().stream().anyMatch(s -> !s.isEmpty());
 	}
 
 	@Override
 	public int getBarWidth(ItemStack itemStack) {
-		long size = getInventoryFromTag(itemStack).items().stream().filter((s) -> !s.isEmpty()).count();
+		long size = getInventory(itemStack).items().stream().filter((s) -> !s.isEmpty()).count();
 		return size == 4L ? 13 : (int) (size * 3);
 	}
 
@@ -114,7 +113,7 @@ public class UtilityBeltItem extends AccessoryItem {
 
 	@Override
 	public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
-		UtilityBeltInventory inv = getInventoryFromTag(itemStack);
+		UtilityBeltInventory inv = getInventory(itemStack);
 
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
@@ -131,7 +130,7 @@ public class UtilityBeltItem extends AccessoryItem {
 		}
 
 		ItemStack slotStack = slot.getItem();
-		UtilityBeltInventory.Mutable inv = new Mutable(getInventoryFromTag(belt));
+		UtilityBeltInventory.Mutable inv = new Mutable(getInventory(belt));
 
 		if (!handleStack(slotStack, inv, slot::set)) {
 			return false;
@@ -148,7 +147,7 @@ public class UtilityBeltItem extends AccessoryItem {
 			return false;
 		}
 
-		UtilityBeltInventory.Mutable inv = new Mutable(getInventoryFromTag(belt));
+		UtilityBeltInventory.Mutable inv = new Mutable(getInventory(belt));
 
 		if (!handleStack(otherStack, inv, slotAccess::set)) {
 			return false;
@@ -174,7 +173,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	@Override
 	public void onEquip(ItemStack stack, SlotReference reference) {
 		if (reference.entity() instanceof Player player && !player.level().isClientSide) {
-			StateManager.getStateManager(player).setInventory(player, new Mutable(getInventoryFromTag(stack)));
+			StateManager.getStateManager(player).setInventory(player, new Mutable(getInventory(stack)));
 		}
 	}
 

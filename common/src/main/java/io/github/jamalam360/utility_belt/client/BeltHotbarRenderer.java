@@ -23,19 +23,21 @@ public class BeltHotbarRenderer {
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Player player = Minecraft.getInstance().player;
-
-        if(player == null) return;
-
+        
+        if (Minecraft.getInstance().options.hideGui || player == null) {
+            return;
+        }
+        
         StateManager stateManager = StateManager.getStateManager(player);
 
         if (stateManager.hasBelt(player) && (stateManager.isInBelt(player)
-                                                               || UtilityBelt.CONFIG.get().displayUtilityBeltWhenNotSelected)) {
+                                                               || UtilityBeltClient.CONFIG.get().displayUtilityBeltWhenNotSelected)) {
             int scaledHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-            int x = switch (UtilityBelt.CONFIG.get().hotbarPosition) {
+            int x = switch (UtilityBeltClient.CONFIG.get().hotbarPosition) {
                 case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> 2;
                 case TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT -> Minecraft.getInstance().getWindow().getGuiScaledWidth() - 24;
             };
-            int y = switch (UtilityBelt.CONFIG.get().hotbarPosition) {
+            int y = switch (UtilityBeltClient.CONFIG.get().hotbarPosition) {
                 case TOP_LEFT, TOP_RIGHT -> 2;
                 case MIDDLE_LEFT, MIDDLE_RIGHT -> scaledHeight / 2 - 44;
                 case BOTTOM_LEFT, BOTTOM_RIGHT -> scaledHeight - 84;

@@ -3,9 +3,9 @@ package io.github.jamalam360.utility_belt.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.jamalam360.utility_belt.StateManager;
-import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.client.ClientNetworking;
+import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -49,7 +49,7 @@ public class MinecraftMixin {
 	private boolean utilitybelt$useHotbarKeysInBelt(boolean pressed, @Local int i) {
 		StateManager stateManager = StateManager.getStateManager(true);
 		if (stateManager.isInBelt(this.player) && pressed) {
-			switch (UtilityBelt.CONFIG.get().hotbarKeyBehaviour) {
+			switch (UtilityBeltClient.CONFIG.get().hotbarKeyBehaviour) {
 				case SWITCH_BACK_TO_HOTBAR:
 					stateManager.setInBelt(this.player, false);
 					ClientNetworking.sendNewStateToServer(false, stateManager.getSelectedBeltSlot(this.player), this.player.isCrouching());

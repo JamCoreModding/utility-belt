@@ -131,7 +131,7 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
         @Nullable
         @Override
         public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-            return new UtilityBeltMenu(i, inventory, new Mutable(UtilityBeltItem.getInventoryFromTag(UtilityBeltItem.getBelt(player))));
+            return new UtilityBeltMenu(i, inventory, new Mutable(UtilityBeltItem.getInventory(UtilityBeltItem.getBelt(player))));
         }
     }
 }

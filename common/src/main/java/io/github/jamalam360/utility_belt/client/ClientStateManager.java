@@ -40,7 +40,7 @@ public class ClientStateManager extends StateManager {
 		if (belt == null) {
 			return UtilityBeltInventory.EMPTY;
 		} else {
-			return UtilityBeltItem.getInventoryFromTag(belt);
+			return UtilityBeltItem.getInventory(belt);
 		}
 	}
 

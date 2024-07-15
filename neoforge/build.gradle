@@ -86,7 +86,7 @@ processResources {
         expand "minecraft_version": project.minecraft_version,
             "architectury_version": libs.versions.architectury.get(),
             "jamlib_version": libs.versions.jamlib.get(),
-            "accessories_version": libs.versions.curios.get()
+            "accessories_version": libs.versions.accessories.get()
     }
 
     inputs.property "minecraft_version", project.minecraft_version

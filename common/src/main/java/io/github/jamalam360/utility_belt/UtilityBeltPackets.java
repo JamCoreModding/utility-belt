@@ -75,7 +75,7 @@ public class UtilityBeltPackets {
 
         @Override
         public Type<? extends CustomPacketPayload> type() {
-            return new CustomPacketPayload.Type<>(UtilityBelt.id("update_belt_inventory"));
+            return S2C_UPDATE_BELT_INVENTORY;
         }
     }
 }
