@@ -7,13 +7,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import io.wispforest.accessories.api.AccessoryItem;
-import io.wispforest.accessories.api.DropRule;
 import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -175,10 +173,5 @@ public class UtilityBeltItem extends AccessoryItem {
 		if (reference.entity() instanceof Player player && !player.level().isClientSide) {
 			StateManager.getStateManager(player).setInventory(player, new Mutable(getInventory(stack)));
 		}
-	}
-
-	@Override
-	public DropRule getDropRule(ItemStack stack, SlotReference reference, DamageSource source) {
-		return DropRule.DROP;
 	}
 }
