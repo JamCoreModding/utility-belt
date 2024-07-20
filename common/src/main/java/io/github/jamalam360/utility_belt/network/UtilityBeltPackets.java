@@ -1,5 +1,7 @@
-package io.github.jamalam360.utility_belt;
+package io.github.jamalam360.utility_belt.network;
 
+import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;

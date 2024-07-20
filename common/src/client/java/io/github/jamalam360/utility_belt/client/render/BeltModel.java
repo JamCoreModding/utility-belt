@@ -1,4 +1,4 @@
-package io.github.jamalam360.utility_belt.client;
+package io.github.jamalam360.utility_belt.client.render;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

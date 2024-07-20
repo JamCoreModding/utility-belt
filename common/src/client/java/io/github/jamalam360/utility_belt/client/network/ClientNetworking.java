@@ -1,14 +1,15 @@
-package io.github.jamalam360.utility_belt.client;
+package io.github.jamalam360.utility_belt.client.network;
 
 import dev.architectury.networking.NetworkManager;
-import io.github.jamalam360.utility_belt.StateManager;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.C2SOpenScreen;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.C2SUpdateState;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.S2CSetBeltSlot;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.S2CSetHotbarSlot;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.S2CUpdateBeltInventory;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SOpenScreen;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SUpdateState;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetBeltSlot;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetHotbarSlot;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CUpdateBeltInventory;
+import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.player.Player;

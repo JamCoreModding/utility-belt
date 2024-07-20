@@ -51,3 +51,6 @@ side = "BOTH"
 
 [[mixins]]
 config = "utility_belt.mixins.json"
+
+[[mixins]]
+config = "utility_belt.client.mixins.json"

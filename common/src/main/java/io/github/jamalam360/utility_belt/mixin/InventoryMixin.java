@@ -1,6 +1,7 @@
 package io.github.jamalam360.utility_belt.mixin;
 
-import io.github.jamalam360.utility_belt.StateManager;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import net.minecraft.tags.TagKey;
@@ -9,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,27 +43,25 @@ public abstract class InventoryMixin {
             cir.setReturnValue(inv.getItem(stateManager.getSelectedBeltSlot(this.player)));
         }
     }
-
-    /**
-     * Necessary because Mojank does not use getSelected in this method.
-     */
-    @Inject(
-          method = "getDestroySpeed",
-          at = @At("HEAD"),
-          cancellable = true
+    
+    @ModifyExpressionValue(
+            method = "getDestroySpeed",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/core/NonNullList;get(I)Ljava/lang/Object;"
+            )
     )
-    private void utilitybelt$getDestroySpeed(BlockState blockState, CallbackInfoReturnable<Float> cir) {
+    private ItemStack utilitybelt$useBeltStackForDestroySpeed(ItemStack original) {
         StateManager stateManager = StateManager.getStateManager(player);
         if (stateManager.isInBelt(this.player)) {
             ItemStack belt = UtilityBeltItem.getBelt(this.player);
 
-            if (belt == null) {
-                return;
+            if (belt != null) {
+                UtilityBeltInventory inv = stateManager.getInventory(this.player);
+                return inv.getItem(stateManager.getSelectedBeltSlot(this.player));
             }
-
-            UtilityBeltInventory inv = stateManager.getInventory(this.player);
-            cir.setReturnValue(inv.getItem(stateManager.getSelectedBeltSlot(this.player)).getDestroySpeed(blockState));
         }
+        return original;
     }
 
     @Inject(

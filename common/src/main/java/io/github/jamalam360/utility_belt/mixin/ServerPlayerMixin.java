@@ -1,12 +1,15 @@
 package io.github.jamalam360.utility_belt.mixin;
 
-import io.github.jamalam360.utility_belt.StateManager;
+import com.mojang.authlib.GameProfile;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
-import io.github.jamalam360.utility_belt.server.ServerNetworking;
+import io.github.jamalam360.utility_belt.network.ServerNetworking;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,12 +17,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
-public class ServerPlayerMixin {
+public abstract class ServerPlayerMixin extends Player {
 
     @Unique
     private int utilitybelt$lastSyncedInventoryHash = 0;
     @Unique
     private boolean utilitybelt$hasBeltLastTick = false;
+
+    public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
+        super(level, blockPos, f, gameProfile);
+    }
 
     @SuppressWarnings("UnreachableCode")
     @Inject(
@@ -27,8 +34,8 @@ public class ServerPlayerMixin {
           at = @At("HEAD")
     )
     private void utilitybelt$startPlayerTick(CallbackInfo ci) {
-        StateManager stateManager = StateManager.getStateManager((Player) (Object) this);
-        ItemStack belt = UtilityBeltItem.getBelt((Player) (Object) this);
+        StateManager stateManager = StateManager.getStateManager(this);
+        ItemStack belt = UtilityBeltItem.getBelt(this);
 
         if (belt != null) {
             if (!this.utilitybelt$hasBeltLastTick) {
@@ -36,7 +43,7 @@ public class ServerPlayerMixin {
                 return;
             }
 
-            UtilityBeltInventory inv = stateManager.getInventory((Player) (Object) this);
+            UtilityBeltInventory inv = stateManager.getInventory(this);
 
             if (this.utilitybelt$lastSyncedInventoryHash != inv.hashCode()) {
                 this.utilitybelt$lastSyncedInventoryHash = inv.hashCode();

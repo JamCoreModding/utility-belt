@@ -18,10 +18,14 @@
     "entrypoints": {
         "main": [
             "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabric"
+        ],
+        "client": [
+            "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabricClient"
         ]
     },
     "mixins": [
-        "utility_belt.mixins.json"
+        "utility_belt.mixins.json",
+        "utility_belt.client.mixins.json"
     ],
     "depends": {
         "fabricloader": ">=0.15.0",

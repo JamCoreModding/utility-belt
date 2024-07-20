@@ -1,11 +1,11 @@
 package io.github.jamalam360.utility_belt;
 
 import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
-import io.github.jamalam360.utility_belt.client.ClientNetworking;
 
 import java.util.List;
 import java.util.function.Consumer;
 
+import io.github.jamalam360.utility_belt.state.StateManager;
 import io.wispforest.accessories.api.AccessoryItem;
 import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
@@ -158,14 +158,7 @@ public class UtilityBeltItem extends AccessoryItem {
 
 	@Override
 	public void onUnequip(ItemStack stack, SlotReference reference) {
-		if (reference.entity() instanceof Player player && player.level().isClientSide) {
-			var manager = StateManager.getStateManager(player);
-
-			manager.setInBelt(player, false);
-			manager.setSelectedBeltSlot(player, 0);
-
-			ClientNetworking.sendNewStateToServer(false, 0, false);
-		}
+		UtilityBelt.UTILITY_BELT_UNEQUIP_EVENT.invoker().onUnequip(stack, reference);
 	}
 
 	@Override

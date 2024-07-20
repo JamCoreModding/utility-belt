@@ -1,10 +1,10 @@
-package io.github.jamalam360.utility_belt.mixin.client;
+package io.github.jamalam360.utility_belt.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.github.jamalam360.utility_belt.StateManager;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
-import io.github.jamalam360.utility_belt.client.ClientNetworking;
+import io.github.jamalam360.utility_belt.client.network.ClientNetworking;
 import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -34,10 +34,7 @@ public class MinecraftMixin {
 			ClientNetworking.sendNewStateToServer(false, stateManager.getSelectedBeltSlot(this.player), false);
 		}
 	}
-
-	/**
-	 * @reason Allows using the 1-9 hotbar keys to select slots in the belt or switch back to the hotbar depending on the config
-	 */
+	
 	@ModifyExpressionValue(
 			method = "handleKeybinds",
 			at = @At(

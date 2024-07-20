@@ -1,20 +1,17 @@
 package io.github.jamalam360.utility_belt;
 
-import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.platform.Platform;
+import dev.architectury.event.Event;
+import dev.architectury.event.EventFactory;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import dev.architectury.utils.Env;
-import dev.architectury.utils.EnvExecutor;
 import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
-import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
+import io.github.jamalam360.utility_belt.network.ServerNetworking;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
-import io.github.jamalam360.utility_belt.server.ServerNetworking;
-import io.github.jamalam360.utility_belt.server.ServerStateManager;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
+import io.github.jamalam360.utility_belt.state.ServerStateManager;
+import io.github.jamalam360.utility_belt.state.StateManager;
+import io.wispforest.accessories.api.slot.SlotReference;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +20,7 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,31 +41,25 @@ public class UtilityBelt {
     );
     public static final RegistrySupplier<MenuType<UtilityBeltMenu>> MENU_TYPE = MENUS.register("utility_belt", () -> new MenuType<>(UtilityBeltMenu::new, FeatureFlagSet.of()));
 
+    public static final Event<UtilityBeltUnequipEvent> UTILITY_BELT_UNEQUIP_EVENT = EventFactory.createLoop();
+    
     public static void init() {
         JamLib.checkForJarRenaming(UtilityBelt.class);
-        COMPONENT_TYPES.register(); // needs to be before items
+        COMPONENT_TYPES.register();
         ITEMS.register();
         MENUS.register();
         UTILITY_BELT_ITEM.listen((belt) -> CreativeTabRegistry.append(CreativeModeTabs.TOOLS_AND_UTILITIES, belt));
         ServerNetworking.init();
         StateManager.setServerInstance(new ServerStateManager());
-        EnvExecutor.runInEnv(Env.CLIENT, () -> UtilityBeltClient::init);
-
-        if (Platform.isDevelopmentEnvironment()) {
-            CommandRegistrationEvent.EVENT.register(((dispatcher, registry, selection) -> dispatcher.register(Commands.literal("dumpstate").executes(ctx -> {
-                CommandSourceStack source = ctx.getSource();
-                StateManager stateManager = StateManager.getStateManager(false);
-                System.out.println("In belt: " + stateManager.isInBelt(source.getPlayerOrException()));
-                System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(source.getPlayerOrException()));
-                System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(source.getPlayerOrException()).get(UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
-                return 0;
-            }))));
-        }
-
         LOGGER.info(MOD_NAME + " initialized on " + JamLibPlatform.getPlatform());
     }
 
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
+    
+    @FunctionalInterface
+    public interface UtilityBeltUnequipEvent {
+        void onUnequip(ItemStack stack, SlotReference reference);
     }
 }
