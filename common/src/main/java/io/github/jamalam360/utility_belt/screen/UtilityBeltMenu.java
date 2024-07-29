@@ -1,10 +1,10 @@
 package io.github.jamalam360.utility_belt.screen;
 
-import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class UtilityBeltMenu extends AbstractContainerMenu {
 
-    private final UtilityBeltInventory.Mutable inventory;
+    private final Mutable inventory;
 
     public UtilityBeltMenu(int syncId, Inventory playerInventory) {
         this(syncId, playerInventory, new Mutable(UtilityBeltInventory.EMPTY));
@@ -111,8 +111,6 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
         ItemStack belt = UtilityBeltItem.getBelt(player);
 
         if (belt == null) {
-            // uh oh
-            // anyways
             return;
         }
 

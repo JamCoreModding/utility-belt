@@ -11,9 +11,6 @@
     "ServerPlayerMixin"
   ],
   "client": [
-    "client.ClientPacketListenerMixin",
-    "client.GuiMixin",
-    "client.MinecraftMixin"
   ],
   "server": [
   ],

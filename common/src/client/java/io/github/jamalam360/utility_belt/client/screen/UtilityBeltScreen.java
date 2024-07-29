@@ -1,7 +1,8 @@
-package io.github.jamalam360.utility_belt.screen;
+package io.github.jamalam360.utility_belt.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;

@@ -1,6 +1,6 @@
-package io.github.jamalam360.utility_belt.client;
+package io.github.jamalam360.utility_belt.client.state;
 
-import io.github.jamalam360.utility_belt.StateManager;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import net.fabricmc.api.EnvType;

@@ -1,7 +1,7 @@
-package io.github.jamalam360.utility_belt.mixin.client;
+package io.github.jamalam360.utility_belt.client.mixin;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import io.github.jamalam360.utility_belt.StateManager;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Gui;

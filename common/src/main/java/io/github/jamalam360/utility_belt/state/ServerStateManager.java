@@ -1,6 +1,5 @@
-package io.github.jamalam360.utility_belt.server;
+package io.github.jamalam360.utility_belt.state;
 
-import io.github.jamalam360.utility_belt.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -11,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
-// Server == Logical Server
 public class ServerStateManager extends StateManager {
 	private final Map<UUID, PlayerState> playerStates = new Object2ObjectArrayMap<>();
 

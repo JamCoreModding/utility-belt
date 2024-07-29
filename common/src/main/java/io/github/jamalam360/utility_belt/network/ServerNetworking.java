@@ -1,18 +1,17 @@
-package io.github.jamalam360.utility_belt.server;
+package io.github.jamalam360.utility_belt.network;
 
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import io.github.jamalam360.utility_belt.Duck;
-import io.github.jamalam360.utility_belt.StateManager;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.C2SOpenScreen;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.C2SUpdateState;
-import io.github.jamalam360.utility_belt.UtilityBeltPackets.S2CSetBeltSlot;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SOpenScreen;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SUpdateState;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetBeltSlot;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

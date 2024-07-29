@@ -1,5 +1,8 @@
-package io.github.jamalam360.utility_belt;
+package io.github.jamalam360.utility_belt.state;
 
+import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
