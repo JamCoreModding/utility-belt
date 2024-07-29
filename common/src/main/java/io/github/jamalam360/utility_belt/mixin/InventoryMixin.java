@@ -51,7 +51,7 @@ public abstract class InventoryMixin {
                     target = "Lnet/minecraft/core/NonNullList;get(I)Ljava/lang/Object;"
             )
     )
-    private ItemStack utilitybelt$useBeltStackForDestroySpeed(ItemStack original) {
+    private Object utilitybelt$useBeltStackForDestroySpeed(Object original) {
         StateManager stateManager = StateManager.getStateManager(player);
         if (stateManager.isInBelt(this.player)) {
             ItemStack belt = UtilityBeltItem.getBelt(this.player);
@@ -61,6 +61,7 @@ public abstract class InventoryMixin {
                 return inv.getItem(stateManager.getSelectedBeltSlot(this.player));
             }
         }
+        
         return original;
     }
 
@@ -184,25 +185,7 @@ public abstract class InventoryMixin {
             }
         }
     }
-
-    @Inject(method = "dropAll", at = @At("HEAD"))
-    private void utilitybelt$dropAllFromUtilityBelt(CallbackInfo ci) {
-        ItemStack belt = UtilityBeltItem.getBelt(this.player);
-        if (belt != null) {
-            UtilityBeltInventory.Mutable inv = StateManager.getStateManager(this.player).getMutableInventory(this.player);
-
-            for (int i = 0; i < inv.getContainerSize(); i++) {
-                ItemStack itemStack = inv.getItem(i);
-                if (!itemStack.isEmpty()) {
-                    this.player.drop(itemStack, true, false);
-                    inv.setItem(i, ItemStack.EMPTY);
-                }
-            }
-
-            StateManager.getStateManager(this.player).setInventory(this.player, inv);
-        }
-    }
-
+    
     @Inject(
           method = "isEmpty",
           at = @At("HEAD"),

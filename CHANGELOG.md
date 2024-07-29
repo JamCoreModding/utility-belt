@@ -1,1 +1,1 @@
-- Fix (#31).
+- Fix duplication when player dies (#53).
