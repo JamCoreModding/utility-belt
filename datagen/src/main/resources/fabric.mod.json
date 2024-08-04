@@ -1,0 +1,30 @@
+{
+    "schemaVersion": 1,
+    "id": "utility_belt",
+    "version": "1.0.0",
+    "name": "Utility Belt Datagen",
+    "description": "Free your hotbar",
+    "authors": [
+        "Jamalam"
+    ],
+    "contact": {
+        "homepage": "https://github.com/JamCoreModding/utility-belt",
+        "sources": "https://github.com/JamCoreModding/utility-belt",
+        "issues": "https://github.com/JamCoreModding/utility-belt/issues"
+    },
+    "license": "MIT",
+    "icon": "assets/utility_belt/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "io.github.jamalam360.utility_belt.datagen.UtilityBeltBootstrap"
+        ],
+        "fabric-datagen": [
+            "io.github.jamalam360.utility_belt.datagen.Datagen"
+        ]
+    },
+    "mixins": [
+    ],
+    "depends": {
+    }
+}

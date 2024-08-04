@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "obtain_belt": {
+      "conditions": {
+        "items": [
+          {
+            "items": "utility_belt:utility_belt"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.utility_belt.utility_belt.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "utility_belt:utility_belt"
+    },
+    "title": {
+      "translate": "advancements.utility_belt.utility_belt.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_belt"
+    ]
+  ],
+  "rewards": {
+    "experience": 25
+  },
+  "sends_telemetry_event": true
+}

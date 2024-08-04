@@ -32,9 +32,9 @@ dependencies {
     modImplementation libs.architectury.neoforge
     modImplementation libs.jamlib.neoforge  
     modRuntimeOnly libs.accessories.neoforge
-
-    // Dependency of JamLib
-    forgeRuntimeLibrary "blue.endless:jankson:1.2.3"
+    
+    forgeRuntimeLibrary "blue.endless:jankson:1.2.3" // Dependency of JamLib
+    forgeRuntimeLibrary "io.wispforest:endec:0.1.5" // Dependency of Accessories
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }

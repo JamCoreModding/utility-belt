@@ -29,5 +29,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "utility_belt"
 include("common")
+include("datagen")
 include("fabric")
 include("neoforge")
