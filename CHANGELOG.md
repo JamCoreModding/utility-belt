@@ -1,1 +1,2 @@
-- Fix duplication when player dies (#53).
+- (fix) duplication when player dies (#53).
+- (internal) use datagen
