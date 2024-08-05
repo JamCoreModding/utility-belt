@@ -232,10 +232,12 @@ public abstract class InventoryMixin {
                     }
                 }
             }
-
-            inv.setItem(beltSlot, stack.copyAndClear());
-            stateManager.setInventory(this.player, inv);
-            cir.setReturnValue(true);
+            
+            if (beltSlot != -1) {
+                inv.setItem(beltSlot, stack.copyAndClear());
+                stateManager.setInventory(this.player, inv);
+                cir.setReturnValue(true);
+            }
         }
     }
 }

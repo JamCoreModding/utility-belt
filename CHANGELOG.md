@@ -1,2 +1,1 @@
-- (fix) duplication when player dies (#53).
-- (internal) use datagen
+- (fix) crash when trying to automatically insert items into belt (#55) 
