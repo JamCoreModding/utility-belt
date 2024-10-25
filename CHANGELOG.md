@@ -1,1 +1,4 @@
-- (fix) crash when trying to automatically insert items into belt (#55) 
+- (feat) compat with LambDynamicLights
+  - When LambDynamicLights is installed, you will be able to put light sources into your Utility Belt and they will illuminate the world around you.
+  - If you have suggestions for other dynamic lights mods to add compat for, please open an issue on GitHub.
+  - Closes #56

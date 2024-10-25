@@ -28,6 +28,7 @@ dependencies {
     modImplementation(libs.accessories.common) {
         exclude group: "mezz.jei"
     }
+    
     compileOnly libs.mixin.extras.common
     annotationProcessor libs.mixin.extras.common
 }
