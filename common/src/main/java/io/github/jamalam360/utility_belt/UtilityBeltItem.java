@@ -5,15 +5,18 @@ import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
 import java.util.List;
 import java.util.function.Consumer;
 
+import io.github.jamalam360.utility_belt.network.ServerNetworking;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import io.wispforest.accessories.api.AccessoryItem;
 import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -157,8 +160,24 @@ public class UtilityBeltItem extends AccessoryItem {
 	}
 
 	@Override
+	public void onDestroyed(ItemEntity itemEntity) {
+		super.onDestroyed(itemEntity);
+		UtilityBeltInventory inv = getInventory(itemEntity.getItem());
+		
+		for (ItemStack stack : inv.items()) {
+			if (!stack.isEmpty()) {
+				itemEntity.spawnAtLocation(stack);
+			}
+		}
+	}
+
+	@Override
 	public void onUnequip(ItemStack stack, SlotReference reference) {
-		UtilityBelt.UTILITY_BELT_UNEQUIP_EVENT.invoker().onUnequip(stack, reference);
+		if (reference.entity() instanceof ServerPlayer player) {
+			StateManager.getStateManager(player).setInBelt(player, false);
+			StateManager.getStateManager(player).setSelectedBeltSlot(player, 0);
+			ServerNetworking.sendBeltUnequippedToClient(player);
+		}
 	}
 
 	@Override

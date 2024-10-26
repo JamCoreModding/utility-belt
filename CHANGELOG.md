@@ -2,3 +2,8 @@
   - When LambDynamicLights is installed, you will be able to put light sources into your Utility Belt and they will illuminate the world around you.
   - If you have suggestions for other dynamic lights mods to add compat for, please open an issue on GitHub.
   - Closes #56
+- (fix) issue when unequipping belt while you are using it
+- (fix) general stability improvements
+- (fix) the belt will now pop out all of its items when it is broken
+  - This means that Netherite tools will not be lost if the belt burns in lava
+- (feat) add X/Y offset config options for the belt hotbar for more granular control over its position

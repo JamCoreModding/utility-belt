@@ -43,6 +43,9 @@ public class BeltHotbarRenderer {
                 case MIDDLE_LEFT, MIDDLE_RIGHT -> scaledHeight / 2 - 44;
                 case BOTTOM_LEFT, BOTTOM_RIGHT -> scaledHeight - 84;
             };
+            
+            x += UtilityBeltClient.CONFIG.get().hotbarOffsetX;
+            y += UtilityBeltClient.CONFIG.get().hotbarOffsetY;
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);

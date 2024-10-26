@@ -13,6 +13,7 @@ public class UtilityBeltPackets {
     public static final CustomPacketPayload.Type<S2CSetBeltSlot> S2C_SET_BELT_SLOT = new CustomPacketPayload.Type<>(UtilityBelt.id("set_belt_slot"));
     public static final CustomPacketPayload.Type<S2CSetHotbarSlot> S2C_SET_HOTBAR_SLOT = new CustomPacketPayload.Type<>(UtilityBelt.id("set_hotbar_slot"));
     public static final CustomPacketPayload.Type<S2CUpdateBeltInventory> S2C_UPDATE_BELT_INVENTORY = new CustomPacketPayload.Type<>(UtilityBelt.id("update_belt_inventory"));
+    public static final CustomPacketPayload.Type<S2CBeltUnequipped> S2C_BELT_UNEQUIPPED = new CustomPacketPayload.Type<>(UtilityBelt.id("belt_unequipped"));
 
     public record C2SUpdateState(boolean inBelt, int slot, boolean swapItems) implements CustomPacketPayload {
 
@@ -78,6 +79,16 @@ public class UtilityBeltPackets {
         @Override
         public Type<? extends CustomPacketPayload> type() {
             return S2C_UPDATE_BELT_INVENTORY;
+        }
+    }
+    
+    public record S2CBeltUnequipped() implements CustomPacketPayload {
+        
+        public static final StreamCodec<RegistryFriendlyByteBuf, S2CBeltUnequipped> STREAM_CODEC = StreamCodec.unit(new S2CBeltUnequipped());
+        
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return S2C_BELT_UNEQUIPPED;
         }
     }
 }

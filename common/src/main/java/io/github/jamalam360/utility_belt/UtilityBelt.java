@@ -40,8 +40,6 @@ public class UtilityBelt {
           DataComponentType.<UtilityBeltInventory>builder().persistent(UtilityBeltInventory.CODEC).cacheEncoding().build()
     );
     public static final RegistrySupplier<MenuType<UtilityBeltMenu>> MENU_TYPE = MENUS.register("utility_belt", () -> new MenuType<>(UtilityBeltMenu::new, FeatureFlagSet.of()));
-
-    public static final Event<UtilityBeltUnequipEvent> UTILITY_BELT_UNEQUIP_EVENT = EventFactory.createLoop();
     
     public static void init() {
         JamLib.checkForJarRenaming(UtilityBelt.class);

@@ -51,14 +51,6 @@ public class UtilityBeltClient {
 
 		UtilityBelt.MENU_TYPE.listen(menu -> MenuRegistry.registerScreenFactory(UtilityBelt.MENU_TYPE.get(), UtilityBeltScreen::new));
 		UtilityBelt.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.registerRenderer(belt, BeltRenderer::new));
-		UtilityBelt.UTILITY_BELT_UNEQUIP_EVENT.register((stack, reference) -> {
-			if (reference.entity() instanceof Player player && player.level().isClientSide) {
-				var manager = StateManager.getStateManager(player);
-				manager.setInBelt(player, false);
-				manager.setSelectedBeltSlot(player, 0);
-				ClientNetworking.sendNewStateToServer(false, 0, false);
-			}
-		});
 		ClientNetworking.init();
 		StateManager.setClientInstance(new ClientStateManager());
 	}

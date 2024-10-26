@@ -15,6 +15,10 @@ jamlib = "1.2.1+1.21"
 # https://modrinth.com/mod/accessories/versions
 accessories = "1.1.0-beta.11+1.21.1"
 
+# https://modrinth.com/mod/owo/versions
+owo-lib-fabric = "0.12.15+1.21"
+owo-lib-neoforge = "0.12.15-beta.5+1.21"
+
 # https://github.com/LlamaLad7/MixinExtras/releases
 mixin-extras = "0.4.1"
 
@@ -23,6 +27,9 @@ modmenu = "11.0.1"
 
 # https://modrinth.com/mod/lambdynamiclights/versions
 lambdynamiclights = "3.1.0+1.21.1"
+
+# https://modrinth.com/mod/sodium/versions
+sodium = "mc1.21-0.6.0-beta.2-fabric"
 
 [libraries]
 architectury-common = { module = "dev.architectury:architectury", version.ref = "architectury" }
@@ -42,8 +49,13 @@ accessories-common = { module = "io.wispforest:accessories-common", version.ref 
 accessories-fabric = { module = "io.wispforest:accessories-fabric", version.ref = "accessories" }
 accessories-neoforge = { module = "io.wispforest:accessories-neoforge", version.ref = "accessories" }
 
+owo-lib-fabric = { module = "io.wispforest:owo-lib", version.ref = "owo-lib-fabric" }
+owo-lib-neoforge = { module = "io.wispforest:owo-lib-neoforge", version.ref = "owo-lib-neoforge" }
+
 mixin-extras-common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
 
 modmenu = { module = "maven.modrinth:modmenu", version.ref = "modmenu" }
 
 lambdynamiclights = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime", version.ref = "lambdynamiclights" }
+
+sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }

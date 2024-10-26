@@ -14,6 +14,8 @@ public class Config implements ConfigExtensions<Config> {
 	public boolean useSneakSwapping = true;
 	public HotbarKeyBehaviour hotbarKeyBehaviour = HotbarKeyBehaviour.SWITCH_BELT_SLOT;
 	public Position hotbarPosition = Position.MIDDLE_LEFT;
+	public int hotbarOffsetX = 0;
+	public int hotbarOffsetY = 0;
 
 	@Override
 	public List<Link> getLinks() {

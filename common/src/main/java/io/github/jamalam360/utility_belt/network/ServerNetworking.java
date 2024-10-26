@@ -29,10 +29,15 @@ public class ServerNetworking {
         NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_BELT_SLOT, UtilityBeltPackets.S2CSetBeltSlot.STREAM_CODEC);
         NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, UtilityBeltPackets.S2CSetHotbarSlot.STREAM_CODEC);
         NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, UtilityBeltPackets.S2CUpdateBeltInventory.STREAM_CODEC);
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_BELT_UNEQUIPPED, UtilityBeltPackets.S2CBeltUnequipped.STREAM_CODEC);
     }
 
     public static void sendInventoryToClient(ServerPlayer player, UtilityBeltInventory inventory) {
         NetworkManager.sendToPlayer(player, new UtilityBeltPackets.S2CUpdateBeltInventory(inventory));
+    }
+    
+    public static void sendBeltUnequippedToClient(ServerPlayer player) {
+        NetworkManager.sendToPlayer(player, new UtilityBeltPackets.S2CBeltUnequipped());
     }
 
     private static void handleUpdateState(C2SUpdateState payload, NetworkManager.PacketContext ctx) {
@@ -46,7 +51,13 @@ public class ServerNetworking {
             int beltSlot = slot;
             StateManager stateManager = StateManager.getStateManager(player);
             stateManager.setInBelt(player, inBelt);
-            stateManager.setSelectedBeltSlot(player, beltSlot);
+            
+            if (beltSlot < 0 || beltSlot >= stateManager.getInventory(player).getContainerSize()) {
+                UtilityBelt.LOGGER.warn("Ignoring request from client to set an invalid belt slot: {}", beltSlot);
+            } else {
+                stateManager.setSelectedBeltSlot(player, beltSlot);
+            }
+            
             player.swing(InteractionHand.MAIN_HAND, true);
 
             if (swap) {
