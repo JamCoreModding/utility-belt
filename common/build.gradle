@@ -28,7 +28,6 @@ dependencies {
     modImplementation(libs.accessories.common) {
         exclude group: "mezz.jei"
     }
-    modImplementation libs.owo.lib.fabric // Dependency of Accessories
     
     compileOnly libs.mixin.extras.common
     annotationProcessor libs.mixin.extras.common

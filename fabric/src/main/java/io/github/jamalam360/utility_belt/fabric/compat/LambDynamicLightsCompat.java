@@ -6,44 +6,33 @@ import dev.lambdaurora.lambdynlights.api.DynamicLightHandlers;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.state.StateManager;
-import net.minecraft.core.BlockPos;
+import io.github.jamalam360.utility_belt.compat.LambDynamicLightsLikeCompat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Function;
 
 public class LambDynamicLightsCompat implements DynamicLightsInitializer {
 	@Override
 	public void onInitializeDynamicLights(ItemLightSourceManager manager) {
 		UtilityBelt.LOGGER.info("Initializing LambDynamicLights compat for Utility Belt.");
-		DynamicLightHandlers.registerDynamicLightHandler(EntityType.PLAYER, DynamicLightHandler.makeHandler(this::getLuminanceInBelt, player -> false));
-	}
-
-	private int getLuminanceInBelt(Player player) {
-		boolean submerged = isEyeSubmergedInFluid(player);
-		int luminance = 0;
-
-		StateManager stateManager = StateManager.getStateManager(player);
-		if (stateManager.hasBelt(player)) {
-			UtilityBeltInventory inv = stateManager.getInventory(player);
-
-			for (ItemStack stack : inv.items()) {
-				luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(stack, submerged));
+		LambDynamicLightsLikeCompat.init(new LambDynamicLightsLikeCompat.LambDynamicLightsLike() {
+			@Override
+			public <T extends LivingEntity> void registerDynamicLightHandler(EntityType<T> type, Function<T, Integer> handler) {
+				DynamicLightHandlers.registerDynamicLightHandler(type, DynamicLightHandler.makeHandler(handler, player -> false));
 			}
-		}
 
-		return luminance;
-	}
+			@Override
+			public int getLuminanceFromItemStack(@NotNull ItemStack stack, boolean submergedInWater) {
+				return LambDynLights.getLuminanceFromItemStack(stack, submergedInWater);
+			}
 
-	// From LambDynLights mod
-	private static boolean isEyeSubmergedInFluid(LivingEntity entity) {
-		if (!LambDynLights.get().config.getWaterSensitiveCheck().get()) {
-			return false;
-		} else {
-			BlockPos eyePos = BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ());
-			return !entity.level().getFluidState(eyePos).isEmpty();
-		}
+			@Override
+			public boolean isWaterSensitiveCheckEnabled() {
+				return LambDynLights.get().config.getWaterSensitiveCheck().get();
+			}
+		});
 	}
 }

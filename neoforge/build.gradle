@@ -34,6 +34,9 @@ dependencies {
     modImplementation libs.accessories.neoforge
     modImplementation libs.owo.lib.neoforge // Dependency of Accessories
     
+    // Compat
+    modImplementation libs.ryoamic.lights
+    
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3" // Dependency of JamLib
     forgeRuntimeLibrary "io.wispforest:endec:0.1.5" // Dependency of Accessories
 
