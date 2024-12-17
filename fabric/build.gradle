@@ -33,7 +33,7 @@ dependencies {
     modImplementation libs.architectury.fabric
     modImplementation libs.jamlib.fabric
     modImplementation libs.accessories.fabric
-    modImplementation libs.owo.lib.fabric // Dependency of Accessories
+    modRuntimeOnly libs.owo.lib.fabric // Dependency of Accessories
     modRuntimeOnly libs.modmenu
     
     // Compat
@@ -50,7 +50,7 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
             displayName = "V${project.version} (Fabric ${project.minecraft_version})"
             changelog = rootProject.file("CHANGELOG.md").text
             releaseType = project.version.contains("beta") ? "beta" : "release"
-            gameVersions = [project.minecraft_version, *project.additional_minecraft_versions.split(",")]
+            gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == "" ? [] : project.additional_minecraft_versions.split(","))]
             gameLoaders = ["fabric", "quilt"]
 
             mainPublication tasks.remapJar
@@ -91,21 +91,20 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
 }
 
 processResources {
+    def substitutions = [
+            "version"             : project.version,
+            "minecraft_version"   : project.minimum_minecraft_version,
+            "fabric_api_version"  : project.minimum_fabric_api_version,
+            "architectury_version": project.minimum_architectury_api_version,
+            "jamlib_version"      : project.minimum_jamlib_version,
+            "accessories_version" : project.minimum_accessories_version
+    ]
+
     filesMatching("fabric.mod.json") {
-        expand "version": project.version,
-            "minecraft_version": project.minecraft_version,
-            "fabric_api_version": libs.versions.fabric.api.get(),
-            "architectury_version": libs.versions.architectury.get(),
-            "jamlib_version": libs.versions.jamlib.get(),
-            "accessories_version": libs.versions.accessories.get()
+        expand substitutions
     }
 
-    inputs.property "version", project.version
-    inputs.property "minecraft_version", project.minecraft_version
-    inputs.property "fabric_api_version", libs.versions.fabric.api.get()
-    inputs.property "architectury_version", libs.versions.architectury.get()
-    inputs.property "jamlib_version", libs.versions.jamlib.get()
-    inputs.property "accessories_version", libs.versions.accessories.get()
+    substitutions.each { inputs.property it.key, it.value }
 }
 
 shadowJar {

@@ -87,6 +87,10 @@ public class UtilityBeltItem extends AccessoryItem {
 
 	@Nullable
 	public static ItemStack getBelt(Player player) {
+		if (player.accessoriesCapability() == null) {
+			return null;
+		}
+
 		@Nullable SlotEntryReference slot = player.accessoriesCapability().getFirstEquipped(UtilityBelt.UTILITY_BELT_ITEM.get());
 
 		if (slot != null) {

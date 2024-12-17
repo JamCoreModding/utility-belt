@@ -5,6 +5,7 @@ import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import io.github.jamalam360.utility_belt.Duck;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetHotbarSlot;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
@@ -27,7 +28,7 @@ public class ServerNetworking {
     
     private static void registerServerPayloadTypes() {
         NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_BELT_SLOT, UtilityBeltPackets.S2CSetBeltSlot.STREAM_CODEC);
-        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, UtilityBeltPackets.S2CSetHotbarSlot.STREAM_CODEC);
+        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, S2CSetHotbarSlot.STREAM_CODEC);
         NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, UtilityBeltPackets.S2CUpdateBeltInventory.STREAM_CODEC);
         NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_BELT_UNEQUIPPED, UtilityBeltPackets.S2CBeltUnequipped.STREAM_CODEC);
     }
@@ -102,7 +103,7 @@ public class ServerNetworking {
                         NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetBeltSlot(beltSlot));
                     } else if (hotbarSlot != player.getInventory().selected) {
                         player.getInventory().selected = hotbarSlot;
-                        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetBeltSlot(hotbarSlot));
+                        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetHotbarSlot(hotbarSlot));
                     }
                 }
             }

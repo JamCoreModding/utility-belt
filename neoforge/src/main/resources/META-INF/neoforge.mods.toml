@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/JamCoreModding/utility-belt/issues"
 
 [[mods]]
 modId = "utility_belt"
-version = "${file.jarVersion}"
+version = "${version}"
 displayName = "Utility Belt"
 displayURL="https://github.com/JamCoreModding/utility-belt"
 logoFile = "icon.png"
@@ -17,7 +17,7 @@ Free your hotbar
 [[dependencies.utility_belt]]
 modId = "neoforge"
 type = "required"
-versionRange = "[20.4,)"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 

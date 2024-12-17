@@ -3,7 +3,6 @@ package io.github.jamalam360.utility_belt.compat;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-// LambDynamicLights and RyoamicLights
+// LambDynamicLights and RyoamicLights (planned but not yet implemented)
 public class LambDynamicLightsLikeCompat {
 	public static void init(LambDynamicLightsLike lights) {
 		lights.registerDynamicLightHandler(EntityType.PLAYER, (player) -> getLuminanceInBelt(player, lights));

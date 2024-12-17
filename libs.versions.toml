@@ -3,21 +3,22 @@
 architectury = "13.0.8"
 
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "21.1.72"
+neoforge = "21.1.90"
 
 # https://fabricmc.net/develop
 fabric-loader = "0.15.11"
 fabric-api = "0.106.0+1.21.1"
 
 # https://maven.jamalam.tech/#/releases
-jamlib = "1.2.1+1.21"
+jamlib = "1.2.2-build.2+1.21.1"
  
 # https://modrinth.com/mod/accessories/versions
-accessories = "1.1.0-beta.11+1.21.1"
+accessories = "1.1.0-beta.16+1.21.1"
 
 # https://modrinth.com/mod/owo-lib/versions
 owo-lib-fabric = "0.12.15+1.21"
-owo-lib-neoforge = "0.12.15-beta.7+1.21"
+
+endec = "0.1.9"
 
 # https://github.com/LlamaLad7/MixinExtras/releases
 mixin-extras = "0.4.1"
@@ -27,9 +28,6 @@ modmenu = "11.0.1"
 
 # https://modrinth.com/mod/lambdynamiclights/versions
 lambdynamiclights = "3.1.0+1.21.1"
-
-# https://modrinth.com/mod/ryoamiclights
-ryoamic-lights = "0.2.11+mc1.21.1-neoforge"
 
 # https://modrinth.com/mod/sodium/versions
 sodium = "mc1.21-0.6.0-beta.2-fabric"
@@ -53,14 +51,11 @@ accessories-fabric = { module = "io.wispforest:accessories-fabric", version.ref 
 accessories-neoforge = { module = "io.wispforest:accessories-neoforge", version.ref = "accessories" }
 
 owo-lib-fabric = { module = "io.wispforest:owo-lib", version.ref = "owo-lib-fabric" }
-owo-lib-neoforge = { module = "io.wispforest:owo-lib-neoforge", version.ref = "owo-lib-neoforge" }
 
 mixin-extras-common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
 
 modmenu = { module = "maven.modrinth:modmenu", version.ref = "modmenu" }
 
 lambdynamiclights = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime", version.ref = "lambdynamiclights" }
-
-ryoamic-lights = { module = "maven.modrinth:ryoamiclights", version.ref = "ryoamic-lights" }
 
 sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }
