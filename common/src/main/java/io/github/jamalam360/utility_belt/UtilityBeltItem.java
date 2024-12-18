@@ -10,9 +10,14 @@ import io.github.jamalam360.utility_belt.state.StateManager;
 import io.wispforest.accessories.api.AccessoryItem;
 import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
@@ -20,25 +25,15 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.BrushItem;
-import net.minecraft.world.item.FishingRodItem;
-import net.minecraft.world.item.FlintAndSteelItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.SpyglassItem;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.*;
 import org.jetbrains.annotations.Nullable;
 
 public class UtilityBeltItem extends AccessoryItem {
 
-	private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
+	private static final int BAR_COLOR = ARGB.color((int) (0.4 * 255), (int) (0.4 * 255), (int) (1.0 * 255));
 
 	public UtilityBeltItem() {
-		super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.EMPTY));
+		super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.EMPTY).setId(ResourceKey.create(Registries.ITEM, UtilityBelt.id("utility_belt"))));
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -69,7 +64,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	}
 
 	public static boolean isValidItem(ItemStack stack) {
-		return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ProjectileWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.getItem() instanceof BrushItem || stack.isEmpty() || stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
+		return stack.getItem() instanceof DiggerItem || stack.getItem() instanceof MaceItem || stack.getItem() instanceof SwordItem || stack.getItem() instanceof ProjectileWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof FoodOnAStickItem<?> || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.getItem() instanceof BrushItem || stack.isEmpty() || stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
 	}
 
 	public static UtilityBeltInventory getInventory(ItemStack stack) {
@@ -169,8 +164,8 @@ public class UtilityBeltItem extends AccessoryItem {
 		UtilityBeltInventory inv = getInventory(itemEntity.getItem());
 		
 		for (ItemStack stack : inv.items()) {
-			if (!stack.isEmpty()) {
-				itemEntity.spawnAtLocation(stack);
+			if (!stack.isEmpty() && itemEntity.level() instanceof ServerLevel server) {
+				itemEntity.spawnAtLocation(server, stack);
 			}
 		}
 	}

@@ -1,1 +1,1 @@
-- (fix) game will no longer crash when `player.accessoriesCapability()` returns null (#59)
+Update to 1.21.4

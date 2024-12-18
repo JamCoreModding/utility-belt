@@ -37,7 +37,7 @@ dependencies {
     modRuntimeOnly libs.modmenu
     
     // Compat
-    modImplementation libs.lambdynamiclights
+    modRuntimeOnly libs.lambdynamiclights
     modRuntimeOnly libs.sodium
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

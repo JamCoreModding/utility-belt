@@ -5,7 +5,7 @@ import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,11 +26,9 @@ public class UtilityBeltScreen extends AbstractContainerScreen<UtilityBeltMenu> 
 
 	@Override
 	protected void renderBg(GuiGraphics graphics, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShader(CoreShaders.POSITION_TEX);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		int x = (width - this.imageWidth) / 2;
-		int y = (height - this.imageHeight) / 2;
-		graphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
+		graphics.blit(RenderType::guiTextured, TEXTURE, this.leftPos, this.topPos, 0F, 0F, this.imageWidth, this.imageHeight, 256, 256);
 	}
 
 	@Override

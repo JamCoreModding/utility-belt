@@ -11,6 +11,7 @@ fabricApi {
         createSourceSet = false
         addToResources = false
         outputDirectory = project(":common").file("src/generated/resources")
+        client = true
     }
 }
 

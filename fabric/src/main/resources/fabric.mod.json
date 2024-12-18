@@ -22,8 +22,8 @@
         "client": [
             "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabricClient"
         ],
-        "dynamiclights": [
-            "io.github.jamalam360.utility_belt.fabric.compat.LambDynamicLightsCompat"
+        "lambdynlights:initializer": [
+            "io.github.jamalam360.utility_belt.client.compat.LambDynamicLightsCompat"
         ]
     },
     "mixins": [

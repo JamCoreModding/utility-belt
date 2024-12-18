@@ -54,3 +54,6 @@ config = "utility_belt.mixins.json"
 
 [[mixins]]
 config = "utility_belt.client.mixins.json"
+
+[modproperties.utility_belt]
+"lambdynlights:intializer" = "io.github.jamalam360.utility_belt.client.compat.LambDynamicLightsCompat"

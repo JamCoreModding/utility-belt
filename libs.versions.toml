@@ -1,36 +1,38 @@
 [versions]
 # https://modrinth.com/mod/architectury-api/versions
-architectury = "13.0.8"
+architectury = "15.0.1"
+
+# https://parchmentmc.org/docs/getting-started
+parchment-minecraft = "1.21.4"
+parchment = "2024.12.07"
 
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "21.1.90"
+neoforge = "21.4.13-beta"
 
 # https://fabricmc.net/develop
-fabric-loader = "0.15.11"
-fabric-api = "0.106.0+1.21.1"
+fabric-loader = "0.16.9"
+fabric-api = "0.111.0+1.21.4"
 
 # https://maven.jamalam.tech/#/releases
-jamlib = "1.2.2-build.2+1.21.1"
+jamlib = "1.2.2+1.21.4"
  
 # https://modrinth.com/mod/accessories/versions
-accessories = "1.1.0-beta.16+1.21.1"
+accessories = "1.2.5-beta+1.21.4"
 
 # https://modrinth.com/mod/owo-lib/versions
-owo-lib-fabric = "0.12.15+1.21"
-
-endec = "0.1.9"
+owo-lib-fabric = "0.12.19+1.21.4"
 
 # https://github.com/LlamaLad7/MixinExtras/releases
 mixin-extras = "0.4.1"
 
 # https://modrinth.com/mod/modmenu/versions
-modmenu = "11.0.1"
+modmenu = "13.0.0-beta.1"
 
 # https://modrinth.com/mod/lambdynamiclights/versions
-lambdynamiclights = "3.1.0+1.21.1"
+lambdynamiclights = "4.0.1+1.21.4"
 
 # https://modrinth.com/mod/sodium/versions
-sodium = "mc1.21-0.6.0-beta.2-fabric"
+sodium = "mc1.21.4-0.6.4-fabric"
 
 [libraries]
 architectury-common = { module = "dev.architectury:architectury", version.ref = "architectury" }
@@ -57,5 +59,6 @@ mixin-extras-common = { module = "io.github.llamalad7:mixinextras-common", versi
 modmenu = { module = "maven.modrinth:modmenu", version.ref = "modmenu" }
 
 lambdynamiclights = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime", version.ref = "lambdynamiclights" }
+lambdynamiclights-api = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api", version.ref = "lambdynamiclights" }
 
 sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }

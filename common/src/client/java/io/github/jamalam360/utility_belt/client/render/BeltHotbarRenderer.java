@@ -10,7 +10,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +19,8 @@ import net.minecraft.world.item.ItemStack;
 @Environment(EnvType.CLIENT)
 public class BeltHotbarRenderer {
 
-    private static final ResourceLocation UTILITY_BELT_WIDGET_TEXTURE = UtilityBelt
-          .id("textures/gui/utility_belt_widget.png");
+    private static final ResourceLocation UTILITY_BELT_HOTBAR_TEXTURE = UtilityBelt
+          .id("utility_belt_hotbar");
     private static final ResourceLocation HOTBAR_SELECTION_SPRITE = ResourceLocation.withDefaultNamespace("hud/hotbar_selection");
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
@@ -48,12 +49,12 @@ public class BeltHotbarRenderer {
             y += UtilityBeltClient.CONFIG.get().hotbarOffsetY;
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShader(CoreShaders.POSITION_TEX);
 
-            graphics.blit(UTILITY_BELT_WIDGET_TEXTURE, x, y, 0, 0, 22, 88);
+            graphics.blitSprite(RenderType::guiTextured, UTILITY_BELT_HOTBAR_TEXTURE, x, y, 22, 88);
 
             if (stateManager.isInBelt(player)) {
-                graphics.blitSprite(HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 0, 24, 23);
+                graphics.blitSprite(RenderType::guiTextured, HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 22, 24, 23);
             }
 
             UtilityBeltInventory inv = stateManager.getInventory(player);
@@ -61,8 +62,8 @@ public class BeltHotbarRenderer {
             RenderSystem.defaultBlendFunc();
             int m = 1;
 
-            for (int n = 0; n < inv.getContainerSize(); ++n) {
-                renderHotbarItem(graphics, x, y + n * 20 + 3, deltaTracker.getGameTimeDeltaTicks(), player, inv.getItem(n), m++);
+            for (int n = 0; n < inv.getContainerSize(); n++) {
+                renderHotbarItem(graphics, x, y + n * 22 + 3, deltaTracker.getGameTimeDeltaTicks(), player, inv.getItem(n), m++);
             }
         }
     }

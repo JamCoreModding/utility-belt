@@ -31,4 +31,6 @@ dependencies {
     
     compileOnly libs.mixin.extras.common
     annotationProcessor libs.mixin.extras.common
+
+    modCompileOnly libs.lambdynamiclights.api
 }

@@ -7,7 +7,7 @@ import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
@@ -114,7 +114,7 @@ public abstract class InventoryMixin {
     }
 
     @Inject(method = "fillStackedContents", at = @At("HEAD"))
-    private void utilitybelt$recipeFinderPatch(StackedContents contents, CallbackInfo ci) {
+    private void utilitybelt$recipeFinderPatch(StackedItemContents contents, CallbackInfo ci) {
         ItemStack belt = UtilityBeltItem.getBelt(this.player);
         if (belt != null) {
             UtilityBeltInventory inv = StateManager.getStateManager(this.player).getInventory(this.player);
