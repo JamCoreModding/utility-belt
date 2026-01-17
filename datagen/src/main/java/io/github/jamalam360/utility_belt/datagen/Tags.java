@@ -19,12 +19,10 @@ public class Tags extends FabricTagProvider.ItemTagProvider {
 
 	@Override
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
-		getOrCreateTagBuilder(UtilityBelt.ALLOWED_IN_UTILITY_BELT)
-				.setReplace(false)
-				.addOptional(ResourceLocation.fromNamespaceAndPath("create", "wrench"));
+		getOrCreateRawBuilder(UtilityBelt.ALLOWED_IN_UTILITY_BELT)
+				.addOptionalElement(ResourceLocation.fromNamespaceAndPath("create", "wrench"));
 		
-		getOrCreateTagBuilder(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("accessories", "belt")))
-				.setReplace(false)
-				.add(UtilityBelt.UTILITY_BELT_ITEM.getId());
+		getOrCreateRawBuilder(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("accessories", "belt")))
+				.addElement(UtilityBelt.UTILITY_BELT_ITEM.getId());
 	}
 }

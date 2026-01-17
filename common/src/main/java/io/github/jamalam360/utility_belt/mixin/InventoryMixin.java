@@ -1,10 +1,10 @@
 package io.github.jamalam360.utility_belt.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedItemContents;
@@ -26,9 +26,9 @@ public abstract class InventoryMixin {
     public Player player;
     
     @Inject(
-          method = "getSelected",
-          at = @At("HEAD"),
-          cancellable = true
+            method = "getSelectedItem",
+            at = @At("HEAD"),
+            cancellable = true
     )
     private void utilitybelt$getSelectedInUtilityBelt(CallbackInfoReturnable<ItemStack> cir) {
         StateManager stateManager = StateManager.getStateManager(player);
@@ -42,27 +42,6 @@ public abstract class InventoryMixin {
             UtilityBeltInventory inv = stateManager.getInventory(this.player);
             cir.setReturnValue(inv.getItem(stateManager.getSelectedBeltSlot(this.player)));
         }
-    }
-    
-    @ModifyExpressionValue(
-            method = "getDestroySpeed",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/core/NonNullList;get(I)Ljava/lang/Object;"
-            )
-    )
-    private Object utilitybelt$useBeltStackForDestroySpeed(Object original) {
-        StateManager stateManager = StateManager.getStateManager(player);
-        if (stateManager.isInBelt(this.player)) {
-            ItemStack belt = UtilityBeltItem.getBelt(this.player);
-
-            if (belt != null) {
-                UtilityBeltInventory inv = stateManager.getInventory(this.player);
-                return inv.getItem(stateManager.getSelectedBeltSlot(this.player));
-            }
-        }
-        
-        return original;
     }
 
     @Inject(
@@ -84,7 +63,7 @@ public abstract class InventoryMixin {
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 ItemStack stack = inv.getItem(i);
                 if (!stack.isEmpty()) {
-                    stack.inventoryTick(this.player.level(), this.player, i, i == selectedSlot);
+                    stack.inventoryTick(this.player.level(), this.player, i == selectedSlot ? EquipmentSlot.MAINHAND : null);
                 }
             }
         }

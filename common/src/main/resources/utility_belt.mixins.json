@@ -6,10 +6,10 @@
   "mixins": [
     "InventoryMixin",
     "LivingEntityMixin",
-    "PlayerMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin",
-    "TagLoaderMixin"
+    "TagLoaderMixin",
+    "compat.travelersbackpack.FeedingUpgradeMixin"
   ],
   "client": [
   ],

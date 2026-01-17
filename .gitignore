@@ -17,11 +17,12 @@ out
 # gradle
 build
 .gradle
+*.cache
 
 # other
 eclipse
 run
 .architectury-transformer
 
-backup
-.cache
+TODO.md
+libs/

@@ -1,22 +1,22 @@
 package io.github.jamalam360.utility_belt.client;
 
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.client.*;
+import dev.architectury.event.events.client.ClientCommandRegistrationEvent;
+import dev.architectury.event.events.client.ClientPlayerEvent;
+import dev.architectury.event.events.client.ClientRawInputEvent;
+import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.platform.Platform;
+import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
-import dev.architectury.registry.menu.MenuRegistry;
 import io.github.jamalam360.jamlib.config.ConfigManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.client.network.ClientNetworking;
-import io.github.jamalam360.utility_belt.client.render.BeltHotbarRenderer;
 import io.github.jamalam360.utility_belt.client.render.BeltRenderer;
 import io.github.jamalam360.utility_belt.client.screen.UtilityBeltScreen;
 import io.github.jamalam360.utility_belt.client.state.ClientStateManager;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import io.wispforest.accessories.api.client.AccessoriesRendererRegistry;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -26,12 +26,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
-@Environment(EnvType.CLIENT)
 public class UtilityBeltClient {
 	public static final ConfigManager<Config> CONFIG = new ConfigManager<>(UtilityBelt.MOD_ID, Config.class);
-	private static final KeyMapping SWAP_TOGGLE = new KeyMapping("key.utility_belt.swap_toggle", GLFW.GLFW_KEY_B, "key.category.utility_belt");
-	private static final KeyMapping SWAP_HOLD = new KeyMapping("key.utility_belt.swap_hold", GLFW.GLFW_KEY_N, "key.category.utility_belt");
-	private static final KeyMapping OPEN_SCREEN = new KeyMapping("key.utility_belt.open_screen", GLFW.GLFW_KEY_APOSTROPHE, "key.category.utility_belt");
+	private static final KeyMapping.Category KEY_CATEGORY = KeyMapping.Category.register(UtilityBelt.id("utility_belt"));
+	private static final KeyMapping SWAP_TOGGLE = new KeyMapping("key.utility_belt.swap_toggle", GLFW.GLFW_KEY_B, KEY_CATEGORY);
+	private static final KeyMapping SWAP_HOLD = new KeyMapping("key.utility_belt.swap_hold", GLFW.GLFW_KEY_N, KEY_CATEGORY);
+	private static final KeyMapping OPEN_SCREEN = new KeyMapping("key.utility_belt.open_screen", GLFW.GLFW_KEY_APOSTROPHE, KEY_CATEGORY);
 	private static boolean isHoldingSwap = false;
 
 	public static void init() {
@@ -39,7 +39,6 @@ public class UtilityBeltClient {
 		KeyMappingRegistry.register(SWAP_HOLD);
 		KeyMappingRegistry.register(OPEN_SCREEN);
 
-		ClientGuiEvent.RENDER_HUD.register(BeltHotbarRenderer::render);
 		ClientTickEvent.CLIENT_POST.register(UtilityBeltClient::onEndClientTick);
 		ClientRawInputEvent.MOUSE_SCROLLED.register(UtilityBeltClient::onMouseScrolled);
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register(UtilityBeltClient::onPlayerRespawn);
@@ -49,8 +48,8 @@ public class UtilityBeltClient {
 			ClientCommandRegistrationEvent.EVENT.register(UtilityBeltCommands::registerDevelopmentCommands);
 		}
 
-		UtilityBelt.MENU_TYPE.listen(menu -> MenuRegistry.registerScreenFactory(UtilityBelt.MENU_TYPE.get(), UtilityBeltScreen::new));
-		UtilityBelt.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.registerRenderer(belt, BeltRenderer::new));
+		UtilityBelt.MENU_TYPE.listen(menu -> MenuScreenRegistry.registerScreenFactory(menu, UtilityBeltScreen::new));
+		UtilityBelt.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.bindItemToRenderer(belt, UtilityBelt.id("utility_belt"), BeltRenderer::new));
 		ClientNetworking.init();
 		StateManager.setClientInstance(new ClientStateManager());
 	}

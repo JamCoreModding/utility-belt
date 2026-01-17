@@ -28,7 +28,8 @@
     },
     "mixins": [
         "utility_belt.mixins.json",
-        "utility_belt.client.mixins.json"
+        "utility_belt.client.mixins.json",
+        "utility_belt.fabric.mixins.json"
     ],
     "depends": {
         "fabric": ">=${fabric_api_version}",

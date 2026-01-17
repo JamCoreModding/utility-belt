@@ -34,9 +34,11 @@ dependencies {
     modImplementation libs.accessories.neoforge
 
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3" // Dependency of JamLib
-    forgeRuntimeLibrary "io.wispforest:endec:0.1.8" // Dependency of Accessories
-    forgeRuntimeLibrary "io.wispforest.endec:gson:0.1.5" // Dependency of Accessories
-    forgeRuntimeLibrary "io.wispforest.endec:netty:0.1.4" // Dependency of Accessories
+    forgeRuntimeLibrary "blue.endless:jankson:1.2.2" // Dependency of Accessories
+    forgeRuntimeLibrary "io.wispforest:endec:0.1.9" // Dependency of Accessories
+    forgeRuntimeLibrary "io.wispforest.endec:gson:0.1.6" // Dependency of Accessories
+    forgeRuntimeLibrary "io.wispforest.endec:jankson:0.1.6" // Dependency of Accessories
+    forgeRuntimeLibrary "io.wispforest.endec:netty:0.1.5" // Dependency of Accessories
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
@@ -90,7 +92,7 @@ processResources {
             "neoforge_version"    : project.minimum_minecraft_version.substring(2),
             "architectury_version": project.minimum_architectury_api_version,
             "jamlib_version"      : project.minimum_jamlib_version,
-            "accessories_version" : project.minimum_accessories_version
+            "accessories_version" : project.minimum_accessories_version_neoforge
     ]
 
     filesMatching("META-INF/neoforge.mods.toml") {

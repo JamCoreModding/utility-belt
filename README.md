@@ -29,6 +29,10 @@
 
 Utility Belt can be configured via an in-game configuration screen which can be accessed in Mod Menu (Fabric/Quilt) or the mods screen (Forge/NeoForge).
 
+## Mod Compatibility
+
+- **LambDynamicLights**: torches and lanterns in your belt will light up the world around you. 
+
 ## I think I found a bug!
 
 Please report any issues you find on the [GitHub issue tracker](https://github.com/JamCoreModding/utility-belt). Until I reply, try out the `/utilitybelt fixme` command to see if it resolves the issue (but still report the problem if it does!).

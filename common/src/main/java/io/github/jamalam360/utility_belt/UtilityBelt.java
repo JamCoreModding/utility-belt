@@ -49,7 +49,7 @@ public class UtilityBelt {
         UTILITY_BELT_ITEM.listen((belt) -> CreativeTabRegistry.append(CreativeModeTabs.TOOLS_AND_UTILITIES, belt));
         ServerNetworking.init();
         StateManager.setServerInstance(new ServerStateManager());
-        LOGGER.info(MOD_NAME + " initialized on " + JamLibPlatform.getPlatform());
+	    LOGGER.info("{} initialized on {}", MOD_NAME, JamLibPlatform.getPlatform());
     }
 
     public static ResourceLocation id(String path) {

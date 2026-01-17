@@ -33,11 +33,12 @@ dependencies {
     modImplementation libs.architectury.fabric
     modImplementation libs.jamlib.fabric
     modImplementation libs.accessories.fabric
-    modRuntimeOnly libs.owo.lib.fabric // Dependency of Accessories
     modRuntimeOnly libs.modmenu
     
     // Compat
-    modRuntimeOnly libs.lambdynamiclights
+//    modRuntimeOnly libs.lambdynamiclights
+//    modRuntimeOnly(rootProject.files("libs/lambdynamiclights-runtime-4.8.7+1.21.10.jar"))
+//    modRuntimeOnly(rootProject.files("libs/lambdynamiclights-4.8.7+1.21.10.jar"))
     modRuntimeOnly libs.sodium
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

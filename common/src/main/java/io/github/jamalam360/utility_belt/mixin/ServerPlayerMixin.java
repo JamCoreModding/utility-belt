@@ -1,11 +1,10 @@
 package io.github.jamalam360.utility_belt.mixin;
 
 import com.mojang.authlib.GameProfile;
-import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.network.ServerNetworking;
-import net.minecraft.core.BlockPos;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +23,8 @@ public abstract class ServerPlayerMixin extends Player {
     @Unique
     private boolean utilitybelt$hasBeltLastTick = false;
 
-    public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(level, blockPos, f, gameProfile);
+    public ServerPlayerMixin(Level level, GameProfile gameProfile) {
+        super(level, gameProfile);
     }
 
     @SuppressWarnings("UnreachableCode")

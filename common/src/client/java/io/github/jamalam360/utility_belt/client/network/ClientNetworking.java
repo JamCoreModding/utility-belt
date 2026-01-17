@@ -3,17 +3,13 @@ package io.github.jamalam360.utility_belt.client.network;
 import dev.architectury.networking.NetworkManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
+import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.*;
 import io.github.jamalam360.utility_belt.state.StateManager;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
-import io.github.jamalam360.utility_belt.network.UtilityBeltPackets;
-import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 
-@Environment(EnvType.CLIENT)
 public class ClientNetworking {
 
     public static void init() {
@@ -43,7 +39,7 @@ public class ClientNetworking {
             UtilityBeltInventory inventory = manager.getInventory(player);
             
             if (payload.slot() < 0 || payload.slot() >= inventory.getContainerSize()) {
-                UtilityBelt.LOGGER.warn("Ignoring request from server to set an invalid belt slot: {}", payload.slot());
+                UtilityBelt.LOGGER.warn("Suspicious request from server to set an invalid belt slot: {}", payload.slot());
                 return;
             }
 
@@ -52,7 +48,7 @@ public class ClientNetworking {
     }
 
     private static void handleSetHotbarSlot(S2CSetHotbarSlot payload, NetworkManager.PacketContext ctx) {
-        ctx.queue(() -> ctx.getPlayer().getInventory().selected = payload.slot());
+        ctx.queue(() -> ctx.getPlayer().getInventory().setSelectedSlot(payload.slot()));
     }
 
     private static void handleUpdateBeltInventory(S2CUpdateBeltInventory payload, NetworkManager.PacketContext ctx) {

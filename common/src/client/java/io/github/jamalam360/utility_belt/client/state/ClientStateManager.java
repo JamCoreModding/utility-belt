@@ -1,14 +1,11 @@
 package io.github.jamalam360.utility_belt.client.state;
 
-import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-@Environment(EnvType.CLIENT)
 public class ClientStateManager extends StateManager {
 	private boolean isInUtilityBelt = false;
 	private int selectedSlot = 0;

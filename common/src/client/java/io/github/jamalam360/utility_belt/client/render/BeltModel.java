@@ -1,16 +1,12 @@
 package io.github.jamalam360.utility_belt.client.render;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.world.entity.LivingEntity;
 
-@Environment(EnvType.CLIENT)
 public class BeltModel extends HumanoidModel<HumanoidRenderState> {
 
 	public BeltModel(ModelPart root) {

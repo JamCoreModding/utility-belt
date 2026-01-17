@@ -5,15 +5,15 @@ import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import io.github.jamalam360.utility_belt.Duck;
-import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetHotbarSlot;
-import io.github.jamalam360.utility_belt.state.StateManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SOpenScreen;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SUpdateState;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetBeltSlot;
+import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetHotbarSlot;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -48,33 +48,29 @@ public class ServerNetworking {
 
         ctx.queue(() -> {
             var player = ctx.getPlayer();
-
             int beltSlot = slot;
             StateManager stateManager = StateManager.getStateManager(player);
-            stateManager.setInBelt(player, inBelt);
-            
+
             if (beltSlot < 0 || beltSlot >= stateManager.getInventory(player).getContainerSize()) {
-                UtilityBelt.LOGGER.warn("Ignoring request from client to set an invalid belt slot: {}", beltSlot);
-            } else {
-                stateManager.setSelectedBeltSlot(player, beltSlot);
+                UtilityBelt.LOGGER.warn("Suspicious request from client to set an invalid belt slot: {}", beltSlot);
+                return;
             }
-            
-            player.swing(InteractionHand.MAIN_HAND, true);
 
             if (swap) {
                 ItemStack belt = UtilityBeltItem.getBelt(player);
 
                 if (belt == null) {
-                    UtilityBelt.LOGGER.warn("Received swap request packet from client without a belt equipped");
+                    UtilityBelt.LOGGER.warn("Suspicious swap request packet from client without a belt equipped");
                     return;
                 }
 
                 UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
-                ItemStack stackInHand = player.getInventory().getItem(player.getInventory().selected);
-                int hotbarSlot = player.getInventory().selected;
+                int hotbarSlot = player.getInventory().getSelectedSlot();
+                ItemStack stackInHand = player.getInventory().getItem(hotbarSlot);
                 ItemStack stackInBelt = inv.getItem(beltSlot);
 
-                if (!stackInHand.isEmpty() && !stateManager.isInBelt(player)) {
+                if (!stackInHand.isEmpty() && !stackInBelt.isEmpty()) {
+                    if (stateManager.isInBelt(player)) {
                     for (int i = 0; i < 10; i++) {
                         if (player.getInventory().getItem(i).isEmpty()) {
                             hotbarSlot = i;
@@ -82,12 +78,13 @@ public class ServerNetworking {
                             break;
                         }
                     }
-                } else if (!stackInBelt.isEmpty() && stateManager.isInBelt(player)) {
-                    for (int i = 0; i < inv.getContainerSize(); i++) {
-                        if (inv.getItem(i).isEmpty()) {
-                            beltSlot = i;
-                            stackInBelt = inv.getItem(i);
-                            break;
+                    } else {
+                        for (int i = 0; i < inv.getContainerSize(); i++) {
+                            if (inv.getItem(i).isEmpty()) {
+                                beltSlot = i;
+                                stackInBelt = inv.getItem(i);
+                                break;
+                            }
                         }
                     }
                 }
@@ -101,12 +98,16 @@ public class ServerNetworking {
                     if (beltSlot != slot) {
                         stateManager.setSelectedBeltSlot(player, beltSlot);
                         NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetBeltSlot(beltSlot));
-                    } else if (hotbarSlot != player.getInventory().selected) {
-                        player.getInventory().selected = hotbarSlot;
+                    } else if (hotbarSlot != player.getInventory().getSelectedSlot()) {
+                        player.getInventory().setSelectedSlot(hotbarSlot);
                         NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetHotbarSlot(hotbarSlot));
                     }
                 }
             }
+
+            stateManager.setInBelt(player, inBelt);
+            stateManager.setSelectedBeltSlot(player, beltSlot);
+            player.swing(InteractionHand.MAIN_HAND, true);
         });
     }
 

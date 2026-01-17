@@ -1,13 +1,10 @@
 package io.github.jamalam360.utility_belt.client;
 
 import io.github.jamalam360.jamlib.config.ConfigExtensions;
-import java.util.List;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 
-@Environment(EnvType.CLIENT)
+import java.util.List;
+
 public class Config implements ConfigExtensions<Config> {
 	public boolean displayUtilityBeltWhenNotSelected = true;
 	public boolean invertScrolling = false;
@@ -16,6 +13,7 @@ public class Config implements ConfigExtensions<Config> {
 	public Position hotbarPosition = Position.MIDDLE_LEFT;
 	public int hotbarOffsetX = 0;
 	public int hotbarOffsetY = 0;
+	public boolean renderBelts = true;
 
 	@Override
 	public List<Link> getLinks() {

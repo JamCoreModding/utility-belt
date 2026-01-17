@@ -2,29 +2,22 @@ package io.github.jamalam360.utility_belt.client.render;
 
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import io.github.jamalam360.utility_belt.UtilityBelt;
-
-import java.util.function.Supplier;
-
-import io.wispforest.accessories.api.client.AccessoryRenderer;
-import io.wispforest.accessories.api.slot.SlotReference;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
+import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
+import io.wispforest.accessories.api.client.AccessoryRenderState;
+import io.wispforest.accessories.api.client.renderers.AccessoryRenderer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.EntityType;
 
-@Environment(EnvType.CLIENT)
+import java.util.function.Supplier;
+
 public class BeltRenderer implements AccessoryRenderer {
 
 	private static final ResourceLocation TEXTURE = UtilityBelt.id("textures/entity/belt.png");
@@ -33,20 +26,23 @@ public class BeltRenderer implements AccessoryRenderer {
 	);
 
 	@Override
-	public <S extends LivingEntityRenderState> void render(ItemStack stack, SlotReference reference, PoseStack matrices, EntityModel<S> entityModel, S state, MultiBufferSource multiBufferSource, int light, float v) {
-		HumanoidModel<HumanoidRenderState> beltModel = MODEL.get();
-		beltModel.setupAnim((HumanoidRenderState) state);
-		followBodyRotations(reference.entity(), beltModel);
-		VertexConsumer vertexConsumer = multiBufferSource.getBuffer(beltModel.renderType(TEXTURE));
-		beltModel.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+	public <S extends LivingEntityRenderState> void render(AccessoryRenderState accessoryState, S entityState, EntityModel<S> model, PoseStack matrices, SubmitNodeCollector collector) {
+		if (entityState.entityType != EntityType.PLAYER) {
+			throw new IllegalStateException("Utility belt can only be rendered on players");
+		}
+
+		if (UtilityBeltClient.CONFIG.get().renderBelts) {
+			this.render(accessoryState, (HumanoidRenderState) entityState, (HumanoidModel<HumanoidRenderState>) model, matrices, collector);
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private static void followBodyRotations(LivingEntity entity, HumanoidModel<HumanoidRenderState> model) {
-		EntityRenderer<? super LivingEntity, ?> render = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
-
-		if (render instanceof LivingEntityRenderer<?, ?, ?> renderer && renderer.getModel() instanceof HumanoidModel<?> entityModel) {
-			((HumanoidModel<HumanoidRenderState>) entityModel).copyPropertiesTo(model);
-		}
+	private void render(AccessoryRenderState accessoryState, HumanoidRenderState entityState, HumanoidModel<HumanoidRenderState> model, PoseStack matrices, SubmitNodeCollector collector) {
+		HumanoidModel<HumanoidRenderState> beltModel = MODEL.get();
+		beltModel.setupAnim(entityState);
+		matrices.mulPose(Axis.ZP.rotationDegrees(180));
+		matrices.mulPose(Axis.YP.rotationDegrees(180));
+		matrices.scale(1.75f, 1.75f, 1.75f);
+		AccessoryRenderer.transformToModelPart(matrices, model.body, 0, 0.9, 0);
+		collector.submitModel(beltModel, entityState, matrices, beltModel.renderType(TEXTURE), entityState.lightCoords, OverlayTexture.NO_OVERLAY, 0, null);
 	}
 }
