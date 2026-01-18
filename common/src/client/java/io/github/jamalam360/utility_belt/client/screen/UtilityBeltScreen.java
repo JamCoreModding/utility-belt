@@ -21,8 +21,9 @@ public class UtilityBeltScreen extends AbstractContainerScreen<UtilityBeltMenu> 
 
 	@Override
 	protected void init() {
+		this.imageHeight = 16 + this.menu.getBeltRows() * 18 + 96;
 		super.init();
-		this.inventoryLabelY = this.imageHeight - 130 + (this.menu.getBeltRows() - 1) * 18;
+		this.inventoryLabelY = this.imageHeight - 94;
 	}
 
 	@Override
