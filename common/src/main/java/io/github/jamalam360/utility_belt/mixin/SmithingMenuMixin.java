@@ -57,6 +57,9 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 		return original;
 	}
 
+	/**
+	 * method_64653 is the `action` lambda in optional.ifPresentOrElse in createResult.
+	 */
 	@WrapOperation(
 			method = "method_64653",
 			at = @At(
