@@ -8,6 +8,7 @@
     "LivingEntityMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin",
+    "SmithingMenuMixin",
     "TagLoaderMixin",
     "compat.travelersbackpack.FeedingUpgradeMixin"
   ],

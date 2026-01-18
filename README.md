@@ -25,13 +25,26 @@
 
 <div align="center">
 
-![The recipe for the Utility Belt](https://cdn.jamalam.tech/mod-assets/utility-belt-recipe.png)
+![The recipe for the belt pouch](https://cdn.jamalam.tech/mod-assets/utility-belt-pouch-recipe.png)
+
+![The recipe for the belt](https://cdn.jamalam.tech/mod-assets/utility-belt-belt-recipe.png)
 
 </div>
 
-1. **Craft** a Utility Belt using the recipe above.
-2. **Equip** it in your belt slot.
-3. **Fill** it with your tools and weapons.
+1. **Craft** two belt pouches using the recipe above.
+2. **Craft** a Utility Belt using the recipe above.
+3. **Equip** it in your belt slot.
+4. **Fill** it with your tools and weapons.
+
+## ⬆️ Upgrading the Belt
+
+By default, the belt has **4** slots and can be upgraded to have up to **6** slots (_these values can be changed in the mod configuration_). You can add a slot to a belt in a **Smithing Table** using the recipe below.
+
+<div align="center">
+
+![The recipe for the belt upgrade](https://cdn.jamalam.tech/mod-assets/utility-belt-belt-upgrade-recipe.png)
+
+</div>
 
 ## 🎮 Controls
 

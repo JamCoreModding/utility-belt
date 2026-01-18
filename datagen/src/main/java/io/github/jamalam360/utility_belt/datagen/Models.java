@@ -20,5 +20,6 @@ public class Models extends FabricModelProvider {
 	@Override
 	public void generateItemModels(ItemModelGenerators gen) {
 		gen.generateFlatItem(UtilityBelt.UTILITY_BELT_ITEM.get(), ModelTemplates.FLAT_ITEM);
+		gen.generateFlatItem(UtilityBelt.POUCH_ITEM.get(), ModelTemplates.FLAT_ITEM);
 	}
 }

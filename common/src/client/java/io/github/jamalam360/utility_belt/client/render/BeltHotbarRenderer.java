@@ -14,8 +14,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class BeltHotbarRenderer {
 
-    private static final ResourceLocation UTILITY_BELT_HOTBAR_TEXTURE = UtilityBelt
-          .id("utility_belt_hotbar");
+    private static final ResourceLocation HOTBAR_SLOT_TOP_SPRITE = UtilityBelt
+        .id("utility_belt_hotbar_slot_top");
+    private static final ResourceLocation HOTBAR_SLOT_MIDDLE_SPRITE = UtilityBelt
+        .id("utility_belt_hotbar_slot_middle");
+    private static final ResourceLocation HOTBAR_SLOT_BOTTOM_SPRITE = UtilityBelt
+        .id("utility_belt_hotbar_slot_bottom");
     private static final ResourceLocation HOTBAR_SELECTION_SPRITE = ResourceLocation.withDefaultNamespace("hud/hotbar_selection");
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
@@ -28,32 +32,42 @@ public class BeltHotbarRenderer {
         StateManager stateManager = StateManager.getStateManager(player);
 
         if (stateManager.hasBelt(player) && (stateManager.isInBelt(player)
-                                                               || UtilityBeltClient.CONFIG.get().displayUtilityBeltWhenNotSelected)) {
+                                                               || UtilityBeltClient.CLIENT_CONFIG.get().displayUtilityBeltWhenNotSelected)) {
+            UtilityBeltInventory inv = stateManager.getInventory(player);
             int scaledHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-            int x = switch (UtilityBeltClient.CONFIG.get().hotbarPosition) {
+            int hotbarHeight = inv.getContainerSize() * 20 + 2;
+            int x = switch (UtilityBeltClient.CLIENT_CONFIG.get().hotbarPosition) {
                 case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> 2;
                 case TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT -> Minecraft.getInstance().getWindow().getGuiScaledWidth() - 24;
             };
-            int y = switch (UtilityBeltClient.CONFIG.get().hotbarPosition) {
+            int y = switch (UtilityBeltClient.CLIENT_CONFIG.get().hotbarPosition) {
                 case TOP_LEFT, TOP_RIGHT -> 2;
-                case MIDDLE_LEFT, MIDDLE_RIGHT -> scaledHeight / 2 - 44;
-                case BOTTOM_LEFT, BOTTOM_RIGHT -> scaledHeight - 90;
+                case MIDDLE_LEFT, MIDDLE_RIGHT -> scaledHeight / 2 - (hotbarHeight / 2);
+                case BOTTOM_LEFT, BOTTOM_RIGHT -> scaledHeight - hotbarHeight - 2;
             };
             
-            x += UtilityBeltClient.CONFIG.get().hotbarOffsetX;
-            y += UtilityBeltClient.CONFIG.get().hotbarOffsetY;
+            x += UtilityBeltClient.CLIENT_CONFIG.get().hotbarOffsetX;
+            y += UtilityBeltClient.CLIENT_CONFIG.get().hotbarOffsetY;
 
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, UTILITY_BELT_HOTBAR_TEXTURE, x, y, 22, 88);
+            int m = 1;
+            int slotY = y;
+            for (int n = 0; n < inv.getContainerSize(); n++) {
+                if (n == 0) {
+                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SLOT_TOP_SPRITE, x, slotY, 22, 21);
+                    slotY += 21;
+                } else if (n == inv.getContainerSize() - 1) {
+                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SLOT_BOTTOM_SPRITE, x, slotY, 22, 21);
+                    slotY += 21;
+                } else {
+                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SLOT_MIDDLE_SPRITE, x, slotY, 22, 20);
+                    slotY += 20;
+                }
 
-            if (stateManager.isInBelt(player)) {
-                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 22, 24, 23);
+                renderHotbarItem(graphics, x, y + 3 + n * 20, deltaTracker.getGameTimeDeltaTicks(), player, inv.getItem(n), m++);
             }
 
-            UtilityBeltInventory inv = stateManager.getInventory(player);
-            int m = 1;
-
-            for (int n = 0; n < inv.getContainerSize(); n++) {
-                renderHotbarItem(graphics, x, y + n * 22 + 3, deltaTracker.getGameTimeDeltaTicks(), player, inv.getItem(n), m++);
+            if (stateManager.isInBelt(player)) {
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 24, 23);
             }
         }
     }

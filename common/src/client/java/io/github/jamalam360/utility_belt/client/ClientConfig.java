@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class Config implements ConfigExtensions<Config> {
+public class ClientConfig implements ConfigExtensions<ClientConfig> {
 	public boolean displayUtilityBeltWhenNotSelected = true;
 	public boolean invertScrolling = false;
 	public boolean useSneakSwapping = true;

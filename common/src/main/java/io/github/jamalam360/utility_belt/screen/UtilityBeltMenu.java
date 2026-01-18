@@ -21,39 +21,45 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
     private final Mutable inventory;
 
     public UtilityBeltMenu(int syncId, Inventory playerInventory) {
-        this(syncId, playerInventory, new Mutable(UtilityBeltInventory.EMPTY));
+        this(syncId, playerInventory, new Mutable(UtilityBeltInventory.empty(UtilityBeltItem.getInventorySize(UtilityBeltItem.getBelt(playerInventory.player)))));
     }
 
     public UtilityBeltMenu(int syncId, Inventory playerInventory, UtilityBeltInventory.Mutable inventory) {
         super(UtilityBelt.MENU_TYPE.get(), syncId);
         this.inventory = inventory;
+        int rows = this.getBeltRows();
 
-        int m;
-        int l;
+        for (int i = 0; i < 9; i++) {
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 106 + (rows - 1) * 18));
+        }
 
-        for (l = 0; l < this.inventory.getContainerSize(); ++l) {
-            this.addSlot(new Slot(inventory, l, 53 + l * 18, 17) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                this.addSlot(new Slot(playerInventory, j + (i + 1) * 9, 8 + j * 18, 48 + (rows - 1) * 18 + i * 18));
+            }
+        }
+
+        int x = 0;
+        int y = 0;
+        while ((x + y * 9) < this.inventory.getContainerSize()) {
+            this.addSlot(new Slot(inventory, x + y * 9, 8 + x * 18, 17 + y * 18) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return UtilityBeltItem.isValidItem(stack);
                 }
             });
-        }
 
-        for (m = 0; m < 3; ++m) {
-            for (l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 48 + m * 18));
+            x += 1;
+            if (x == 9) {
+                x = 0;
+                y += 1;
             }
-        }
-
-        for (m = 0; m < 9; ++m) {
-            this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 106));
         }
     }
 
     @Override
     public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
-        if (slot.getContainerSlot() < this.inventory.getContainerSize()) {
+        if (this.isBeltSlot(slot.index)) {
             return UtilityBeltItem.isValidItem(stack);
         }
 
@@ -68,11 +74,11 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
-            if (index < this.inventory.getContainerSize()) {
-                if (!this.moveItemStackTo(originalStack, this.inventory.getContainerSize(), this.slots.size(), true)) {
+            if (this.isBeltSlot(index)) {
+                if (!this.moveItemStackTo(originalStack, 0, 36, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(originalStack, 0, this.inventory.getContainerSize(), false)) {
+            } else if (!this.moveItemStackTo(originalStack, 36, 36 + this.inventory.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -91,7 +97,7 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
     public void clicked(int slotIndex, int button, ClickType clickType, Player player) {
         super.clicked(slotIndex, button, clickType, player);
 
-        if (slotIndex < this.inventory.getContainerSize()) {
+        if (this.isBeltSlot(slotIndex)) {
             this.markDirty(player);
         }
     }
@@ -107,9 +113,24 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
         super.removed(player);
     }
 
+    public int getBeltInventorySize() {
+        return this.inventory.getContainerSize();
+    }
+
+    public int getBeltRows() {
+		return Math.max(1, (int) Math.ceil((float) this.getBeltInventorySize() / 9));
+	}
+
+    private boolean isBeltSlot(int slotIndex) {
+        if (slotIndex < 0 || slotIndex >= this.slots.size()) {
+            return false;
+        }
+
+	    return this.getSlot(slotIndex).container instanceof Mutable;
+    }
+
     private void markDirty(Player player) {
         ItemStack belt = UtilityBeltItem.getBelt(player);
-
         if (belt == null) {
             return;
         }

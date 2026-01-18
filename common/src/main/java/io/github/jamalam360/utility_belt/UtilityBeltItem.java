@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -22,6 +23,7 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
+import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -31,7 +33,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	private static final int BAR_COLOR = ARGB.color((int) (0.4 * 255), (int) (0.4 * 255), (int) (1.0 * 255));
 
 	public UtilityBeltItem() {
-		super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.EMPTY).setId(ResourceKey.create(Registries.ITEM, UtilityBelt.id("utility_belt"))));
+		super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize)).component(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize).setId(ResourceKey.create(Registries.ITEM, UtilityBelt.id("utility_belt"))));
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -81,12 +83,27 @@ public class UtilityBeltItem extends AccessoryItem {
 						stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
 	}
 
-	public static UtilityBeltInventory getInventory(ItemStack stack) {
-		if (!stack.has(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get())) {
-			stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.EMPTY);
+	public static int getInventorySize(ItemStack stack) {
+		if (!stack.has(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get())) {
+			stack.set(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize);
 		}
 
-		return stack.get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get());
+		return stack.get(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get());
+	}
+
+	public static UtilityBeltInventory getInventory(ItemStack stack) {
+		int size = getInventorySize(stack);
+		if (!stack.has(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get())) {
+			stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.empty(size));
+		}
+
+		UtilityBeltInventory inv = stack.get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get());
+		if (size != inv.getContainerSize()) {
+			inv = inv.copyWithSize(size);
+			stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), inv);
+		}
+
+		return inv;
 	}
 
 	// This should only be called by the state managers, or when the belt is NOT equipped
@@ -116,8 +133,9 @@ public class UtilityBeltItem extends AccessoryItem {
 
 	@Override
 	public int getBarWidth(ItemStack itemStack) {
-		long size = getInventory(itemStack).items().stream().filter((s) -> !s.isEmpty()).count();
-		return size == 4L ? 13 : (int) (size * 3);
+		UtilityBeltInventory inv = getInventory(itemStack);
+		int size = Math.toIntExact(inv.items().stream().filter((s) -> !s.isEmpty()).count());
+		return Math.min(1 + Mth.mulAndTruncate(Fraction.getFraction(size, inv.getContainerSize()), 12), 13);
 	}
 
 	@Override
@@ -129,6 +147,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	public void appendHoverText(ItemStack belt, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
 		super.appendHoverText(belt, context, tooltipDisplay, tooltipAdder, flag);
 		UtilityBeltInventory inv = getInventory(belt);
+		tooltipAdder.accept(Component.translatable("text.utility_belt.tooltip.size", inv.getContainerSize()));
 
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);

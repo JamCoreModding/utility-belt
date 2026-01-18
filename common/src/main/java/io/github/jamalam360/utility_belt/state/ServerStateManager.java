@@ -1,5 +1,6 @@
 package io.github.jamalam360.utility_belt.state;
 
+import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -45,7 +46,7 @@ public class ServerStateManager extends StateManager {
 			ItemStack belt = UtilityBeltItem.getBelt(player);
 
 			if (belt == null) {
-				return UtilityBeltInventory.EMPTY;
+				return UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize);
 			}
 
 			state.inventory = UtilityBeltItem.getInventory(belt);
