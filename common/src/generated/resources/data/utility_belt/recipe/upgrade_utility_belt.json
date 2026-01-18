@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "utility_belt:pouch",
+  "base": "utility_belt:utility_belt",
+  "result": {
+    "id": "utility_belt:utility_belt"
+  }
+}

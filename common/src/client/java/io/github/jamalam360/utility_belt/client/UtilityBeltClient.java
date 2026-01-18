@@ -27,7 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
 public class UtilityBeltClient {
-	public static final ConfigManager<Config> CONFIG = new ConfigManager<>(UtilityBelt.MOD_ID, Config.class);
+	public static final ConfigManager<ClientConfig> CLIENT_CONFIG = new ConfigManager<>(UtilityBelt.MOD_ID, "client", ClientConfig.class);
 	private static final KeyMapping.Category KEY_CATEGORY = KeyMapping.Category.register(UtilityBelt.id("utility_belt"));
 	private static final KeyMapping SWAP_TOGGLE = new KeyMapping("key.utility_belt.swap_toggle", GLFW.GLFW_KEY_B, KEY_CATEGORY);
 	private static final KeyMapping SWAP_HOLD = new KeyMapping("key.utility_belt.swap_hold", GLFW.GLFW_KEY_N, KEY_CATEGORY);
@@ -87,7 +87,7 @@ public class UtilityBeltClient {
 
 			int beltSize = stateManager.getInventory(player).getContainerSize();
 
-			if (CONFIG.get().invertScrolling) {
+			if (CLIENT_CONFIG.get().invertScrolling) {
 				scrollY = -scrollY;
 			}
 

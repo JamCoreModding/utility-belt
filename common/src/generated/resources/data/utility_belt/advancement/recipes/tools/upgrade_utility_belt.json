@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pouch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "utility_belt:pouch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "utility_belt:upgrade_utility_belt"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_utility_belt": {
+      "conditions": {
+        "items": [
+          {
+            "items": "utility_belt:utility_belt"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_utility_belt",
+      "has_pouch"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "utility_belt:upgrade_utility_belt"
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 package io.github.jamalam360.utility_belt.client.state;
 
+import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.state.StateManager;
@@ -35,7 +36,7 @@ public class ClientStateManager extends StateManager {
 		ItemStack belt = UtilityBeltItem.getBelt(player);
 
 		if (belt == null) {
-			return UtilityBeltInventory.EMPTY;
+			return UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize);
 		} else {
 			return UtilityBeltItem.getInventory(belt);
 		}

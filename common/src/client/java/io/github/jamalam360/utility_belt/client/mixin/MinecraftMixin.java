@@ -43,7 +43,7 @@ public class MinecraftMixin {
 	private boolean utilitybelt$useHotbarKeysInBelt(boolean pressed, @Local int i) {
 		StateManager stateManager = StateManager.getStateManager(true);
 		if (stateManager.isInBelt(this.player) && pressed) {
-			switch (UtilityBeltClient.CONFIG.get().hotbarKeyBehaviour) {
+			switch (UtilityBeltClient.CLIENT_CONFIG.get().hotbarKeyBehaviour) {
 				case SWITCH_BACK_TO_HOTBAR:
 					stateManager.setInBelt(this.player, false);
 					ClientNetworking.sendNewStateToServer(false, stateManager.getSelectedBeltSlot(this.player), this.player.isCrouching());

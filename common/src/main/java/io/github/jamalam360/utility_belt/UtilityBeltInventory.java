@@ -13,22 +13,32 @@ import net.minecraft.world.item.ItemStack;
 
 public record UtilityBeltInventory(List<ItemStack> items) {
 
-    public static final UtilityBeltInventory EMPTY = new UtilityBeltInventory(NonNullList.withSize(4, ItemStack.EMPTY));
     public static final Codec<UtilityBeltInventory> CODEC = Codec
           .list(ItemStack.OPTIONAL_CODEC)
           .xmap(UtilityBeltInventory::new, UtilityBeltInventory::items);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, UtilityBeltInventory> STREAM_CODEC = StreamCodec
           .composite(
-                ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list(4)),
+                ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list()),
                 UtilityBeltInventory::items,
                 UtilityBeltInventory::new
           );
 
-    public UtilityBeltInventory {
-        if (items.size() != 4) {
-            throw new IllegalArgumentException("Utility belt inventory must have exactly 4 items");
+    public static UtilityBeltInventory empty(int size) {
+        return new UtilityBeltInventory(NonNullList.withSize(size, ItemStack.EMPTY));
+    }
+
+    public UtilityBeltInventory copyWithSize(int newSize) {
+        if (newSize == this.getContainerSize()) {
+            return this;
         }
+
+        UtilityBeltInventory copy = new UtilityBeltInventory(NonNullList.withSize(newSize, ItemStack.EMPTY));
+        for (int i = 0; i < Math.min(this.getContainerSize(), newSize); i++) {
+            copy.items.set(i, this.getItem(i));
+        }
+
+        return copy;
     }
 
     public ItemStack getItem(int index) {
@@ -36,7 +46,7 @@ public record UtilityBeltInventory(List<ItemStack> items) {
     }
 
     public int getContainerSize() {
-        return 4;
+        return this.items.size();
     }
 
     @SuppressWarnings("deprecation")
@@ -63,7 +73,7 @@ public record UtilityBeltInventory(List<ItemStack> items) {
     public static class Mutable extends SimpleContainer {
 
         public Mutable(UtilityBeltInventory inv) {
-            super(4);
+            super(inv.getContainerSize());
 
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 this.setItem(i, inv.getItem(i));

@@ -31,7 +31,7 @@ public class BeltRenderer implements AccessoryRenderer {
 			throw new IllegalStateException("Utility belt can only be rendered on players");
 		}
 
-		if (UtilityBeltClient.CONFIG.get().renderBelts) {
+		if (UtilityBeltClient.CLIENT_CONFIG.get().renderBelts) {
 			this.render(accessoryState, (HumanoidRenderState) entityState, (HumanoidModel<HumanoidRenderState>) model, matrices, collector);
 		}
 	}

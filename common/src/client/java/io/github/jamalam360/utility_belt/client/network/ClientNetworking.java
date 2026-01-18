@@ -20,7 +20,7 @@ public class ClientNetworking {
     }
 
     public static void sendNewStateToServer(boolean inBelt, int slot, boolean swapItems) {
-        if (swapItems && !UtilityBeltClient.CONFIG.get().useSneakSwapping) {
+        if (swapItems && !UtilityBeltClient.CLIENT_CONFIG.get().useSneakSwapping) {
             swapItems = false;
         }
 

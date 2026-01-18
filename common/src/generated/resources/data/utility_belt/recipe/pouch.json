@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "D": "minecraft:diamond",
     "L": "minecraft:leather",
-    "P": "utility_belt:pouch",
     "S": "minecraft:string"
   },
   "pattern": [
-    "LPL",
-    "S S",
-    "LPL"
+    "SDS",
+    "L L",
+    "SLS"
   ],
   "result": {
     "count": 1,
-    "id": "utility_belt:utility_belt"
+    "id": "utility_belt:pouch"
   }
 }
