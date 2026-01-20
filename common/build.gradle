@@ -21,12 +21,21 @@ loom {
     }
 }
 
+var mappings = Attribute.of("net.minecraft.mappings", String.class)
+
 dependencies {
+    attributesSchema {
+		attribute mappings
+	}
+
     modImplementation libs.fabric.loader
     modImplementation libs.architectury.common
     modImplementation libs.jamlib.common
     modImplementation libs.accessories.common
 
-//    modCompileOnly libs.lambdynamiclights.api
-//    modCompileOnly(rootProject.files("libs/lambdynamiclights-api-4.8.7+1.21.10.jar"))
+    compileOnly(libs.lambdynamiclights.api) {
+        attributes {
+            attribute(mappings, "mojmap")
+        }
+    }
 }

@@ -49,7 +49,7 @@ accessories-neoforge = { module = "io.wispforest:accessories-neoforge", version.
 
 modmenu = { module = "maven.modrinth:modmenu", version.ref = "modmenu" }
 
-lambdynamiclights = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime", version.ref = "lambdynamiclights" }
+lambdynamiclights-runtime = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime", version.ref = "lambdynamiclights" }
 lambdynamiclights-api = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api", version.ref = "lambdynamiclights" }
 
 sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }

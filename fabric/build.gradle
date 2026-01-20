@@ -20,13 +20,6 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
-repositories {
-    maven {
-        name = "Gegy's Maven"
-        url = "https://maven.gegy.dev"
-    }
-}
-
 dependencies {
     modImplementation libs.fabric.loader
     modImplementation libs.fabric.api
@@ -36,10 +29,8 @@ dependencies {
     modRuntimeOnly libs.modmenu
     
     // Compat
-//    modRuntimeOnly libs.lambdynamiclights
-//    modRuntimeOnly(rootProject.files("libs/lambdynamiclights-runtime-4.8.7+1.21.10.jar"))
-//    modRuntimeOnly(rootProject.files("libs/lambdynamiclights-4.8.7+1.21.10.jar"))
     modRuntimeOnly libs.sodium
+    modRuntimeOnly(libs.lambdynamiclights.runtime)
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
