@@ -19,27 +19,29 @@ import static dev.architectury.event.events.client.ClientCommandRegistrationEven
 
 public class UtilityBeltCommands {
 	public static void registerCommands(CommandDispatcher<ClientCommandRegistrationEvent.ClientCommandSourceStack> dispatcher, CommandBuildContext _ctx) {
-		literal("utilitybelt")
-				.then(
-						literal("help")
-								.executes(ctx -> {
-									ctx.getSource().arch$sendSuccess(UtilityBeltCommands::getHelpMessage, false);
-									return 0;
-								})
-				)
-				.then(
-						literal("fixme")
-								.executes(ctx -> {
-									Player player = Minecraft.getInstance().player;
+		dispatcher.register(
+				literal("utilitybelt")
+						.then(
+								literal("help")
+										.executes(ctx -> {
+											ctx.getSource().arch$sendSuccess(UtilityBeltCommands::getHelpMessage, false);
+											return 0;
+										})
+						)
+						.then(
+								literal("fixme")
+										.executes(ctx -> {
+											Player player = Minecraft.getInstance().player;
 
-									StateManager stateManager = StateManager.getStateManager(player);
-									stateManager.setInBelt(player, false);
-									stateManager.setSelectedBeltSlot(player, 0);
-									ClientNetworking.sendNewStateToServer(false, 0, false);
-									ctx.getSource().arch$sendSuccess(() -> Component.literal("Reset state"), false);
-									return 0;
-								})
-				);
+											StateManager stateManager = StateManager.getStateManager(player);
+											stateManager.setInBelt(player, false);
+											stateManager.setSelectedBeltSlot(player, 0);
+											ClientNetworking.sendNewStateToServer(false, 0, false);
+											ctx.getSource().arch$sendSuccess(() -> Component.literal("Reset state"), false);
+											return 0;
+										})
+						)
+		);
 	}
 	
 	public static void registerDevelopmentCommands(CommandDispatcher<ClientCommandRegistrationEvent.ClientCommandSourceStack> dispatcher, CommandBuildContext _ctx) {
