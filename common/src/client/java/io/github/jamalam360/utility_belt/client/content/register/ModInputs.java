@@ -4,7 +4,6 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientRawInputEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
-import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import io.github.jamalam360.utility_belt.client.network.ClientNetworking;
 import io.github.jamalam360.utility_belt.content.UtilityBeltItem;
@@ -18,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
 public class ModInputs {
-	private static final KeyMapping.Category KEY_CATEGORY = KeyMapping.Category.register(UtilityBelt.id("utility_belt"));
+	private static final String KEY_CATEGORY = "key.category.utility_belt.utility_belt";
 	private static final KeyMapping SWAP_TOGGLE = new KeyMapping("key.utility_belt.swap_toggle", GLFW.GLFW_KEY_B, KEY_CATEGORY);
 	private static final KeyMapping SWAP_HOLD = new KeyMapping("key.utility_belt.swap_hold", GLFW.GLFW_KEY_N, KEY_CATEGORY);
 	private static final KeyMapping OPEN_SCREEN = new KeyMapping("key.utility_belt.open_screen", GLFW.GLFW_KEY_APOSTROPHE, KEY_CATEGORY);

@@ -1,7 +1,7 @@
 package io.github.jamalam360.utility_belt.client;
 
 import dev.architectury.event.events.client.ClientPlayerEvent;
-import dev.architectury.registry.client.gui.MenuScreenRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
 import io.github.jamalam360.jamlib.config.ConfigManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.client.content.ClientConfig;
@@ -27,8 +27,8 @@ public class UtilityBeltClient {
 		ClientNetworking.init();
 		StateManager.setClientInstance(new ClientStateManager());
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register(UtilityBeltClient::onPlayerRespawn);
-		ModMenus.MENU_TYPE.listen(menu -> MenuScreenRegistry.registerScreenFactory(menu, UtilityBeltScreen::new));
-		ModItems.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.bindItemToRenderer(belt, UtilityBelt.id("utility_belt"), BeltRenderer::new));
+		ModMenus.MENU_TYPE.listen(menu -> MenuRegistry.registerScreenFactory(menu, UtilityBeltScreen::new));
+		ModItems.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.registerRenderer(belt, BeltRenderer::new));
 	}
 
 	private static void onPlayerRespawn(LocalPlayer oldPlayer, LocalPlayer newPlayer) {

@@ -1,9 +1,9 @@
 package io.github.jamalam360.utility_belt.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.content.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.state.StateManager;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

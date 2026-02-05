@@ -35,7 +35,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	private static final int BAR_COLOR = Mth.color((int) (0.4 * 255), (int) (0.4 * 255), (int) (1.0 * 255));
 
 	public UtilityBeltItem() {
-		super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize)).component(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize));
+		super(new Item.Properties().stacksTo(1).component(ModComponents.UTILITY_BELT_INVENTORY.get(), UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize)).component(ModComponents.UTILITY_BELT_SIZE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize));
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")

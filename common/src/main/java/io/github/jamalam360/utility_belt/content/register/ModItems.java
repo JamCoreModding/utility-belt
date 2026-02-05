@@ -14,7 +14,7 @@ import net.minecraft.world.item.Item;
 public class ModItems {
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(UtilityBelt.MOD_ID, Registries.ITEM);
 	public static final RegistrySupplier<Item> UTILITY_BELT_ITEM = ITEMS.register("utility_belt", UtilityBeltItem::new);
-	public static final RegistrySupplier<Item> POUCH_ITEM = ITEMS.register("pouch", () -> new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, UtilityBelt.id("pouch")))));
+	public static final RegistrySupplier<Item> POUCH_ITEM = ITEMS.register("pouch", () -> new Item(new Item.Properties()));
 	public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.create(Registries.ITEM, UtilityBelt.id("allowed_in_utility_belt"));
 
 	public static void init() {

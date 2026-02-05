@@ -4,24 +4,12 @@ import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.content.register.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRequirements;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.SmithingTransformRecipe;
-import net.minecraft.world.item.crafting.TransmuteResult;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class Recipes extends FabricRecipeProvider {
@@ -30,44 +18,38 @@ public class Recipes extends FabricRecipeProvider {
 	}
 
 	@Override
-	protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
-		return new RecipeProvider(provider, recipeOutput) {
-			@Override
-			public void buildRecipes() {
-				shaped(RecipeCategory.TOOLS, ModItems.POUCH_ITEM.get())
+	public void buildRecipes(RecipeOutput output) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.POUCH_ITEM.get())
 						.pattern("SDS").pattern("L L").pattern("SLS")
 						.define('S', Items.STRING).define('L', Items.LEATHER).define('D', Items.DIAMOND)
 						.unlockedBy("has_string", has(Items.STRING))
 						.unlockedBy("has_leather", has(Items.LEATHER))
 						.unlockedBy("has_diamond", has(Items.DIAMOND))
-						.save(this.output);
+				.save(output);
 
-				shaped(RecipeCategory.TOOLS, ModItems.UTILITY_BELT_ITEM.get())
-						.pattern("LPL").pattern("S S").pattern("LPL")
-						.define('L', Items.LEATHER).define('P', ModItems.POUCH_ITEM.get()).define('S', Items.STRING)
-						.unlockedBy("has_leather", has(Items.LEATHER))
-						.unlockedBy("has_pouch", has(ModItems.POUCH_ITEM.get()))
-						.unlockedBy("has_string", has(Items.STRING))
-						.save(this.output);
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.UTILITY_BELT_ITEM.get())
+				.pattern("LPL").pattern("S S").pattern("LPL")
+				.define('L', Items.LEATHER).define('P', ModItems.POUCH_ITEM.get()).define('S', Items.STRING)
+				.unlockedBy("has_leather", has(Items.LEATHER))
+				.unlockedBy("has_pouch", has(ModItems.POUCH_ITEM.get()))
+				.unlockedBy("has_string", has(Items.STRING))
+				.save(output);
 
-				this.createSmithingRecipe();
-			}
+		this.createSmithingRecipe(output);
+	}
 
-			private void createSmithingRecipe() {
-				ResourceLocation resourceLocation = UtilityBelt.id("upgrade_utility_belt");
-				ResourceKey<Recipe<?>> resourceKey = ResourceKey.create(Registries.RECIPE, resourceLocation);
-				Advancement.Builder builder = this.output.advancement()
-						.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(resourceKey))
-						.rewards(AdvancementRewards.Builder.recipe(resourceKey))
-						.requirements(AdvancementRequirements.Strategy.OR);
-				builder.addCriterion("has_utility_belt", this.has(ModItems.UTILITY_BELT_ITEM.get()));
-				builder.addCriterion("has_pouch", this.has(ModItems.POUCH_ITEM.get()));
-				SmithingTransformRecipe smithingTransformRecipe = new SmithingTransformRecipe(
-						Optional.empty(), Ingredient.of(ModItems.UTILITY_BELT_ITEM.get()), Optional.of(Ingredient.of(ModItems.POUCH_ITEM.get())), new TransmuteResult(ModItems.UTILITY_BELT_ITEM.get())
-				);
-				output.accept(resourceKey, smithingTransformRecipe, builder.build(resourceKey.location().withPrefix("recipes/" + RecipeCategory.TOOLS.getFolderName() + "/")));
-			}
-		};
+	private void createSmithingRecipe(RecipeOutput output) {
+		ResourceLocation resourceLocation = UtilityBelt.id("upgrade_utility_belt");
+
+		SmithingTransformRecipeBuilder.smithing(
+						Ingredient.EMPTY,
+						Ingredient.of(ModItems.UTILITY_BELT_ITEM.get()),
+						Ingredient.of(ModItems.POUCH_ITEM.get()),
+						RecipeCategory.TOOLS,
+						ModItems.UTILITY_BELT_ITEM.get()
+				).unlocks("has_utility_belt", has(ModItems.UTILITY_BELT_ITEM.get()))
+				.unlocks("has_pouch", has(ModItems.POUCH_ITEM.get()))
+				.save(output, resourceLocation);
 	}
 
 	@Override

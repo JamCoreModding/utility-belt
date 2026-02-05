@@ -61,7 +61,8 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 			method = "createResult",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V"
+					target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V",
+					ordinal = 1
 			)
 	)
 	private void utilitybelt$upgradeBeltSlots(ResultContainer instance, int slot, ItemStack resultStack, Operation<Void> original, @Local(name = "list") List<RecipeHolder<SmithingRecipe>> list) {
