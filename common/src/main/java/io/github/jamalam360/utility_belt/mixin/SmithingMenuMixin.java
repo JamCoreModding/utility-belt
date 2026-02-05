@@ -65,7 +65,7 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 					ordinal = 1
 			)
 	)
-	private void utilitybelt$upgradeBeltSlots(ResultContainer instance, int slot, ItemStack resultStack, Operation<Void> original, @Local(name = "list") List<RecipeHolder<SmithingRecipe>> list) {
+	private void utilitybelt$upgradeBeltSlots(ResultContainer instance, int slot, ItemStack resultStack, Operation<Void> original, @Local List<RecipeHolder<SmithingRecipe>> list) {
 		RecipeHolder<SmithingRecipe> holder = list.getFirst();
 		if (holder.id().equals(UPGRADE_RECIPE_LOCATION)) {
 			ItemStack inputStack = this.getSlot(1).getItem();

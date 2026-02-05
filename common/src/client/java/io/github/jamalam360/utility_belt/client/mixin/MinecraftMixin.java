@@ -40,7 +40,7 @@ public class MinecraftMixin {
 					ordinal = 2
 			)
 	)
-	private boolean utilitybelt$useHotbarKeysInBelt(boolean pressed, @Local(name = "i") int i) {
+	private boolean utilitybelt$useHotbarKeysInBelt(boolean pressed, @Local int i) {
 		StateManager stateManager = StateManager.getStateManager(true);
 		if (stateManager.isInBelt(this.player) && pressed) {
 			switch (UtilityBeltClient.CLIENT_CONFIG.get().hotbarKeyBehaviour) {
