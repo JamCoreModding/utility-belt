@@ -1,13 +1,12 @@
 package io.github.jamalam360.utility_belt.datagen;
 
-import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.content.register.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -19,10 +18,10 @@ public class Tags extends FabricTagProvider.ItemTagProvider {
 
 	@Override
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
-		getOrCreateRawBuilder(UtilityBelt.ALLOWED_IN_UTILITY_BELT)
+		getOrCreateRawBuilder(ModItems.ALLOWED_IN_UTILITY_BELT)
 				.addOptionalElement(ResourceLocation.fromNamespaceAndPath("create", "wrench"));
 		
 		getOrCreateRawBuilder(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("accessories", "belt")))
-				.addElement(UtilityBelt.UTILITY_BELT_ITEM.getId());
+				.addElement(ModItems.UTILITY_BELT_ITEM.getId());
 	}
 }

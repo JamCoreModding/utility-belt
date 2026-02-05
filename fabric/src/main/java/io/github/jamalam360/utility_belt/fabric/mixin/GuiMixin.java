@@ -1,6 +1,6 @@
 package io.github.jamalam360.utility_belt.fabric.mixin;
 
-import io.github.jamalam360.utility_belt.client.render.BeltHotbarRenderer;
+import io.github.jamalam360.utility_belt.client.content.render.BeltHotbarRenderer;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;

@@ -2,8 +2,8 @@ package io.github.jamalam360.utility_belt.client.network;
 
 import dev.architectury.networking.NetworkManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.*;

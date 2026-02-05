@@ -1,4 +1,4 @@
-package io.github.jamalam360.utility_belt.client.render;
+package io.github.jamalam360.utility_belt.client.content.render;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;

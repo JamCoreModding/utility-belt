@@ -1,9 +1,9 @@
-package io.github.jamalam360.utility_belt.screen;
+package io.github.jamalam360.utility_belt.content;
 
-import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.content.register.ModComponents;
+import io.github.jamalam360.utility_belt.content.register.ModMenus;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -21,11 +21,11 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
     private final Mutable inventory;
 
     public UtilityBeltMenu(int syncId, Inventory playerInventory) {
-        this(syncId, playerInventory, new Mutable(UtilityBeltInventory.empty(UtilityBeltItem.getInventorySize(UtilityBeltItem.getBelt(playerInventory.player)))));
+        this(syncId, playerInventory, new Mutable(UtilityBeltInventory.empty(ModComponents.getBeltSize(UtilityBeltItem.getBelt(playerInventory.player)))));
     }
 
     public UtilityBeltMenu(int syncId, Inventory playerInventory, UtilityBeltInventory.Mutable inventory) {
-        super(UtilityBelt.MENU_TYPE.get(), syncId);
+        super(ModMenus.MENU_TYPE.get(), syncId);
         this.inventory = inventory;
         int rows = this.getBeltRows();
 
@@ -150,7 +150,7 @@ public class UtilityBeltMenu extends AbstractContainerMenu {
         @Nullable
         @Override
         public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-            return new UtilityBeltMenu(i, inventory, new Mutable(UtilityBeltItem.getInventory(UtilityBeltItem.getBelt(player))));
+            return new UtilityBeltMenu(i, inventory, new Mutable(ModComponents.getBeltInventory(UtilityBeltItem.getBelt(player))));
         }
     }
 }

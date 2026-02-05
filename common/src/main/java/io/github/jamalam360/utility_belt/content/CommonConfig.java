@@ -1,4 +1,4 @@
-package io.github.jamalam360.utility_belt;
+package io.github.jamalam360.utility_belt.content;
 
 import io.github.jamalam360.jamlib.config.ConfigExtensions;
 import io.github.jamalam360.jamlib.config.WithinRange;

@@ -5,7 +5,7 @@ import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

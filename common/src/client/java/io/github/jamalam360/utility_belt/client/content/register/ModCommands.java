@@ -1,10 +1,11 @@
-package io.github.jamalam360.utility_belt.client;
+package io.github.jamalam360.utility_belt.client.content.register;
 
 import com.mojang.brigadier.CommandDispatcher;
 import dev.architectury.event.events.client.ClientCommandRegistrationEvent;
-import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import dev.architectury.platform.Platform;
+import io.github.jamalam360.utility_belt.content.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.client.network.ClientNetworking;
+import io.github.jamalam360.utility_belt.content.register.ModComponents;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -17,14 +18,22 @@ import java.net.URI;
 
 import static dev.architectury.event.events.client.ClientCommandRegistrationEvent.literal;
 
-public class UtilityBeltCommands {
-	public static void registerCommands(CommandDispatcher<ClientCommandRegistrationEvent.ClientCommandSourceStack> dispatcher, CommandBuildContext _ctx) {
+public class ModCommands {
+	public static void init() {
+		ClientCommandRegistrationEvent.EVENT.register(ModCommands::registerCommands);
+
+		if (Platform.isDevelopmentEnvironment()) {
+			ClientCommandRegistrationEvent.EVENT.register(ModCommands::registerDevelopmentCommands);
+		}
+	}
+
+	private static void registerCommands(CommandDispatcher<ClientCommandRegistrationEvent.ClientCommandSourceStack> dispatcher, CommandBuildContext _ctx) {
 		dispatcher.register(
 				literal("utilitybelt")
 						.then(
 								literal("help")
 										.executes(ctx -> {
-											ctx.getSource().arch$sendSuccess(UtilityBeltCommands::getHelpMessage, false);
+											ctx.getSource().arch$sendSuccess(ModCommands::getHelpMessage, false);
 											return 0;
 										})
 						)
@@ -44,7 +53,7 @@ public class UtilityBeltCommands {
 		);
 	}
 	
-	public static void registerDevelopmentCommands(CommandDispatcher<ClientCommandRegistrationEvent.ClientCommandSourceStack> dispatcher, CommandBuildContext _ctx) {
+	private static void registerDevelopmentCommands(CommandDispatcher<ClientCommandRegistrationEvent.ClientCommandSourceStack> dispatcher, CommandBuildContext _ctx) {
 		dispatcher.register(
 				literal("dumpstatec")
 						.executes(ctx -> {
@@ -54,12 +63,12 @@ public class UtilityBeltCommands {
 
 							System.out.println("In belt: " + stateManager.isInBelt(player));
 							System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(player));
-							System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
+							System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(player).get(ModComponents.UTILITY_BELT_INVENTORY.get()));
 
 							StateManager stateManagerS = StateManager.getStateManager(false);
 							System.out.println("In belt (client but server): " + stateManagerS.isInBelt(player));
 							System.out.println("Selected slot (client but server): " + stateManagerS.getSelectedBeltSlot(player));
-							System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(player).get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get()));
+							System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(player).get(ModComponents.UTILITY_BELT_INVENTORY.get()));
 							return 0;
 						})
 		);

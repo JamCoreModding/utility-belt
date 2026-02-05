@@ -1,4 +1,4 @@
-package io.github.jamalam360.utility_belt.client.render;
+package io.github.jamalam360.utility_belt.client.content.render;
 
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;

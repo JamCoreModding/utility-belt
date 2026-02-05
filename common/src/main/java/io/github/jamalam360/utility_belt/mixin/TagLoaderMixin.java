@@ -1,6 +1,6 @@
 package io.github.jamalam360.utility_belt.mixin;
 
-import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.content.register.ModItems;
 import io.github.jamalam360.utility_belt.util.DynamicTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -31,7 +31,7 @@ public class TagLoaderMixin {
 		}
 		
 		Map<ResourceLocation, List<TagLoader.EntryWithSource>> map = cir.getReturnValue();
-		List<TagLoader.EntryWithSource> list = map.computeIfAbsent(UtilityBelt.ALLOWED_IN_UTILITY_BELT.location(), id -> new ArrayList<>());
+		List<TagLoader.EntryWithSource> list = map.computeIfAbsent(ModItems.ALLOWED_IN_UTILITY_BELT.location(), id -> new ArrayList<>());
 		
 		for (ResourceLocation item : DynamicTags.getExtraItemsAllowedInUtilityBelt()) {
 			list.add(new TagLoader.EntryWithSource(TagEntry.element(item), "utilitybelt"));
