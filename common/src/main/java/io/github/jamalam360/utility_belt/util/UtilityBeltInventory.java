@@ -118,8 +118,8 @@ public record UtilityBeltInventory(List<ItemStack> items) {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj instanceof Mutable(List<ItemStack> items1)) {
-                return listMatches(this.items, items1);
+            if (obj instanceof Mutable other) {
+                return listMatches(this.items, other.items);
             }
 
             return false;

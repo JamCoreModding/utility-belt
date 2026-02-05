@@ -36,7 +36,7 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 	)
 	private List<SmithingRecipe> utilitybelt$capBeltSize(List<SmithingRecipe> original) {
 		if (!original.isEmpty()) {
-			SmithingRecipe recipe = original.getFirst();
+			SmithingRecipe recipe = original.get(0);
 
 			if (recipe.getId().equals(UPGRADE_RECIPE_LOCATION)) {
 				ItemStack inputStack = this.getSlot(1).getItem();
@@ -63,8 +63,8 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 					ordinal = 1
 			)
 	)
-	private void utilitybelt$upgradeBeltSlots(ResultContainer instance, int slot, ItemStack resultStack, Operation<Void> original, @Local(name = "list") List<SmithingRecipe> list) {
-		SmithingRecipe recipe = list.getFirst();
+	private void utilitybelt$upgradeBeltSlots(ResultContainer instance, int slot, ItemStack resultStack, Operation<Void> original, @Local List<SmithingRecipe> list) {
+		SmithingRecipe recipe = list.get(0);
 		if (recipe.getId().equals(UPGRADE_RECIPE_LOCATION)) {
 			ItemStack inputStack = this.getSlot(1).getItem();
 
