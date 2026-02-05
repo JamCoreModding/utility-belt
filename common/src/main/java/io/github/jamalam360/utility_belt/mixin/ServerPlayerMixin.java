@@ -1,8 +1,9 @@
 package io.github.jamalam360.utility_belt.mixin;
 
 import com.mojang.authlib.GameProfile;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.content.register.ModComponents;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.content.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.network.ServerNetworking;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.core.BlockPos;
@@ -48,7 +49,7 @@ public abstract class ServerPlayerMixin extends Player {
             if (this.utilitybelt$lastSyncedInventoryHash != inv.hashCode()) {
                 this.utilitybelt$lastSyncedInventoryHash = inv.hashCode();
                 ServerNetworking.sendInventoryToClient((ServerPlayer) (Object) this, inv);
-                UtilityBeltItem.setInventory(belt, inv);
+                ModComponents.setBeltInventory(belt, inv);
             }
         } else {
             this.utilitybelt$hasBeltLastTick = false;

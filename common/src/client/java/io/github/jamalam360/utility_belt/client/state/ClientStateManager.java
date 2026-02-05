@@ -1,8 +1,9 @@
 package io.github.jamalam360.utility_belt.client.state;
 
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.content.register.ModComponents;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.content.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,7 +39,7 @@ public class ClientStateManager extends StateManager {
 		if (belt == null) {
 			return UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize);
 		} else {
-			return UtilityBeltItem.getInventory(belt);
+			return ModComponents.getBeltInventory(belt);
 		}
 	}
 
@@ -47,7 +48,7 @@ public class ClientStateManager extends StateManager {
 		ItemStack belt = UtilityBeltItem.getBelt(player);
 
 		if (belt != null) {
-			UtilityBeltItem.setInventory(belt, inventory.toImmutable());
+			ModComponents.setBeltInventory(belt, inventory.toImmutable());
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package io.github.jamalam360.utility_belt.state;
 
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;

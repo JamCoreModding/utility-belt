@@ -1,7 +1,7 @@
-package io.github.jamalam360.utility_belt.client.render;
+package io.github.jamalam360.utility_belt.client.content.render;
 
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.client.DeltaTracker;

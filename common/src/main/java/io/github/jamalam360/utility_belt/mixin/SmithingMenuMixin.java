@@ -5,8 +5,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.content.register.ModComponents;
+import io.github.jamalam360.utility_belt.content.register.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
@@ -43,11 +43,11 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 			if (holder.id().equals(UPGRADE_RECIPE_LOCATION)) {
 				ItemStack inputStack = this.getSlot(1).getItem();
 
-				if (!inputStack.is(UtilityBelt.UTILITY_BELT_ITEM.get())) {
+				if (!inputStack.is(ModItems.UTILITY_BELT_ITEM.get())) {
 					throw new IllegalStateException("Attempted to upgrade an item which is not a utility belt using the utility belt upgrade recipe.");
 				}
 
-				int currentSize = UtilityBeltItem.getInventorySize(inputStack);
+				int currentSize = ModComponents.getBeltSize(inputStack);
 				if (currentSize >= UtilityBelt.COMMON_CONFIG.get().maxBeltSize) {
 					return List.of();
 				}
@@ -69,14 +69,12 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 		if (holder.id().equals(UPGRADE_RECIPE_LOCATION)) {
 			ItemStack inputStack = this.getSlot(1).getItem();
 
-			if (!inputStack.is(UtilityBelt.UTILITY_BELT_ITEM.get()) || !resultStack.is(UtilityBelt.UTILITY_BELT_ITEM.get())) {
+			if (!inputStack.is(ModItems.UTILITY_BELT_ITEM.get()) || !resultStack.is(ModItems.UTILITY_BELT_ITEM.get())) {
 				throw new IllegalStateException("Attempted to upgrade an item which is not a utility belt using the utility belt upgrade recipe.");
 			}
 
-			int currentSize = UtilityBeltItem.getInventorySize(inputStack);
-			UtilityBeltInventory currentInventory = UtilityBeltItem.getInventory(inputStack);
-			resultStack.set(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get(), currentSize + 1);
-			resultStack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), currentInventory.copyWithSize(currentSize + 1));
+			int currentSize = ModComponents.getBeltSize(inputStack);
+			ModComponents.setBeltSize(resultStack, currentSize + 1);
 		}
 
 		original.call(instance, slot, resultStack);

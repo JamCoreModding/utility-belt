@@ -1,4 +1,4 @@
-package io.github.jamalam360.utility_belt;
+package io.github.jamalam360.utility_belt.util;
 
 import com.mojang.serialization.Codec;
 import java.util.ArrayList;

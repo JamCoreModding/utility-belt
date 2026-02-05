@@ -1,6 +1,11 @@
-package io.github.jamalam360.utility_belt;
+package io.github.jamalam360.utility_belt.content;
 
-import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
+import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.content.register.ModComponents;
+import io.github.jamalam360.utility_belt.content.register.ModItems;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory.Mutable;
+import io.github.jamalam360.utility_belt.content.register.ModComponents;
 import io.github.jamalam360.utility_belt.network.ServerNetworking;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import io.wispforest.accessories.api.AccessoryItem;
@@ -77,35 +82,7 @@ public class UtilityBeltItem extends AccessoryItem {
 						stack.getItem() instanceof SwordItem ||
 						stack.has(DataComponents.TOOL) || // TODO: check if these two checks are valid
 						stack.isEmpty() ||
-						stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
-	}
-
-	public static int getInventorySize(ItemStack stack) {
-		if (!stack.has(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get())) {
-			stack.set(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize);
-		}
-
-		return stack.get(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get());
-	}
-
-	public static UtilityBeltInventory getInventory(ItemStack stack) {
-		int size = getInventorySize(stack);
-		if (!stack.has(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get())) {
-			stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.empty(size));
-		}
-
-		UtilityBeltInventory inv = stack.get(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get());
-		if (size != inv.getContainerSize()) {
-			inv = inv.copyWithSize(size);
-			stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), inv);
-		}
-
-		return inv;
-	}
-
-	// This should only be called by the state managers, or when the belt is NOT equipped
-	public static void setInventory(ItemStack stack, UtilityBeltInventory inv) {
-		stack.set(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), inv);
+						stack.is(ModItems.ALLOWED_IN_UTILITY_BELT);
 	}
 
 	@Nullable
@@ -114,7 +91,7 @@ public class UtilityBeltItem extends AccessoryItem {
 			return null;
 		}
 
-		@Nullable SlotEntryReference slot = player.accessoriesCapability().getFirstEquipped(UtilityBelt.UTILITY_BELT_ITEM.get());
+		@Nullable SlotEntryReference slot = player.accessoriesCapability().getFirstEquipped(ModItems.UTILITY_BELT_ITEM.get());
 
 		if (slot != null) {
 			return slot.stack();
@@ -125,12 +102,12 @@ public class UtilityBeltItem extends AccessoryItem {
 
 	@Override
 	public boolean isBarVisible(ItemStack itemStack) {
-		return getInventory(itemStack).items().stream().anyMatch(s -> !s.isEmpty());
+		return ModComponents.getBeltInventory(itemStack).items().stream().anyMatch(s -> !s.isEmpty());
 	}
 
 	@Override
 	public int getBarWidth(ItemStack itemStack) {
-		UtilityBeltInventory inv = getInventory(itemStack);
+		UtilityBeltInventory inv = ModComponents.getBeltInventory(itemStack);
 		int size = Math.toIntExact(inv.items().stream().filter((s) -> !s.isEmpty()).count());
 		return Math.min(1 + Mth.mulAndTruncate(Fraction.getFraction(size, inv.getContainerSize()), 12), 13);
 	}
@@ -143,7 +120,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	@Override
 	public void appendHoverText(ItemStack belt, TooltipContext context, List<Component> tooltipComponents, TooltipFlag flag) {
 		super.appendHoverText(belt, context, tooltipComponents, flag);
-		UtilityBeltInventory inv = getInventory(belt);
+		UtilityBeltInventory inv = ModComponents.getBeltInventory(belt);
 		tooltipComponents.add(Component.translatable("text.utility_belt.tooltip.size", inv.getContainerSize()));
 
 		for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -161,14 +138,14 @@ public class UtilityBeltItem extends AccessoryItem {
 		}
 
 		ItemStack slotStack = slot.getItem();
-		UtilityBeltInventory.Mutable inv = new Mutable(getInventory(belt));
+		UtilityBeltInventory.Mutable inv = new Mutable(ModComponents.getBeltInventory(belt));
 
 		if (!handleStack(slotStack, inv, slot::set)) {
 			return false;
 		}
 
 		playInsertSound(player);
-		setInventory(belt, inv.toImmutable());
+		ModComponents.setBeltInventory(belt, inv.toImmutable());
 		return true;
 	}
 
@@ -178,21 +155,21 @@ public class UtilityBeltItem extends AccessoryItem {
 			return false;
 		}
 
-		UtilityBeltInventory.Mutable inv = new Mutable(getInventory(belt));
+		UtilityBeltInventory.Mutable inv = new Mutable(ModComponents.getBeltInventory(belt));
 
 		if (!handleStack(otherStack, inv, slotAccess::set)) {
 			return false;
 		}
 
 		playInsertSound(player);
-		setInventory(belt, inv.toImmutable());
+		ModComponents.setBeltInventory(belt, inv.toImmutable());
 		return true;
 	}
 
 	@Override
 	public void onDestroyed(ItemEntity itemEntity) {
 		super.onDestroyed(itemEntity);
-		UtilityBeltInventory inv = getInventory(itemEntity.getItem());
+		UtilityBeltInventory inv = ModComponents.getBeltInventory(itemEntity.getItem());
 		
 		for (ItemStack stack : inv.items()) {
 			if (!stack.isEmpty() && itemEntity.level() instanceof ServerLevel server) {
@@ -213,7 +190,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	@Override
 	public void onEquip(ItemStack stack, SlotReference reference) {
 		if (reference.entity() instanceof Player player && !player.level().isClientSide()) {
-			StateManager.getStateManager(player).setInventory(player, new Mutable(getInventory(stack)));
+			StateManager.getStateManager(player).setInventory(player, new Mutable(ModComponents.getBeltInventory(stack)));
 		}
 	}
 }

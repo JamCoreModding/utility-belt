@@ -1,13 +1,12 @@
 package io.github.jamalam360.utility_belt.network;
 
 import io.github.jamalam360.utility_belt.UtilityBelt;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public class UtilityBeltPackets {
-
     public static final CustomPacketPayload.Type<C2SUpdateState> C2S_UPDATE_STATE = new CustomPacketPayload.Type<>(UtilityBelt.id("update_state"));
     public static final CustomPacketPayload.Type<C2SOpenScreen> C2S_OPEN_SCREEN = new CustomPacketPayload.Type<>(UtilityBelt.id("open_screen"));
     public static final CustomPacketPayload.Type<S2CSetBeltSlot> S2C_SET_BELT_SLOT = new CustomPacketPayload.Type<>(UtilityBelt.id("set_belt_slot"));

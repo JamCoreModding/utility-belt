@@ -1,7 +1,7 @@
 package io.github.jamalam360.utility_belt.mixin;
 
-import io.github.jamalam360.utility_belt.Duck;
-import io.github.jamalam360.utility_belt.UtilityBeltInventory;
+import io.github.jamalam360.utility_belt.util.Duck;
+import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

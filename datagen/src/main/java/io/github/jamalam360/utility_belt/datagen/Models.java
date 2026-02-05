@@ -1,6 +1,6 @@
 package io.github.jamalam360.utility_belt.datagen;
 
-import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.content.register.ModItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -19,7 +19,7 @@ public class Models extends FabricModelProvider {
 
 	@Override
 	public void generateItemModels(ItemModelGenerators gen) {
-		gen.generateFlatItem(UtilityBelt.UTILITY_BELT_ITEM.get(), ModelTemplates.FLAT_ITEM);
-		gen.generateFlatItem(UtilityBelt.POUCH_ITEM.get(), ModelTemplates.FLAT_ITEM);
+		gen.generateFlatItem(ModItems.UTILITY_BELT_ITEM.get(), ModelTemplates.FLAT_ITEM);
+		gen.generateFlatItem(ModItems.POUCH_ITEM.get(), ModelTemplates.FLAT_ITEM);
 	}
 }

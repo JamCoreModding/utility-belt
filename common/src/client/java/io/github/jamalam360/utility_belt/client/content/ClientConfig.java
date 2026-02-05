@@ -1,4 +1,4 @@
-package io.github.jamalam360.utility_belt.client;
+package io.github.jamalam360.utility_belt.client.content;
 
 import io.github.jamalam360.jamlib.config.ConfigExtensions;
 import net.minecraft.network.chat.Component;

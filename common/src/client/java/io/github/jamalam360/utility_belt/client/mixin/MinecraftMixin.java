@@ -2,7 +2,7 @@ package io.github.jamalam360.utility_belt.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.github.jamalam360.utility_belt.UtilityBeltItem;
+import io.github.jamalam360.utility_belt.content.UtilityBeltItem;
 import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import io.github.jamalam360.utility_belt.client.network.ClientNetworking;
 import io.github.jamalam360.utility_belt.state.StateManager;
@@ -40,7 +40,7 @@ public class MinecraftMixin {
 					ordinal = 2
 			)
 	)
-	private boolean utilitybelt$useHotbarKeysInBelt(boolean pressed, @Local int i) {
+	private boolean utilitybelt$useHotbarKeysInBelt(boolean pressed, @Local(name = "i") int i) {
 		StateManager stateManager = StateManager.getStateManager(true);
 		if (stateManager.isInBelt(this.player) && pressed) {
 			switch (UtilityBeltClient.CLIENT_CONFIG.get().hotbarKeyBehaviour) {
