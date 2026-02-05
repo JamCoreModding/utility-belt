@@ -1,17 +1,14 @@
 package io.github.jamalam360.utility_belt.content;
 
-import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.content.register.ModComponents;
 import io.github.jamalam360.utility_belt.content.register.ModItems;
 import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.util.UtilityBeltInventory.Mutable;
-import io.github.jamalam360.utility_belt.content.register.ModComponents;
 import io.github.jamalam360.utility_belt.network.ServerNetworking;
 import io.github.jamalam360.utility_belt.state.StateManager;
 import io.wispforest.accessories.api.AccessoryItem;
 import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,7 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
-import org.apache.commons.lang3.math.Fraction;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -35,7 +32,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	private static final int BAR_COLOR = Mth.color((int) (0.4 * 255), (int) (0.4 * 255), (int) (1.0 * 255));
 
 	public UtilityBeltItem() {
-		super(new Item.Properties().stacksTo(1).component(ModComponents.UTILITY_BELT_INVENTORY.get(), UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize)).component(ModComponents.UTILITY_BELT_SIZE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize));
+		super(new Item.Properties().stacksTo(1));
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -43,7 +40,7 @@ public class UtilityBeltItem extends AccessoryItem {
 		if (stack.isEmpty()) {
 			for (int i = 0; i < inv.getContainerSize(); i++) {
 				if (!inv.getItem(i).isEmpty()) {
-					ItemStack removed = inv.removeItemNoUpdate(i);
+					ItemStack removed = inv.removeItem(i, stack.getCount());
 					slotAccess.accept(removed);
 					return true;
 				}
@@ -73,14 +70,13 @@ public class UtilityBeltItem extends AccessoryItem {
 						stack.getItem() instanceof FlintAndSteelItem ||
 						stack.getItem() instanceof FoodOnAStickItem<?> ||
 						stack.getItem() instanceof HoeItem ||
-						stack.getItem() instanceof MaceItem ||
 						stack.getItem() instanceof ProjectileWeaponItem ||
 						stack.getItem() instanceof ShearsItem ||
 						stack.getItem() instanceof ShovelItem ||
 						stack.getItem() instanceof SpyglassItem ||
 						stack.getItem() instanceof TridentItem ||
 						stack.getItem() instanceof SwordItem ||
-						stack.has(DataComponents.TOOL) || // TODO: check if these two checks are valid
+						stack.getItem() instanceof TieredItem ||
 						stack.isEmpty() ||
 						stack.is(ModItems.ALLOWED_IN_UTILITY_BELT);
 	}
@@ -109,7 +105,7 @@ public class UtilityBeltItem extends AccessoryItem {
 	public int getBarWidth(ItemStack itemStack) {
 		UtilityBeltInventory inv = ModComponents.getBeltInventory(itemStack);
 		int size = Math.toIntExact(inv.items().stream().filter((s) -> !s.isEmpty()).count());
-		return Math.min(1 + Mth.mulAndTruncate(Fraction.getFraction(size, inv.getContainerSize()), 12), 13);
+		return Math.min(1 + 12 * (size / inv.getContainerSize()), 13);
 	}
 
 	@Override
@@ -118,8 +114,8 @@ public class UtilityBeltItem extends AccessoryItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack belt, TooltipContext context, List<Component> tooltipComponents, TooltipFlag flag) {
-		super.appendHoverText(belt, context, tooltipComponents, flag);
+	public void appendHoverText(ItemStack belt, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag flag) {
+		super.appendHoverText(belt, level, tooltipComponents, flag);
 		UtilityBeltInventory inv = ModComponents.getBeltInventory(belt);
 		tooltipComponents.add(Component.translatable("text.utility_belt.tooltip.size", inv.getContainerSize()));
 

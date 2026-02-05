@@ -16,14 +16,14 @@ public abstract class GuiMixin {
 	protected abstract Player getCameraPlayer();
 
 	@WrapWithCondition(
-			method = "renderItemHotbar",
+			method = "renderHotbar",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V",
+					target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V",
 					ordinal = 1
 			)
 	)
-	private boolean utilitybelt$disableHotbarHighlight(GuiGraphics instance, ResourceLocation sprite, int x, int y, int width, int height) {
+	private boolean utilitybelt$disableHotbarHighlight(GuiGraphics instance, ResourceLocation atlasLocation, int x, int y, int uOffset, int vOffset, int uWidth, int vHeight) {
 		return !StateManager.getStateManager(true).isInBelt(this.getCameraPlayer());
 	}
 }

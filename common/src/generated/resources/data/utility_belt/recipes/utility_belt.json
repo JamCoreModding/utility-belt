@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "P": {
+      "item": "utility_belt:pouch"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "LPL",
+    "S S",
+    "LPL"
+  ],
+  "result": {
+    "item": "utility_belt:utility_belt"
+  },
+  "show_notification": true
+}

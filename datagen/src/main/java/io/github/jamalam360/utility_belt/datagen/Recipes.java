@@ -4,21 +4,20 @@ import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.content.register.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class Recipes extends FabricRecipeProvider {
-	public Recipes(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-		super(output, registriesFuture);
+	public Recipes(FabricDataOutput output) {
+		super(output);
 	}
 
 	@Override
-	public void buildRecipes(RecipeOutput output) {
+	public void buildRecipes(Consumer<FinishedRecipe> output) {
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.POUCH_ITEM.get())
 						.pattern("SDS").pattern("L L").pattern("SLS")
 						.define('S', Items.STRING).define('L', Items.LEATHER).define('D', Items.DIAMOND)
@@ -38,7 +37,7 @@ public class Recipes extends FabricRecipeProvider {
 		this.createSmithingRecipe(output);
 	}
 
-	private void createSmithingRecipe(RecipeOutput output) {
+	private void createSmithingRecipe(Consumer<FinishedRecipe> output) {
 		ResourceLocation resourceLocation = UtilityBelt.id("upgrade_utility_belt");
 
 		SmithingTransformRecipeBuilder.smithing(

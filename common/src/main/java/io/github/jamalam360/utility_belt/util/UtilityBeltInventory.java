@@ -1,29 +1,14 @@
 package io.github.jamalam360.utility_belt.util;
 
-import com.mojang.serialization.Codec;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
+
 public record UtilityBeltInventory(List<ItemStack> items) {
-
-    public static final Codec<UtilityBeltInventory> CODEC = Codec
-          .list(ItemStack.OPTIONAL_CODEC)
-          .xmap(UtilityBeltInventory::new, UtilityBeltInventory::items);
-
-    public static final StreamCodec<RegistryFriendlyByteBuf, UtilityBeltInventory> STREAM_CODEC = StreamCodec
-          .composite(
-                ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list()),
-                UtilityBeltInventory::items,
-                UtilityBeltInventory::new
-          );
-
     public static UtilityBeltInventory empty(int size) {
         return new UtilityBeltInventory(NonNullList.withSize(size, ItemStack.EMPTY));
     }
@@ -49,31 +34,23 @@ public record UtilityBeltInventory(List<ItemStack> items) {
         return this.items.size();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof UtilityBeltInventory other) {
-            return ItemStack.listMatches(items, other.items);
+            return listMatches(items, other.items);
         }
 
         return false;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public int hashCode() {
-        return ItemStack.hashStackList(items);
+        return hashStackList(items);
     }
 
-    @Override
-    public String toString() {
-        return invToString("UtilityBeltInventory[", items);
-    }
-
-    public static class Mutable extends SimpleContainer {
-
+    public record Mutable(NonNullList<ItemStack> items) implements Container {
         public Mutable(UtilityBeltInventory inv) {
-            super(inv.getContainerSize());
+            this(NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY));
 
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 this.setItem(i, inv.getItem(i));
@@ -81,38 +58,114 @@ public record UtilityBeltInventory(List<ItemStack> items) {
         }
 
         public UtilityBeltInventory toImmutable() {
-            return new UtilityBeltInventory(new ArrayList<>(this.getItems()));
+            return new UtilityBeltInventory(List.copyOf(this.items));
         }
 
-        @SuppressWarnings("deprecation")
+        @Override
+        public ItemStack getItem(int i) {
+            return this.items.get(i);
+        }
+
+        @Override
+        public void setItem(int i, ItemStack stack) {
+            this.items.set(i, stack);
+        }
+
+        @Override
+        public void setChanged() {
+        }
+
+        @Override
+        public boolean stillValid(Player player) {
+            return true;
+        }
+
+        public ItemStack removeItem(int i, int size) {
+            ItemStack stack = this.items.get(i);
+            ItemStack removed = stack.copy();
+
+            if (stack.getCount() == size) {
+                this.setItem(i, ItemStack.EMPTY);
+            } else {
+                this.setItem(i, stack.copyWithCount(size));
+                removed = stack.copyWithCount(size);
+            }
+
+            return removed;
+        }
+
+        @Override
+        public ItemStack removeItemNoUpdate(int slot) {
+            return this.items.remove(slot);
+        }
+
+        @Override
+        public void clearContent() {
+            for (int i = 0; i < this.getContainerSize(); i++) {
+                this.setItem(i, ItemStack.EMPTY);
+            }
+        }
+
+        @Override
+        public int getContainerSize() {
+            return this.items.size();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return this.items.isEmpty();
+        }
+
         @Override
         public boolean equals(Object obj) {
-            if (obj instanceof UtilityBeltInventory other) {
-                return ItemStack.listMatches(this.getItems(), other.items);
+            if (obj instanceof Mutable(List<ItemStack> items1)) {
+                return listMatches(this.items, items1);
             }
 
             return false;
         }
 
+
         @Override
-        public String toString() {
-            return invToString("UtilityBeltInventory$Mutable[", this.getItems());
+        public int hashCode() {
+            return hashStackList(items);
         }
     }
 
-    private static String invToString(String prefix, List<ItemStack> items) {
-        StringBuilder string = new StringBuilder(prefix);
+    private static boolean listMatches(List<ItemStack> l1, List<ItemStack> l2) {
+        if (l1.size() != l2.size()) {
+            return false;
+        }
 
-        for (int i = 0; i < items.size(); i++) {
-            string.append(items.get(i));
-            string.append(" {");
-            string.append(items.get(i).getComponents().get(DataComponents.DAMAGE));
-            string.append("}");
-            if (i < items.size() - 1) {
-                string.append(", ");
+        for (int i = 0; i < l1.size(); i++) {
+            if (!ItemStack.matches(l1.get(i), l2.get(i))) {
+                return false;
             }
         }
 
-        return string.toString();
+        return true;
+    }
+
+    private static int hashStackList(List<ItemStack> items) {
+        int result = 1;
+
+        for (ItemStack item : items) {
+            if (item == null || item.isEmpty()) {
+                result = 31 * result;
+                continue;
+            }
+
+            int itemHashCode = item.getItem().hashCode();
+            itemHashCode = 31 * itemHashCode + item.getCount();
+
+            CompoundTag tag = item.getTag();
+            if (tag != null) {
+                itemHashCode = 31 * itemHashCode + tag.hashCode();
+            }
+
+            result = 31 * result + itemHashCode;
+        }
+
+        return result;
     }
 }

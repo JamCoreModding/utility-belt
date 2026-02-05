@@ -26,7 +26,7 @@ public class TagLoaderMixin {
 			at = @At("TAIL")
 	)
 	private void utilitybelt$injectDynamicTags(ResourceManager resourceManager, CallbackInfoReturnable<Map<ResourceLocation, List<TagLoader.EntryWithSource>>> cir) {
-		if (!this.directory.equals("tags/item")) {
+		if (!this.directory.equals("tags/items")) {
 			return;
 		}
 		

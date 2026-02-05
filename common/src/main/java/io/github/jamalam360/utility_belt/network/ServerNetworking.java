@@ -2,18 +2,16 @@ package io.github.jamalam360.utility_belt.network;
 
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.menu.MenuRegistry;
-import dev.architectury.utils.Env;
-import dev.architectury.utils.EnvExecutor;
 import io.github.jamalam360.utility_belt.util.Duck;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.content.UtilityBeltItem;
-import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SOpenScreen;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.C2SUpdateState;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetBeltSlot;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.S2CSetHotbarSlot;
 import io.github.jamalam360.utility_belt.content.UtilityBeltMenu;
 import io.github.jamalam360.utility_belt.state.StateManager;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -21,27 +19,20 @@ import net.minecraft.world.item.ItemStack;
 public class ServerNetworking {
 
     public static void init() {
-        NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_UPDATE_STATE, C2SUpdateState.STREAM_CODEC, ServerNetworking::handleUpdateState);
-        NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_OPEN_SCREEN, C2SOpenScreen.STREAM_CODEC, ServerNetworking::handleOpenScreen);
-        EnvExecutor.runInEnv(Env.SERVER, () -> ServerNetworking::registerServerPayloadTypes);
+        NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_UPDATE_STATE, ServerNetworking::handleUpdateState);
+        NetworkManager.registerReceiver(NetworkManager.Side.C2S, UtilityBeltPackets.C2S_OPEN_SCREEN, ServerNetworking::handleOpenScreen);
     }
     
-    private static void registerServerPayloadTypes() {
-        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_BELT_SLOT, UtilityBeltPackets.S2CSetBeltSlot.STREAM_CODEC);
-        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, S2CSetHotbarSlot.STREAM_CODEC);
-        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, UtilityBeltPackets.S2CUpdateBeltInventory.STREAM_CODEC);
-        NetworkManager.registerS2CPayloadType(UtilityBeltPackets.S2C_BELT_UNEQUIPPED, UtilityBeltPackets.S2CBeltUnequipped.STREAM_CODEC);
-    }
-
     public static void sendInventoryToClient(ServerPlayer player, UtilityBeltInventory inventory) {
-        NetworkManager.sendToPlayer(player, new UtilityBeltPackets.S2CUpdateBeltInventory(inventory));
+        NetworkManager.sendToPlayer(player, UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, new UtilityBeltPackets.S2CUpdateBeltInventory(inventory).toBuf());
     }
     
     public static void sendBeltUnequippedToClient(ServerPlayer player) {
-        NetworkManager.sendToPlayer(player, new UtilityBeltPackets.S2CBeltUnequipped());
+        NetworkManager.sendToPlayer(player, UtilityBeltPackets.S2C_BELT_UNEQUIPPED, new UtilityBeltPackets.S2CBeltUnequipped().toBuf());
     }
 
-    private static void handleUpdateState(C2SUpdateState payload, NetworkManager.PacketContext ctx) {
+    private static void handleUpdateState(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
+        C2SUpdateState payload = C2SUpdateState.fromBuf(buf);
         boolean inBelt = payload.inBelt();
         int slot = payload.slot();
         boolean swap = payload.swapItems();
@@ -97,10 +88,10 @@ public class ServerNetworking {
 
                     if (beltSlot != slot) {
                         stateManager.setSelectedBeltSlot(player, beltSlot);
-                        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetBeltSlot(beltSlot));
+                        NetworkManager.sendToPlayer((ServerPlayer) player, UtilityBeltPackets.S2C_SET_BELT_SLOT, new S2CSetBeltSlot(beltSlot).toBuf());
                     } else if (hotbarSlot != player.getInventory().selected) {
                         player.getInventory().selected = hotbarSlot;
-                        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetHotbarSlot(hotbarSlot));
+                        NetworkManager.sendToPlayer((ServerPlayer) player, UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, new S2CSetHotbarSlot(hotbarSlot).toBuf());
                     }
                 }
             }
@@ -111,7 +102,7 @@ public class ServerNetworking {
         });
     }
 
-    private static void handleOpenScreen(C2SOpenScreen payload, NetworkManager.PacketContext ctx) {
+    private static void handleOpenScreen(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
         ctx.queue(() -> MenuRegistry.openMenu((ServerPlayer) ctx.getPlayer(), UtilityBeltMenu.Factory.INSTANCE));
     }
 }

@@ -122,6 +122,6 @@ allprojects {
         dependsOn("clean")
         dependsOn(":githubRelease")
         dependsOn("fabric:publishUnified")
-        dependsOn("neoforge:publishUnified")
+        dependsOn("forge:publishUnified")
     }
 }

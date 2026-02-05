@@ -23,7 +23,7 @@
             "io.github.jamalam360.utility_belt.fabric.UtilityBeltFabricClient"
         ],
         "lambdynlights:initializer": [
-            "io.github.jamalam360.utility_belt.client.compat.LambDynamicLightsCompat"
+          "io.github.jamalam360.utility_belt.fabric.compat.LambDynamicLightsCompat"
         ]
     },
     "mixins": [

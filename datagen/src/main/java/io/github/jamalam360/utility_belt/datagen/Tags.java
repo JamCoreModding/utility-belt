@@ -19,9 +19,9 @@ public class Tags extends FabricTagProvider.ItemTagProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
 		getOrCreateRawBuilder(ModItems.ALLOWED_IN_UTILITY_BELT)
-				.addOptionalElement(ResourceLocation.fromNamespaceAndPath("create", "wrench"));
+				.addOptionalElement(new ResourceLocation("create", "wrench"));
 		
-		getOrCreateRawBuilder(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("accessories", "belt")))
+		getOrCreateRawBuilder(TagKey.create(Registries.ITEM, new ResourceLocation("accessories", "belt")))
 				.addElement(ModItems.UTILITY_BELT_ITEM.getId());
 	}
 }

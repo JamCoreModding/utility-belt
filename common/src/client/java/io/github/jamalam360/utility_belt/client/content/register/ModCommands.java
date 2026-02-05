@@ -61,12 +61,12 @@ public class ModCommands {
 
 							System.out.println("In belt: " + stateManager.isInBelt(player));
 							System.out.println("Selected slot: " + stateManager.getSelectedBeltSlot(player));
-							System.out.println("Belt NBT: " + UtilityBeltItem.getBelt(player).get(ModComponents.UTILITY_BELT_INVENTORY.get()));
+							System.out.println("Belt NBT: " + ModComponents.getBeltInventory(UtilityBeltItem.getBelt(player)));
 
 							StateManager stateManagerS = StateManager.getStateManager(false);
 							System.out.println("In belt (client but server): " + stateManagerS.isInBelt(player));
 							System.out.println("Selected slot (client but server): " + stateManagerS.getSelectedBeltSlot(player));
-							System.out.println("Belt NBT (client but server): " + UtilityBeltItem.getBelt(player).get(ModComponents.UTILITY_BELT_INVENTORY.get()));
+							System.out.println("Belt NBT (client but server): " + stateManagerS.getInventory(player));
 							return 0;
 						})
 		);

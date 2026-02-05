@@ -32,7 +32,7 @@ public class BeltRenderer implements AccessoryRenderer {
 		beltModel.prepareMobModel(reference.entity(), limbSwing, limbSwingAmount, partialTicks);
 		followBodyRotations(reference.entity(), beltModel);
 		VertexConsumer vertexConsumer = multiBufferSource.getBuffer(beltModel.renderType(TEXTURE));
-		beltModel.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+		beltModel.renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 	}
 
 	@SuppressWarnings("unchecked")

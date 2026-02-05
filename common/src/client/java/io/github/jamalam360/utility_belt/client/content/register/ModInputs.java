@@ -50,7 +50,7 @@ public class ModInputs {
 		}
 	}
 
-	private static EventResult onMouseScrolled(Minecraft client, double scrollX, double scrollY) {
+	private static EventResult onMouseScrolled(Minecraft client, double scrollY) {
 		Player player = client.player;
 		StateManager stateManager = StateManager.getStateManager(true);
 

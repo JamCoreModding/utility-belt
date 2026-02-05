@@ -8,15 +8,16 @@ import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets;
 import io.github.jamalam360.utility_belt.network.UtilityBeltPackets.*;
 import io.github.jamalam360.utility_belt.state.StateManager;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 
 public class ClientNetworking {
 
     public static void init() {
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_SET_BELT_SLOT, S2CSetBeltSlot.STREAM_CODEC, ClientNetworking::handleSetBeltSlot);
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, S2CSetHotbarSlot.STREAM_CODEC, ClientNetworking::handleSetHotbarSlot);
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, S2CUpdateBeltInventory.STREAM_CODEC, ClientNetworking::handleUpdateBeltInventory);
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_BELT_UNEQUIPPED, S2CBeltUnequipped.STREAM_CODEC, ClientNetworking::handleBeltUnequipped);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_SET_BELT_SLOT, ClientNetworking::handleSetBeltSlot);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_SET_HOTBAR_SLOT, ClientNetworking::handleSetHotbarSlot);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_UPDATE_BELT_INVENTORY, ClientNetworking::handleUpdateBeltInventory);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, UtilityBeltPackets.S2C_BELT_UNEQUIPPED, ClientNetworking::handleBeltUnequipped);
     }
 
     public static void sendNewStateToServer(boolean inBelt, int slot, boolean swapItems) {
@@ -25,14 +26,15 @@ public class ClientNetworking {
         }
 
         UtilityBeltPackets.C2SUpdateState packet = new C2SUpdateState(inBelt, slot, swapItems);
-        NetworkManager.sendToServer(packet);
+        NetworkManager.sendToServer(UtilityBeltPackets.C2S_UPDATE_STATE, packet.toBuf());
     }
 
     public static void sendOpenScreenToServer() {
-        NetworkManager.sendToServer(new C2SOpenScreen());
+        NetworkManager.sendToServer(UtilityBeltPackets.C2S_OPEN_SCREEN, new C2SOpenScreen().toBuf());
     }
 
-    private static void handleSetBeltSlot(S2CSetBeltSlot payload, NetworkManager.PacketContext ctx) {
+    private static void handleSetBeltSlot(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
+        S2CSetBeltSlot payload = S2CSetBeltSlot.fromBuf(buf);
         ctx.queue(() -> {
             Player player = ctx.getPlayer();
             StateManager manager = StateManager.getStateManager(player);
@@ -47,18 +49,20 @@ public class ClientNetworking {
         });
     }
 
-    private static void handleSetHotbarSlot(S2CSetHotbarSlot payload, NetworkManager.PacketContext ctx) {
+    private static void handleSetHotbarSlot(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
+        S2CSetHotbarSlot payload = S2CSetHotbarSlot.fromBuf(buf);
         ctx.queue(() -> ctx.getPlayer().getInventory().selected = payload.slot());
     }
 
-    private static void handleUpdateBeltInventory(S2CUpdateBeltInventory payload, NetworkManager.PacketContext ctx) {
+    private static void handleUpdateBeltInventory(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
+        S2CUpdateBeltInventory payload = S2CUpdateBeltInventory.fromBuf(buf);
         ctx.queue(() -> {
             Player player = ctx.getPlayer();
             StateManager.getStateManager(player).setInventory(player, new Mutable(payload.inventory()));
         });
     }
     
-    private static void handleBeltUnequipped(S2CBeltUnequipped packet, NetworkManager.PacketContext ctx) {
+    private static void handleBeltUnequipped(FriendlyByteBuf buf, NetworkManager.PacketContext ctx) {
         ctx.queue(() -> {
             Player player = ctx.getPlayer();
             StateManager.getStateManager(player).setInBelt(player, false);

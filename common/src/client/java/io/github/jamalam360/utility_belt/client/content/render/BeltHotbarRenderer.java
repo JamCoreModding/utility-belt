@@ -4,7 +4,6 @@ import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
 import io.github.jamalam360.utility_belt.client.UtilityBeltClient;
 import io.github.jamalam360.utility_belt.state.StateManager;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -12,16 +11,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class BeltHotbarRenderer {
+	private static final ResourceLocation WIDGETS = UtilityBelt.id("textures/gui/widgets.png");
+    private static final ResourceLocation VANILLA_WIDGETS = new ResourceLocation("textures/gui/widgets.png");
 
-    private static final ResourceLocation HOTBAR_SLOT_TOP_SPRITE = UtilityBelt
-        .id("utility_belt_hotbar_slot_top");
-    private static final ResourceLocation HOTBAR_SLOT_MIDDLE_SPRITE = UtilityBelt
-        .id("utility_belt_hotbar_slot_middle");
-    private static final ResourceLocation HOTBAR_SLOT_BOTTOM_SPRITE = UtilityBelt
-        .id("utility_belt_hotbar_slot_bottom");
-    private static final ResourceLocation HOTBAR_SELECTION_SPRITE = ResourceLocation.withDefaultNamespace("hud/hotbar_selection");
-
-    public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+    public static void render(GuiGraphics graphics, float partialTick) {
         Player player = Minecraft.getInstance().player;
         
         if (Minecraft.getInstance().options.hideGui || player == null) {
@@ -52,28 +45,28 @@ public class BeltHotbarRenderer {
             int slotY = y;
             for (int n = 0; n < inv.getContainerSize(); n++) {
                 if (n == 0) {
-                    graphics.blitSprite(HOTBAR_SLOT_TOP_SPRITE, x, slotY, 22, 21);
+                    graphics.blit(WIDGETS, x, slotY, 0, 130, 22, 21);
                     slotY += 21;
                 } else if (n == inv.getContainerSize() - 1) {
-                    graphics.blitSprite(HOTBAR_SLOT_BOTTOM_SPRITE, x, slotY, 22, 21);
+                    graphics.blit(WIDGETS, x, slotY, 0, 171, 22, 21);
                     slotY += 21;
                 } else {
-                    graphics.blitSprite(HOTBAR_SLOT_MIDDLE_SPRITE, x, slotY, 22, 20);
+                    graphics.blit(WIDGETS, x, slotY, 0, 151, 22, 20);
                     slotY += 20;
                 }
 
-                renderHotbarItem(graphics, x + 3, y + 3 + n * 20, deltaTracker, player, inv.getItem(n), m++);
+                renderHotbarItem(graphics, x + 3, y + 3 + n * 20, partialTick, player, inv.getItem(n), m++);
             }
 
             if (stateManager.isInBelt(player)) {
-                graphics.blitSprite(HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 24, 23);
+                graphics.blit(VANILLA_WIDGETS, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 0, 22, 24, 22);
             }
         }
     }
 
-    private static void renderHotbarItem(GuiGraphics graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed) {
+    private static void renderHotbarItem(GuiGraphics graphics, int x, int y, float partialTick, Player player, ItemStack stack, int seed) {
         if (!stack.isEmpty()) {
-			float f = stack.getPopTime() - deltaTracker.getGameTimeDeltaPartialTick(false);
+			float f = stack.getPopTime() - partialTick;
 			if (f > 0.0F) {
 				float g = 1.0F + f / 5.0F;
 				graphics.pose().pushPose();

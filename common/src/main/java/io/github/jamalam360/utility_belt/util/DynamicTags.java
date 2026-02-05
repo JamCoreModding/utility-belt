@@ -30,6 +30,6 @@ public class DynamicTags {
 	}
 	
 	private static ResourceLocation minecraft(String path) {
-		return ResourceLocation.fromNamespaceAndPath("minecraft", path);
+		return new ResourceLocation(path);
 	}
 }

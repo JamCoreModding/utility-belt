@@ -11,9 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SmithingRecipe;
-import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +23,7 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 	@Unique
 	private static final ResourceLocation UPGRADE_RECIPE_LOCATION = UtilityBelt.id("upgrade_utility_belt");
 
-	public SmithingMenuMixin(@Nullable MenuType<?> type, int containerId, Inventory playerInventory, ContainerLevelAccess access) {
+	public SmithingMenuMixin(MenuType<?> type, int containerId, Inventory playerInventory, ContainerLevelAccess access) {
 		super(type, containerId, playerInventory, access);
 	}
 
@@ -33,14 +31,14 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 			method = "createResult",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipesFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/item/crafting/RecipeInput;Lnet/minecraft/world/level/Level;)Ljava/util/List;"
+					target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipesFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/List;"
 			)
 	)
-	private List<RecipeHolder<SmithingRecipe>> utilitybelt$capBeltSize(List<RecipeHolder<SmithingRecipe>> original) {
+	private List<SmithingRecipe> utilitybelt$capBeltSize(List<SmithingRecipe> original) {
 		if (!original.isEmpty()) {
-			RecipeHolder<SmithingRecipe> holder = original.getFirst();
+			SmithingRecipe recipe = original.getFirst();
 
-			if (holder.id().equals(UPGRADE_RECIPE_LOCATION)) {
+			if (recipe.getId().equals(UPGRADE_RECIPE_LOCATION)) {
 				ItemStack inputStack = this.getSlot(1).getItem();
 
 				if (!inputStack.is(ModItems.UTILITY_BELT_ITEM.get())) {
@@ -65,9 +63,9 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 					ordinal = 1
 			)
 	)
-	private void utilitybelt$upgradeBeltSlots(ResultContainer instance, int slot, ItemStack resultStack, Operation<Void> original, @Local(name = "list") List<RecipeHolder<SmithingRecipe>> list) {
-		RecipeHolder<SmithingRecipe> holder = list.getFirst();
-		if (holder.id().equals(UPGRADE_RECIPE_LOCATION)) {
+	private void utilitybelt$upgradeBeltSlots(ResultContainer instance, int slot, ItemStack resultStack, Operation<Void> original, @Local(name = "list") List<SmithingRecipe> list) {
+		SmithingRecipe recipe = list.getFirst();
+		if (recipe.getId().equals(UPGRADE_RECIPE_LOCATION)) {
 			ItemStack inputStack = this.getSlot(1).getItem();
 
 			if (!inputStack.is(ModItems.UTILITY_BELT_ITEM.get()) || !resultStack.is(ModItems.UTILITY_BELT_ITEM.get())) {

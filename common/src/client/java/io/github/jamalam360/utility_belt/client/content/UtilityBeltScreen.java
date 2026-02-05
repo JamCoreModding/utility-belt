@@ -9,10 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class UtilityBeltScreen extends AbstractContainerScreen<UtilityBeltMenu> {
-	private static final ResourceLocation BACKGROUND_TOP_SPRITE = UtilityBelt.id("utility_belt_gui_top");
-	private static final ResourceLocation BACKGROUND_SLOT_ROW_SPRITE = UtilityBelt.id("utility_belt_gui_slot_row");
-	private static final ResourceLocation BACKGROUND_BOTTOM_SPRITE = UtilityBelt.id("utility_belt_gui_bottom");
-	private static final ResourceLocation SLOT_SPRITE = UtilityBelt.id("slot");
+	private static final ResourceLocation WIDGETS = UtilityBelt.id("textures/gui/widgets.png");
 
 	public UtilityBeltScreen(UtilityBeltMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, Component.translatable("container.utility_belt.utility_belt"));
@@ -28,17 +25,17 @@ public class UtilityBeltScreen extends AbstractContainerScreen<UtilityBeltMenu> 
 	@Override
 	protected void renderBg(GuiGraphics graphics, float delta, int mouseX, int mouseY) {
 		int rows = this.menu.getBeltRows();
-		graphics.blitSprite(BACKGROUND_TOP_SPRITE, this.leftPos, this.topPos, 176, 16);
-		graphics.blitSprite(BACKGROUND_BOTTOM_SPRITE, this.leftPos, this.topPos + 16 + rows * 18, 176, 96);
+		graphics.blit(WIDGETS, this.leftPos, this.topPos, 0, 0, 176, 16);
+		graphics.blit(WIDGETS, this.leftPos, this.topPos + 16 + rows * 18, 0, 34, 176, 96);
 
 		for (int i = 0; i < rows; i++) {
-			graphics.blitSprite(BACKGROUND_SLOT_ROW_SPRITE, this.leftPos, this.topPos + 16 + i * 18, 176, 18);
+			graphics.blit(WIDGETS, this.leftPos, this.topPos + 16 + i * 18, 0, 16, 176, 18);
 		}
 
         int x = 0;
         int y = 0;
         while ((x + y * 9) < this.menu.getBeltInventorySize()) {
-            graphics.blitSprite(SLOT_SPRITE, this.leftPos + 7 + x * 18, this.topPos + 16 + y * 18, 18, 18);
+            graphics.blit(WIDGETS, this.leftPos + 7 + x * 18, this.topPos + 16 + y * 18, 176, 0, 18, 18);
 
             x += 1;
             if (x == 9) {

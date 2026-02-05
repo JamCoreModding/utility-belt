@@ -1,44 +1,41 @@
 package io.github.jamalam360.utility_belt.content.register;
 
-import com.mojang.serialization.Codec;
-import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.util.UtilityBeltInventory;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
 
 public class ModComponents {
-	private static final DeferredRegister<DataComponentType<?>> COMPONENT_TYPES = DeferredRegister.create(UtilityBelt.MOD_ID, Registries.DATA_COMPONENT_TYPE);
-	public static final RegistrySupplier<DataComponentType<UtilityBeltInventory>> UTILITY_BELT_INVENTORY = COMPONENT_TYPES.register("utility_belt_inventory", () ->
-	      DataComponentType.<UtilityBeltInventory>builder().persistent(UtilityBeltInventory.CODEC).cacheEncoding().build()
-	);
-	public static final RegistrySupplier<DataComponentType<Integer>> UTILITY_BELT_SIZE = COMPONENT_TYPES.register("utility_belt_size", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).cacheEncoding().build());
+	private static final String KEY_SIZE = "utility_belt:size";
+	private static final String KEY_INVENTORY = "utility_belt:inventory";
 
 	public static void init() {
-		COMPONENT_TYPES.register();
 	}
 
 	public static int getBeltSize(ItemStack stack) {
-		if (!stack.has(UTILITY_BELT_SIZE.get())) {
-			stack.set(UTILITY_BELT_SIZE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize);
+		CompoundTag tag = stack.getOrCreateTag();
+		if (!tag.contains(KEY_SIZE)) {
+			tag.putInt(KEY_SIZE, UtilityBelt.COMMON_CONFIG.get().initialBeltSize);
+			stack.setTag(tag);
 		}
 
-		return stack.get(UTILITY_BELT_SIZE.get());
+		return tag.getInt(KEY_SIZE);
 	}
 
 	public static UtilityBeltInventory getBeltInventory(ItemStack stack) {
 		int size = getBeltSize(stack);
-		if (!stack.has(UTILITY_BELT_INVENTORY.get())) {
-			stack.set(UTILITY_BELT_INVENTORY.get(), UtilityBeltInventory.empty(size));
+		CompoundTag tag = stack.getOrCreateTag();
+		if (!tag.contains(KEY_INVENTORY)) {
+			tag.put(KEY_INVENTORY, saveInventoryToTag(UtilityBeltInventory.empty(size)));
+			stack.setTag(tag);
 		}
 
-		UtilityBeltInventory inv = stack.get(UTILITY_BELT_INVENTORY.get());
+		UtilityBeltInventory inv = loadInventoryFromTag(tag.getList(KEY_INVENTORY, 10));
 		if (size != inv.getContainerSize()) {
 			inv = inv.copyWithSize(size);
-			stack.set(ModComponents.UTILITY_BELT_INVENTORY.get(), inv);
+			tag.put(KEY_INVENTORY, saveInventoryToTag(inv));
+			stack.setTag(tag);
 		}
 
 		return inv;
@@ -46,11 +43,39 @@ public class ModComponents {
 
 	// This should only be called by the state managers, or when the belt is NOT equipped
 	public static void setBeltInventory(ItemStack stack, UtilityBeltInventory inv) {
-		stack.set(UTILITY_BELT_INVENTORY.get(), inv);
+		CompoundTag tag = stack.getOrCreateTag();
+		tag.put(KEY_INVENTORY, saveInventoryToTag(inv));
+		stack.setTag(tag);
 	}
 
 	public static void setBeltSize(ItemStack stack, int newSize) {
-		stack.set(UTILITY_BELT_SIZE.get(), newSize);
+		CompoundTag tag = stack.getOrCreateTag();
+		tag.putInt(KEY_SIZE, newSize);
+		stack.setTag(tag);
 		setBeltInventory(stack, getBeltInventory(stack).copyWithSize(newSize));
+	}
+
+	private static ListTag saveInventoryToTag(UtilityBeltInventory inv) {
+		ListTag tag = new ListTag();
+
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack itemStack = inv.getItem(i);
+			CompoundTag itemTag = new CompoundTag();
+			itemStack.save(itemTag);
+			tag.add(itemTag);
+		}
+
+		return tag;
+	}
+
+	private static UtilityBeltInventory loadInventoryFromTag(ListTag tag) {
+		UtilityBeltInventory.Mutable inv = new UtilityBeltInventory.Mutable(UtilityBeltInventory.empty(tag.size()));
+
+		for (int i = 0; i < tag.size(); i++) {
+			CompoundTag compoundTag = tag.getCompound(i);
+			inv.setItem(i, ItemStack.of(compoundTag));
+		}
+
+		return inv.toImmutable();
 	}
 }
