@@ -13,8 +13,6 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
-import java.net.URI;
-
 import static dev.architectury.event.events.client.ClientCommandRegistrationEvent.literal;
 
 public class UtilityBeltCommands {
@@ -71,6 +69,6 @@ public class UtilityBeltCommands {
 				.append(Component.literal("\n"))
 				.append(Component.literal("/utilitybelt fixme").withStyle(ChatFormatting.YELLOW))
 				.append(Component.literal(" - Fixes your state. Useful if you manage to get stuck in the belt. If you use this command please report the circumstances to ").withStyle(ChatFormatting.GRAY))
-				.append(Component.literal("https://github.com/JamCoreModding/utility-belt").withStyle(s -> s.withUnderlined(true).withColor(ChatFormatting.BLUE).withClickEvent(new ClickEvent.OpenUrl(URI.create("https://github.com/JamCoreModding/utility-belt")))));
+				.append(Component.literal("https://github.com/JamCoreModding/utility-belt").withStyle(s -> s.withUnderlined(true).withColor(ChatFormatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/JamCoreModding/utility-belt"))));
 	}
 }

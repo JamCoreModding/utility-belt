@@ -7,7 +7,6 @@ import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -53,42 +52,42 @@ public class BeltHotbarRenderer {
             int slotY = y;
             for (int n = 0; n < inv.getContainerSize(); n++) {
                 if (n == 0) {
-                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SLOT_TOP_SPRITE, x, slotY, 22, 21);
+                    graphics.blitSprite(HOTBAR_SLOT_TOP_SPRITE, x, slotY, 22, 21);
                     slotY += 21;
                 } else if (n == inv.getContainerSize() - 1) {
-                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SLOT_BOTTOM_SPRITE, x, slotY, 22, 21);
+                    graphics.blitSprite(HOTBAR_SLOT_BOTTOM_SPRITE, x, slotY, 22, 21);
                     slotY += 21;
                 } else {
-                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SLOT_MIDDLE_SPRITE, x, slotY, 22, 20);
+                    graphics.blitSprite(HOTBAR_SLOT_MIDDLE_SPRITE, x, slotY, 22, 20);
                     slotY += 20;
                 }
 
-                renderHotbarItem(graphics, x, y + 3 + n * 20, deltaTracker.getGameTimeDeltaTicks(), player, inv.getItem(n), m++);
+                renderHotbarItem(graphics, x + 3, y + 3 + n * 20, deltaTracker, player, inv.getItem(n), m++);
             }
 
             if (stateManager.isInBelt(player)) {
-                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 24, 23);
+                graphics.blitSprite(HOTBAR_SELECTION_SPRITE, x - 1, y - 1 + stateManager.getSelectedBeltSlot(player) * 20, 24, 23);
             }
         }
     }
 
-    private static void renderHotbarItem(GuiGraphics graphics, int x, int y, float tickDelta, Player player, ItemStack stack, int seed) {
+    private static void renderHotbarItem(GuiGraphics graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed) {
         if (!stack.isEmpty()) {
-            float f = (float) stack.getPopTime() - tickDelta;
-            if (f > 0.0F) {
-                float g = 1.0F + f / 5.0F;
-                graphics.pose().pushMatrix();
-                graphics.pose().translate(12, y + 12);
-                graphics.pose().scale(1.0F / g, (g + 1.0F) / 2.0F);
-                graphics.pose().translate(-12, -(y + 12));
-            }
+			float f = stack.getPopTime() - deltaTracker.getGameTimeDeltaPartialTick(false);
+			if (f > 0.0F) {
+				float g = 1.0F + f / 5.0F;
+				graphics.pose().pushPose();
+				graphics.pose().translate((float)(x + 8), (float)(y + 12), 0.0F);
+				graphics.pose().scale(1.0F / g, (g + 1.0F) / 2.0F, 1.0F);
+				graphics.pose().translate((float)(-(x + 8)), (float)(-(y + 12)), 0.0F);
+			}
 
-            graphics.renderItem(player, stack, x + 3, y, seed);
-            if (f > 0.0F) {
-                graphics.pose().popMatrix();
-            }
+			graphics.renderItem(player, stack, x, y, seed);
+			if (f > 0.0F) {
+				graphics.pose().popPose();
+			}
 
-            graphics.renderItemDecorations(Minecraft.getInstance().font, stack, x + 3, y);
+			graphics.renderItemDecorations(Minecraft.getInstance().font, stack, x, y);
         }
     }
 }

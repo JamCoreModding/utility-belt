@@ -6,8 +6,8 @@ import dev.architectury.event.events.client.ClientPlayerEvent;
 import dev.architectury.event.events.client.ClientRawInputEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.platform.Platform;
-import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
 import io.github.jamalam360.jamlib.config.ConfigManager;
 import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.UtilityBeltItem;
@@ -28,7 +28,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class UtilityBeltClient {
 	public static final ConfigManager<ClientConfig> CLIENT_CONFIG = new ConfigManager<>(UtilityBelt.MOD_ID, "client", ClientConfig.class);
-	private static final KeyMapping.Category KEY_CATEGORY = KeyMapping.Category.register(UtilityBelt.id("utility_belt"));
+	private static final String KEY_CATEGORY = "key.category.utility_belt.utility_belt";
 	private static final KeyMapping SWAP_TOGGLE = new KeyMapping("key.utility_belt.swap_toggle", GLFW.GLFW_KEY_B, KEY_CATEGORY);
 	private static final KeyMapping SWAP_HOLD = new KeyMapping("key.utility_belt.swap_hold", GLFW.GLFW_KEY_N, KEY_CATEGORY);
 	private static final KeyMapping OPEN_SCREEN = new KeyMapping("key.utility_belt.open_screen", GLFW.GLFW_KEY_APOSTROPHE, KEY_CATEGORY);
@@ -48,8 +48,8 @@ public class UtilityBeltClient {
 			ClientCommandRegistrationEvent.EVENT.register(UtilityBeltCommands::registerDevelopmentCommands);
 		}
 
-		UtilityBelt.MENU_TYPE.listen(menu -> MenuScreenRegistry.registerScreenFactory(menu, UtilityBeltScreen::new));
-		UtilityBelt.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.bindItemToRenderer(belt, UtilityBelt.id("utility_belt"), BeltRenderer::new));
+		UtilityBelt.MENU_TYPE.listen(menu -> MenuRegistry.registerScreenFactory(menu, UtilityBeltScreen::new));
+		UtilityBelt.UTILITY_BELT_ITEM.listen(belt -> AccessoriesRendererRegistry.registerRenderer(belt, BeltRenderer::new));
 		ClientNetworking.init();
 		StateManager.setClientInstance(new ClientStateManager());
 	}

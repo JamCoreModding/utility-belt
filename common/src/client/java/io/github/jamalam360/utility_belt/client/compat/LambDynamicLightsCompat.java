@@ -21,6 +21,11 @@ public class LambDynamicLightsCompat implements DynamicLightsInitializer {
 		ctx.entityLightSourceManager().onRegisterEvent().register((registrar) -> registrar.register(EntityType.PLAYER, UtilityBeltEntityLuminance.INSTANCE));
 	}
 
+	@SuppressWarnings("UnstableApiUsage,removal")
+	@Override
+	public void onInitializeDynamicLights(ItemLightSourceManager itemLightSourceManager) {
+	}
+
 	private static class UtilityBeltEntityLuminance implements EntityLuminance {
 		public static final UtilityBeltEntityLuminance INSTANCE = new UtilityBeltEntityLuminance();
 		public static final EntityLuminance.Type TYPE = EntityLuminance.Type.registerSimple(

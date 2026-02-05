@@ -48,7 +48,7 @@ public class ClientNetworking {
     }
 
     private static void handleSetHotbarSlot(S2CSetHotbarSlot payload, NetworkManager.PacketContext ctx) {
-        ctx.queue(() -> ctx.getPlayer().getInventory().setSelectedSlot(payload.slot()));
+        ctx.queue(() -> ctx.getPlayer().getInventory().selected = payload.slot());
     }
 
     private static void handleUpdateBeltInventory(S2CUpdateBeltInventory payload, NetworkManager.PacketContext ctx) {

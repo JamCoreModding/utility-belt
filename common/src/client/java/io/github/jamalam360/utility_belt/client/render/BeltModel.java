@@ -5,9 +5,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.world.entity.LivingEntity;
 
-public class BeltModel extends HumanoidModel<HumanoidRenderState> {
+public class BeltModel extends HumanoidModel<LivingEntity> {
 
 	public BeltModel(ModelPart root) {
 		super(root);

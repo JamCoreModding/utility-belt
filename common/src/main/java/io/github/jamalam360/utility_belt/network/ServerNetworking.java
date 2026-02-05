@@ -65,7 +65,7 @@ public class ServerNetworking {
                 }
 
                 UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
-                int hotbarSlot = player.getInventory().getSelectedSlot();
+                int hotbarSlot = player.getInventory().selected;
                 ItemStack stackInHand = player.getInventory().getItem(hotbarSlot);
                 ItemStack stackInBelt = inv.getItem(beltSlot);
 
@@ -98,8 +98,8 @@ public class ServerNetworking {
                     if (beltSlot != slot) {
                         stateManager.setSelectedBeltSlot(player, beltSlot);
                         NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetBeltSlot(beltSlot));
-                    } else if (hotbarSlot != player.getInventory().getSelectedSlot()) {
-                        player.getInventory().setSelectedSlot(hotbarSlot);
+                    } else if (hotbarSlot != player.getInventory().selected) {
+                        player.getInventory().selected = hotbarSlot;
                         NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetHotbarSlot(hotbarSlot));
                     }
                 }

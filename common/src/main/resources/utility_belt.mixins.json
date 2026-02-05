@@ -9,8 +9,7 @@
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin",
     "SmithingMenuMixin",
-    "TagLoaderMixin",
-    "compat.travelersbackpack.FeedingUpgradeMixin"
+    "TagLoaderMixin"
   ],
   "client": [
   ],

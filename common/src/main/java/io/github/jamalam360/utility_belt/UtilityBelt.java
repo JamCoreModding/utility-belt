@@ -37,7 +37,7 @@ public class UtilityBelt {
     private static final DeferredRegister<DataComponentType<?>> COMPONENT_TYPES = DeferredRegister.create(MOD_ID, Registries.DATA_COMPONENT_TYPE);
 
     public static final RegistrySupplier<Item> UTILITY_BELT_ITEM = ITEMS.register("utility_belt", UtilityBeltItem::new);
-    public static final RegistrySupplier<Item> POUCH_ITEM = ITEMS.register("pouch", () -> new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, UtilityBelt.id("pouch")))));
+    public static final RegistrySupplier<Item> POUCH_ITEM = ITEMS.register("pouch", () -> new Item(new Item.Properties()));
     public static final RegistrySupplier<DataComponentType<UtilityBeltInventory>> UTILITY_BELT_INVENTORY_COMPONENT_TYPE = COMPONENT_TYPES.register("utility_belt_inventory", () ->
           DataComponentType.<UtilityBeltInventory>builder().persistent(UtilityBeltInventory.CODEC).cacheEncoding().build()
     );

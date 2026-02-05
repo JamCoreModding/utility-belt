@@ -4,7 +4,6 @@ import io.github.jamalam360.utility_belt.UtilityBelt;
 import io.github.jamalam360.utility_belt.screen.UtilityBeltMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,17 +28,17 @@ public class UtilityBeltScreen extends AbstractContainerScreen<UtilityBeltMenu> 
 	@Override
 	protected void renderBg(GuiGraphics graphics, float delta, int mouseX, int mouseY) {
 		int rows = this.menu.getBeltRows();
-		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_TOP_SPRITE, this.leftPos, this.topPos, 176, 16);
-		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_BOTTOM_SPRITE, this.leftPos, this.topPos + 16 + rows * 18, 176, 96);
+		graphics.blitSprite(BACKGROUND_TOP_SPRITE, this.leftPos, this.topPos, 176, 16);
+		graphics.blitSprite(BACKGROUND_BOTTOM_SPRITE, this.leftPos, this.topPos + 16 + rows * 18, 176, 96);
 
 		for (int i = 0; i < rows; i++) {
-			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SLOT_ROW_SPRITE, this.leftPos, this.topPos + 16 + i * 18, 176, 18);
+			graphics.blitSprite(BACKGROUND_SLOT_ROW_SPRITE, this.leftPos, this.topPos + 16 + i * 18, 176, 18);
 		}
 
         int x = 0;
         int y = 0;
         while ((x + y * 9) < this.menu.getBeltInventorySize()) {
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_SPRITE, this.leftPos + 7 + x * 18, this.topPos + 16 + y * 18, 18, 18);
+            graphics.blitSprite(SLOT_SPRITE, this.leftPos + 7 + x * 18, this.topPos + 16 + y * 18, 18, 18);
 
             x += 1;
             if (x == 9) {

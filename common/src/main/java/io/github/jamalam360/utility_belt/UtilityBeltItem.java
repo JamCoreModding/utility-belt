@@ -3,17 +3,14 @@ package io.github.jamalam360.utility_belt;
 import io.github.jamalam360.utility_belt.UtilityBeltInventory.Mutable;
 import io.github.jamalam360.utility_belt.network.ServerNetworking;
 import io.github.jamalam360.utility_belt.state.StateManager;
-import io.wispforest.accessories.api.core.AccessoryItem;
+import io.wispforest.accessories.api.AccessoryItem;
 import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
@@ -22,18 +19,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.TooltipDisplay;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class UtilityBeltItem extends AccessoryItem {
 
-	private static final int BAR_COLOR = ARGB.color((int) (0.4 * 255), (int) (0.4 * 255), (int) (1.0 * 255));
+	private static final int BAR_COLOR = Mth.color((int) (0.4 * 255), (int) (0.4 * 255), (int) (1.0 * 255));
 
 	public UtilityBeltItem() {
-		super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize)).component(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize).setId(ResourceKey.create(Registries.ITEM, UtilityBelt.id("utility_belt"))));
+		super(new Item.Properties().stacksTo(1).component(UtilityBelt.UTILITY_BELT_INVENTORY_COMPONENT_TYPE.get(), UtilityBeltInventory.empty(UtilityBelt.COMMON_CONFIG.get().initialBeltSize)).component(UtilityBelt.UTILITY_BELT_SIZE_COMPONENT_TYPE.get(), UtilityBelt.COMMON_CONFIG.get().initialBeltSize));
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -77,8 +74,8 @@ public class UtilityBeltItem extends AccessoryItem {
 						stack.getItem() instanceof ShovelItem ||
 						stack.getItem() instanceof SpyglassItem ||
 						stack.getItem() instanceof TridentItem ||
+						stack.getItem() instanceof SwordItem ||
 						stack.has(DataComponents.TOOL) || // TODO: check if these two checks are valid
-						stack.has(DataComponents.WEAPON) ||
 						stack.isEmpty() ||
 						stack.is(UtilityBelt.ALLOWED_IN_UTILITY_BELT);
 	}
@@ -144,15 +141,15 @@ public class UtilityBeltItem extends AccessoryItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack belt, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
-		super.appendHoverText(belt, context, tooltipDisplay, tooltipAdder, flag);
+	public void appendHoverText(ItemStack belt, TooltipContext context, List<Component> tooltipComponents, TooltipFlag flag) {
+		super.appendHoverText(belt, context, tooltipComponents, flag);
 		UtilityBeltInventory inv = getInventory(belt);
-		tooltipAdder.accept(Component.translatable("text.utility_belt.tooltip.size", inv.getContainerSize()));
+		tooltipComponents.add(Component.translatable("text.utility_belt.tooltip.size", inv.getContainerSize()));
 
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty()) {
-				tooltipAdder.accept(Component.literal("- ").append(stack.getHoverName()));
+				tooltipComponents.add(Component.literal("- ").append(stack.getHoverName()));
 			}
 		}
 	}
@@ -199,7 +196,7 @@ public class UtilityBeltItem extends AccessoryItem {
 		
 		for (ItemStack stack : inv.items()) {
 			if (!stack.isEmpty() && itemEntity.level() instanceof ServerLevel server) {
-				itemEntity.spawnAtLocation(server, stack);
+				itemEntity.spawnAtLocation(stack);
 			}
 		}
 	}
