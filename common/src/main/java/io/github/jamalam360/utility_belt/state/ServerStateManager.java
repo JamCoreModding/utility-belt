@@ -31,7 +31,20 @@ public class ServerStateManager extends StateManager {
 
 	@Override
 	public int getSelectedBeltSlot(Player player) {
-		return getState(player).selectedBeltSlot;
+		if (!isInBelt(player)) {
+			return -1;
+		}
+
+		int slot = getState(player).selectedBeltSlot;
+		int beltSize = getInventory(player).getContainerSize();
+
+		if (slot < 0 || slot >= beltSize) {
+			slot = 0;
+			getState(player).selectedBeltSlot = 0;
+			UtilityBelt.LOGGER.warn("Broken state detected for player {}: selected belt slot {} is out of bounds for belt size {}. Resetting to 0.", player.getName().getString(), slot, beltSize);
+		}
+
+		return slot;
 	}
 
 	@Override
