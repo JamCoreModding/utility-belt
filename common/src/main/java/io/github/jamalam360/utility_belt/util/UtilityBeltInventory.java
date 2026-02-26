@@ -1,5 +1,6 @@
 package io.github.jamalam360.utility_belt.util;
 
+import io.github.jamalam360.utility_belt.UtilityBelt;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
@@ -27,6 +28,11 @@ public record UtilityBeltInventory(List<ItemStack> items) {
     }
 
     public ItemStack getItem(int index) {
+        if (index < 0 || index >= this.getContainerSize()) {
+            UtilityBelt.LOGGER.warn("Attempted to access index {} of UtilityBeltInventory of size {}", index, this.getContainerSize());
+            return ItemStack.EMPTY;
+        }
+
         return items.get(index);
     }
 
