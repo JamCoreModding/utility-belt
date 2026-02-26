@@ -3,6 +3,10 @@ package io.github.jamalam360.utility_belt.util;
 import com.mojang.serialization.Codec;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.jamalam360.utility_belt.UtilityBelt;
+import io.github.jamalam360.utility_belt.state.ServerStateManager;
+import io.github.jamalam360.utility_belt.state.StateManager;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -42,6 +46,11 @@ public record UtilityBeltInventory(List<ItemStack> items) {
     }
 
     public ItemStack getItem(int index) {
+        if (index < 0 || index >= this.getContainerSize()) {
+            UtilityBelt.LOGGER.warn("Attempted to access index {} of UtilityBeltInventory of size {}", index, this.getContainerSize());
+            return ItemStack.EMPTY;
+        }
+
         return items.get(index);
     }
 
