@@ -23,7 +23,10 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
     @Shadow
     protected abstract void detectEquipmentUpdates();
 
-    @Override
+	@Shadow
+	public abstract ItemStack getItemBySlot(EquipmentSlot slot);
+
+	@Override
     public void utilitybelt$detectEquipmentUpdates() {
         this.detectEquipmentUpdates();
     }
@@ -33,7 +36,8 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
 			method = "setItemInHand",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/world/entity/LivingEntity;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V"
+					target = "Lnet/minecraft/world/entity/LivingEntity;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V",
+					ordinal = 0
 			)
 	)
 	private void utilitybelt$setItemInHand(LivingEntity instance, EquipmentSlot equipmentSlot, ItemStack itemStack, Operation<Void> original) {
@@ -43,9 +47,10 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
 				UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
 				inv.setItem(stateManager.getSelectedBeltSlot(player), itemStack);
 				stateManager.setInventory(player, inv);
+				return;
 			}
-		} else {
-			original.call(instance, equipmentSlot, itemStack);
 		}
+
+		original.call(instance, equipmentSlot, itemStack);
 	}
 }
