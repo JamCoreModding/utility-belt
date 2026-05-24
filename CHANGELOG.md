@@ -1,3 +1,3 @@
-# Release 3.0.1
+# Release 3.0.2
 
-- Patch fix for crash detailed in #73 (until further information about the root cause is available).
+- Code improvements that might fix an unreported bug that may or may not exist.

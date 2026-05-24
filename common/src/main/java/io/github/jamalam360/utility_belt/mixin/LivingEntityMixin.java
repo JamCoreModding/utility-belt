@@ -27,7 +27,8 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
 	@SuppressWarnings("ConstantValue")
 	@Inject(
 			method = "setItemInHand",
-			at = @At("HEAD")
+			at = @At("HEAD"),
+			cancellable = true
 	)
 	private void utilitybelt$setItemInHand(InteractionHand hand, ItemStack stack, CallbackInfo ci) {
 		if (hand == InteractionHand.MAIN_HAND && (Object) this instanceof ServerPlayer player) {
@@ -36,6 +37,7 @@ public abstract class LivingEntityMixin implements Duck.LivingEntity {
 				UtilityBeltInventory.Mutable inv = stateManager.getMutableInventory(player);
 				inv.setItem(stateManager.getSelectedBeltSlot(player), stack);
 				stateManager.setInventory(player, inv);
+				ci.cancel();
 			}
 		}
 	}
